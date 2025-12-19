@@ -1,0 +1,12 @@
+diff --git a/src/components/layout/nav-user.tsx b/src/components/layout/nav-user.tsx
+index 2379c87..e62fa71 100644
+--- a/src/components/layout/nav-user.tsx
++++ b/src/components/layout/nav-user.tsx
+@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
+ import { useForm } from 'react-hook-form';
+ import {
+   BadgeCheck,
+-  ChevronsUpDown,
+   LogOut,
+   Lock,
+   Eye,

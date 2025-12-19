@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nstyle: 格式化所有代码文件\n\n- 使用 Prettier 统一代码格式\n- 规范化代码缩进和换行\n- 统一项目代码风格\n- 涵盖所有 TypeScript/JavaScript 文件\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
