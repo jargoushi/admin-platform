@@ -7,7 +7,10 @@
 
 import type { UserQueryRequest } from './types';
 import { DEFAULT_PAGE_REQUEST } from '@/constants/pagination';
-import { FilterFieldConfig, FILTER_TYPES } from '@/components/shared/filter-layout';
+import {
+  FilterFieldConfig,
+  FILTER_TYPES
+} from '@/components/shared/filter-layout';
 
 // ==================== 默认查询参数 ====================
 

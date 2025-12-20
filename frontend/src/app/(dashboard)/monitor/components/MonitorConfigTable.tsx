@@ -26,7 +26,10 @@ import { MonitorApiService } from '@/service/api/monitor.api';
 import { MonitorConfigUpdateForm } from './MonitorConfigUpdateForm';
 import { MonitorDailyStatsChart } from './MonitorDailyStatsChart';
 import { StatusBadge } from '@/components/shared/status-badge';
-import { ACTIVE_STATUS_CONFIG, CHANNEL_TYPES, ACTIVE_STATUSES } from '../constants';
+import {
+  ACTIVE_STATUS_CONFIG,
+  CHANNEL_TYPES
+} from '../constants';
 
 /**
  * 表格组件属性
@@ -95,7 +98,7 @@ export function MonitorConfigTable({
       confirm({
         description: `确定要${statusText}该监控配置吗？`,
         onConfirm: async () => {
-          await MonitorApiService.toggle(config.id, newStatus);
+          await MonitorApiService.toggle(Number(config.id), newStatus);
           onRefresh?.();
         }
       });
@@ -111,7 +114,7 @@ export function MonitorConfigTable({
       confirm({
         description: `确定要删除该监控配置吗？\n\n账号：${config.account_name || '未知'}\n删除后将无法恢复！`,
         onConfirm: async () => {
-          await MonitorApiService.delete(config.id);
+          await MonitorApiService.delete(Number(config.id));
           onRefresh?.();
         }
       });

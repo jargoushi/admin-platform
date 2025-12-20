@@ -52,10 +52,12 @@ export function BrowserTable({
                     toast.success(`窗口 [${record.name}] 已启动`);
                     onRefresh?.();
                 } else {
-                    toast.error(`窗口 [${record.name}] 启动失败: ${result.results[0]?.error}`);
+                    toast.error(
+                        `窗口 [${record.name}] 启动失败: ${result.results[0]?.error}`
+                    );
                 }
-            } catch (error) {
-                toast.error('请求失败');
+            } catch (e) {
+                toast.error('打开浏览器失败');
             }
         },
         [onRefresh]
@@ -67,8 +69,8 @@ export function BrowserTable({
                 await BrowserApiService.close(record.id);
                 toast.success(`窗口 [${record.name}] 已关闭`);
                 onRefresh?.();
-            } catch (error) {
-                toast.error('关闭失败');
+            } catch (e) {
+                toast.error('关闭浏览器失败');
             }
         },
         [onRefresh]
@@ -93,7 +95,7 @@ export function BrowserTable({
             try {
                 const detail = await BrowserApiService.getDetail(record.id);
                 openDialog('detail', detail);
-            } catch (error) {
+            } catch (e) {
                 toast.error('获取详情失败');
             }
         },
@@ -133,8 +135,12 @@ export function BrowserTable({
                     <div className='text-xs'>
                         {record.proxyType ? (
                             <div className='flex items-center space-x-1'>
-                                <span className='font-medium text-primary'>{record.proxyType.toUpperCase()}</span>
-                                <span className='text-muted-foreground'>({record.host}:{record.port})</span>
+                                <span className='text-primary font-medium'>
+                                    {record.proxyType.toUpperCase()}
+                                </span>
+                                <span className='text-muted-foreground'>
+                                    ({record.host}:{record.port})
+                                </span>
                             </div>
                         ) : (
                             <span className='text-muted-foreground italic'>直连</span>

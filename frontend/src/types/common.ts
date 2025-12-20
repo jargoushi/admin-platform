@@ -32,7 +32,7 @@ export interface BaseEntity {
 export interface BaseQueryRequest {
   page?: number;
   size?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

@@ -93,10 +93,10 @@ export function DataTable<T extends object>({
                     <TableCell key={column.key} className={column.className}>
                       {column.render
                         ? column.render(
-                          record[column.key as keyof T],
-                          record,
-                          index
-                        )
+                            record[column.key as keyof T],
+                            record,
+                            index
+                          )
                         : (record[column.key as keyof T] as React.ReactNode)}
                     </TableCell>
                   ))}

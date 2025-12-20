@@ -9,9 +9,12 @@
 'use client';
 
 import { usePageList } from '@/hooks/use-page-list';
-import { FilterLayout, createFilterParsers } from '@/components/shared/filter-layout';
+import {
+  FilterLayout,
+  createFilterParsers
+} from '@/components/shared/filter-layout';
 import { CurdLayout } from '@/components/shared/curd-layout';
-import { MonitorApiService as TaskApiService } from '@/service/api/monitor.api';
+import { TaskApiService } from '@/service/api/task.api';
 
 import { MonitorTaskTable } from './components/MonitorTaskTable';
 import { DEFAULT_QUERY_PARAMS, FILTERS_CONFIG } from './constants';
@@ -28,7 +31,8 @@ export default function MonitorTaskManagementPage() {
     resetFilters,
     items,
     loading,
-    pagination
+    pagination,
+    refresh
   } = usePageList<MonitorTask, MonitorTaskQueryRequest>(
     TaskApiService.getPageList,
     DEFAULT_QUERY_PARAMS,
@@ -40,7 +44,9 @@ export default function MonitorTaskManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={<div className='flex h-8 items-center font-semibold'>任务执行记录</div>}
+      header={
+        <div className='flex h-8 items-center font-semibold'>任务执行记录</div>
+      }
       filters={
         <FilterLayout<MonitorTaskQueryRequest>
           config={FILTERS_CONFIG}
@@ -50,12 +56,7 @@ export default function MonitorTaskManagementPage() {
           loading={loading}
         />
       }
-      table={
-        <MonitorTaskTable
-          data={items}
-          loading={loading}
-        />
-      }
+      table={<MonitorTaskTable data={items} loading={loading} onRefresh={refresh} />}
     />
   );
 }

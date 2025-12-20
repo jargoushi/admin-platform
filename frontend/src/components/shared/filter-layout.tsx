@@ -9,9 +9,9 @@ import {
   Controller,
   FieldValues,
   Path,
-  UseFormHandleSubmit,
+  useForm,
   useWatch,
-  useForm
+  type DefaultValues
 } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';

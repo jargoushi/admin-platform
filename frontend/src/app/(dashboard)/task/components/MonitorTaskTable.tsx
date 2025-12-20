@@ -12,7 +12,11 @@ import { DataTable, type Column } from '@/components/table/data-table';
 import type { MonitorTask } from '../types';
 import { findDescByCode } from '@/types/common';
 import { StatusBadge } from '@/components/shared/status-badge';
-import { TASK_STATUS_CONFIG, CHANNEL_TYPES, TASK_TYPES, TASK_STATUSES } from '../constants';
+import {
+  TASK_STATUS_CONFIG,
+  CHANNEL_TYPES,
+  TASK_TYPES
+} from '../constants';
 
 /**
  * 表格组件属性
@@ -20,13 +24,14 @@ import { TASK_STATUS_CONFIG, CHANNEL_TYPES, TASK_TYPES, TASK_STATUSES } from '..
 interface MonitorTaskTableProps {
   data: MonitorTask[];
   loading?: boolean;
+  onRefresh?: () => void;
 }
 
 export function MonitorTaskTable({
   data,
-  loading = false
+  loading = false,
+  onRefresh
 }: MonitorTaskTableProps) {
-
   /** 列配置 */
   const columns = useMemo<Column<MonitorTask>[]>(
     () => [

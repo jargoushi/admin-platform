@@ -22,7 +22,10 @@ import {
   type ActionItem
 } from '@/components/table/action-dropdown';
 import type { ActivationCode } from '../types';
-import { ACTIVATION_CODE_TYPES, ACTIVATION_CODE_STATUSES, ACTIVATION_STATUS_CONFIG } from '../constants';
+import {
+  ACTIVATION_CODE_TYPES,
+  ACTIVATION_STATUS_CONFIG
+} from '../constants';
 import { findDescByCode } from '@/types/common';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { StatusBadge } from '@/components/shared/status-badge';

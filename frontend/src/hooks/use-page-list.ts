@@ -65,7 +65,7 @@ export function usePageList<T, F extends PageRequest>(
 
   const setFilters = useCallback(
     (newFilters: Partial<F>) => {
-      setUrlFilters(newFilters as any);
+      setUrlFilters(newFilters as Parameters<typeof setUrlFilters>[0]);
     },
     [setUrlFilters]
   );
@@ -75,7 +75,7 @@ export function usePageList<T, F extends PageRequest>(
       setUrlFilters({
         ...newFilters,
         page: 1
-      } as any);
+      } as Parameters<typeof setUrlFilters>[0]);
     },
     [setUrlFilters]
   );

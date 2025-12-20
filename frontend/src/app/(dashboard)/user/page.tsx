@@ -8,7 +8,10 @@
 'use client';
 
 import { usePageList } from '@/hooks/use-page-list';
-import { FilterLayout, createFilterParsers } from '@/components/shared/filter-layout';
+import {
+  FilterLayout,
+  createFilterParsers
+} from '@/components/shared/filter-layout';
 import { CurdLayout } from '@/components/shared/curd-layout';
 import { UserApiService } from '@/service/api/user.api';
 
@@ -28,7 +31,8 @@ export default function UserManagementPage() {
     resetFilters,
     items,
     loading,
-    pagination
+    pagination,
+    refresh
   } = usePageList<User, UserQueryRequest>(
     UserApiService.getPageList,
     DEFAULT_QUERY_PARAMS,
@@ -50,13 +54,7 @@ export default function UserManagementPage() {
           loading={loading}
         />
       }
-      table={
-        <UserTable
-          data={items}
-          loading={loading}
-          onRefresh={refresh}
-        />
-      }
+      table={<UserTable data={items} loading={loading} onRefresh={refresh} />}
     />
   );
 }

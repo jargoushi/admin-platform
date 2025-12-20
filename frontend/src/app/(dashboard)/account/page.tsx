@@ -9,7 +9,10 @@
 'use client';
 
 import { usePageList } from '@/hooks/use-page-list';
-import { FilterLayout, createFilterParsers } from '@/components/shared/filter-layout';
+import {
+  FilterLayout,
+  createFilterParsers
+} from '@/components/shared/filter-layout';
 import { CurdLayout } from '@/components/shared/curd-layout';
 import { AccountApiService } from '@/service/api/account.api';
 
@@ -53,11 +56,7 @@ export default function AccountManagementPage() {
         />
       }
       table={
-        <AccountTable
-          data={items}
-          loading={loading}
-          onRefresh={refresh}
-        />
+        <AccountTable data={items} loading={loading} onRefresh={refresh} />
       }
     />
   );

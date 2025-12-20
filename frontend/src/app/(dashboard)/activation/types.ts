@@ -1,4 +1,3 @@
-```typescript
 import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
@@ -110,4 +109,3 @@ export interface ActivationCodeQueryRequest extends BaseQueryRequest {
   /** QueryParams 兼容索引签名 */
   [key: string]: string | number | undefined;
 }
-```

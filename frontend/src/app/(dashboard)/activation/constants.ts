@@ -8,7 +8,10 @@
 import type { ActivationCodeQueryRequest } from './types';
 import type { OptionConfig } from '@/types/common';
 import { DEFAULT_PAGE_REQUEST } from '@/constants/pagination';
-import { FilterFieldConfig, FILTER_TYPES } from '@/components/shared/filter-layout';
+import {
+  FilterFieldConfig,
+  FILTER_TYPES
+} from '@/components/shared/filter-layout';
 import { StatusConfig } from '@/components/shared/status-badge';
 
 // ==================== 激活码类型配置 ====================
@@ -74,8 +77,18 @@ export const DISTRIBUTE_COUNT_RANGE = {
 
 export const ACTIVATION_STATUS_CONFIG: Record<number, StatusConfig> = {
   0: { label: '未使用', variant: 'secondary' },
-  1: { label: '已分发', variant: 'outline', bg: 'bg-blue-50', color: 'text-blue-500' },
-  2: { label: '已激活', variant: 'default', bg: 'bg-green-100', color: 'text-green-600' },
+  1: {
+    label: '已分发',
+    variant: 'outline',
+    bg: 'bg-blue-50',
+    color: 'text-blue-500'
+  },
+  2: {
+    label: '已激活',
+    variant: 'default',
+    bg: 'bg-green-100',
+    color: 'text-green-600'
+  },
   3: { label: '作废', variant: 'destructive' }
 };
 
