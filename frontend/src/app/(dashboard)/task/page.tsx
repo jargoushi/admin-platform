@@ -44,10 +44,12 @@ export default function MonitorTaskManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={
+    >
+      <CurdLayout.Header>
         <div className='flex h-8 items-center font-semibold'>任务执行记录</div>
-      }
-      filters={
+      </CurdLayout.Header>
+
+      <CurdLayout.Filters>
         <FilterLayout<MonitorTaskQueryRequest>
           config={FILTERS_CONFIG}
           values={filters}
@@ -55,8 +57,11 @@ export default function MonitorTaskManagementPage() {
           onReset={resetFilters}
           loading={loading}
         />
-      }
-      table={<MonitorTaskTable data={items} loading={loading} onRefresh={refresh} />}
-    />
+      </CurdLayout.Filters>
+
+      <CurdLayout.Table>
+        <MonitorTaskTable data={items} loading={loading} onRefresh={refresh} />
+      </CurdLayout.Table>
+    </CurdLayout>
   );
 }

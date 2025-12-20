@@ -45,8 +45,12 @@ export default function MonitorConfigManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={<MonitorConfigPageHeader onSuccess={refresh} />}
-      filters={
+    >
+      <CurdLayout.Header>
+        <MonitorConfigPageHeader onSuccess={refresh} />
+      </CurdLayout.Header>
+
+      <CurdLayout.Filters>
         <FilterLayout<MonitorConfigQueryRequest>
           config={FILTERS_CONFIG}
           values={filters}
@@ -54,14 +58,15 @@ export default function MonitorConfigManagementPage() {
           onReset={resetFilters}
           loading={loading}
         />
-      }
-      table={
+      </CurdLayout.Filters>
+
+      <CurdLayout.Table>
         <MonitorConfigTable
           data={items}
           loading={loading}
           onRefresh={refresh}
         />
-      }
-    />
+      </CurdLayout.Table>
+    </CurdLayout>
   );
 }

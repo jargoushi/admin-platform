@@ -44,8 +44,12 @@ export default function UserManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={<UserPageHeader onSuccess={refresh} />}
-      filters={
+    >
+      <CurdLayout.Header>
+        <UserPageHeader onSuccess={refresh} />
+      </CurdLayout.Header>
+
+      <CurdLayout.Filters>
         <FilterLayout<UserQueryRequest>
           config={FILTERS_CONFIG}
           values={filters}
@@ -53,8 +57,11 @@ export default function UserManagementPage() {
           onReset={resetFilters}
           loading={loading}
         />
-      }
-      table={<UserTable data={items} loading={loading} onRefresh={refresh} />}
-    />
+      </CurdLayout.Filters>
+
+      <CurdLayout.Table>
+        <UserTable data={items} loading={loading} onRefresh={refresh} />
+      </CurdLayout.Table>
+    </CurdLayout>
   );
 }

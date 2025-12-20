@@ -45,8 +45,12 @@ export default function AccountManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={<AccountPageHeader onSuccess={refresh} />}
-      filters={
+    >
+      <CurdLayout.Header>
+        <AccountPageHeader onSuccess={refresh} />
+      </CurdLayout.Header>
+
+      <CurdLayout.Filters>
         <FilterLayout<AccountQueryRequest>
           config={FILTERS_CONFIG}
           values={filters}
@@ -54,10 +58,11 @@ export default function AccountManagementPage() {
           onReset={resetFilters}
           loading={loading}
         />
-      }
-      table={
+      </CurdLayout.Filters>
+
+      <CurdLayout.Table>
         <AccountTable data={items} loading={loading} onRefresh={refresh} />
-      }
-    />
+      </CurdLayout.Table>
+    </CurdLayout>
   );
 }

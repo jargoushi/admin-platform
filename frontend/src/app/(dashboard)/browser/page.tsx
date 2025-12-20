@@ -42,8 +42,12 @@ export default function BrowserManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={<BrowserPageHeader onRefresh={refresh} />}
-      filters={
+    >
+      <CurdLayout.Header>
+        <BrowserPageHeader onRefresh={refresh} />
+      </CurdLayout.Header>
+
+      <CurdLayout.Filters>
         <FilterLayout<BrowserListRequest>
           config={FILTERS_CONFIG}
           values={filters}
@@ -51,10 +55,11 @@ export default function BrowserManagementPage() {
           onReset={resetFilters}
           loading={loading}
         />
-      }
-      table={
+      </CurdLayout.Filters>
+
+      <CurdLayout.Table>
         <BrowserTable data={items} loading={loading} onRefresh={refresh} />
-      }
-    />
+      </CurdLayout.Table>
+    </CurdLayout>
   );
 }

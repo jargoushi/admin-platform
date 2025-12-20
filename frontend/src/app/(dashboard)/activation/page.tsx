@@ -45,8 +45,12 @@ export default function ActivationCodeManagementPage() {
       pagination={pagination}
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-      header={<ActivationCodePageHeader onSuccess={refresh} />}
-      filters={
+    >
+      <CurdLayout.Header>
+        <ActivationCodePageHeader onSuccess={refresh} />
+      </CurdLayout.Header>
+
+      <CurdLayout.Filters>
         <FilterLayout<ActivationCodeQueryRequest>
           config={FILTERS_CONFIG}
           values={filters}
@@ -54,14 +58,15 @@ export default function ActivationCodeManagementPage() {
           onReset={resetFilters}
           loading={loading}
         />
-      }
-      table={
+      </CurdLayout.Filters>
+
+      <CurdLayout.Table>
         <ActivationCodeTable
           data={items}
           loading={loading}
           onRefresh={refresh}
         />
-      }
-    />
+      </CurdLayout.Table>
+    </CurdLayout>
   );
 }

@@ -1,21 +1,63 @@
 /**
- * 通用 CRUD 页面布局组件
+ * CURD 页面布局组件 (复合组件模式)
+ *
+ * @description
+ * 提供标准化的 CURD 页面布局结构
+ * 使用复合组件模式提供语义化的子组件
+ *
+ * @example
+ * ```tsx
+ * <CurdLayout pagination={pagination} onPageChange={...} onPageSizeChange={...}>
+ *   <CurdLayout.Header>
+ *     <PageHeader ... />
+ *   </CurdLayout.Header>
+ *   <CurdLayout.Filters>
+ *     <Filters ... />
+ *   </CurdLayout.Filters>
+ *   <CurdLayout.Table>
+ *     <DataTable ... />
+ *   </CurdLayout.Table>
+ * </CurdLayout>
+ * ```
  */
 
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import PageContainer from '@/components/layout/page-container';
 import { Pagination } from '@/components/table/pagination';
 import { PaginationInfo } from '@/lib/http/types';
 
+// ==================== 子组件 ====================
+
+interface HeaderProps {
+    children: ReactNode;
+}
+
+function Header({ children }: HeaderProps) {
+    return <div className='shrink-0'>{children}</div>;
+}
+
+interface FiltersProps {
+    children: ReactNode;
+}
+
+function Filters({ children }: FiltersProps) {
+    return <div className='shrink-0'>{children}</div>;
+}
+
+interface TableProps {
+    children: ReactNode;
+}
+
+function Table({ children }: TableProps) {
+    return <div className='min-h-0 flex-1 overflow-auto'>{children}</div>;
+}
+
+// ==================== 主组件 ====================
+
 interface CurdLayoutProps {
-    /** 自定义头部内容 (如各种操作按钮) */
-    header?: React.ReactNode;
-    /** 筛选器组件 */
-    filters?: React.ReactNode;
-    /** 表格组件 */
-    table: React.ReactNode;
+    children: ReactNode;
     /** 分页信息 (可选，如果不传则不显示分页组件) */
     pagination?: PaginationInfo;
     /** 分页变化回调 */
@@ -26,10 +68,8 @@ interface CurdLayoutProps {
     scrollable?: boolean;
 }
 
-export function CurdLayout({
-    header,
-    filters,
-    table,
+function CurdLayout({
+    children,
     pagination,
     onPageChange,
     onPageSizeChange,
@@ -38,27 +78,26 @@ export function CurdLayout({
     return (
         <PageContainer scrollable={scrollable}>
             <div className='flex h-[calc(100vh-8rem)] w-full flex-col space-y-4'>
-                {/* 头部区域 */}
-                {header && <div className='shrink-0'>{header}</div>}
+                {children}
 
-                {/* 筛选区域 */}
-                {filters && <div className='shrink-0'>{filters}</div>}
-
-                {/* 表格与分页区域 */}
-                <div className='flex min-h-0 flex-1 flex-col'>
-                    <div className='min-h-0 overflow-auto'>{table}</div>
-
-                    {pagination && onPageChange && onPageSizeChange && (
-                        <div className='shrink-0'>
-                            <Pagination
-                                pagination={pagination}
-                                onPageChange={onPageChange}
-                                onPageSizeChange={onPageSizeChange}
-                            />
-                        </div>
-                    )}
-                </div>
+                {pagination && onPageChange && onPageSizeChange && (
+                    <div className='shrink-0'>
+                        <Pagination
+                            pagination={pagination}
+                            onPageChange={onPageChange}
+                            onPageSizeChange={onPageSizeChange}
+                        />
+                    </div>
+                )}
             </div>
         </PageContainer>
     );
 }
+
+// ==================== 导出 ====================
+
+CurdLayout.Header = Header;
+CurdLayout.Filters = Filters;
+CurdLayout.Table = Table;
+
+export { CurdLayout };
