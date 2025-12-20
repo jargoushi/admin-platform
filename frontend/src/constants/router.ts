@@ -7,7 +7,8 @@ import {
   Ticket,
   Users,
   UserCircle,
-  LayoutDashboard
+  LayoutDashboard,
+  Chrome
 } from 'lucide-react';
 
 // 系统导航列表
@@ -33,6 +34,11 @@ export const navList: NavItem[] = [
         title: '任务管理',
         url: '/task',
         icon: ListChecks
+      },
+      {
+        title: '浏览器管理',
+        url: '/browser',
+        icon: Chrome
       }
     ]
   },
