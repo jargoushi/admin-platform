@@ -18,6 +18,24 @@ export interface OptionConfig {
 }
 
 /**
+ * 基础实体接口
+ */
+export interface BaseEntity {
+  id: string | number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * 基础查询请求接口
+ */
+export interface BaseQueryRequest {
+  page?: number;
+  size?: number;
+  [key: string]: any;
+}
+
+/**
  * 从 OptionConfig 数组中根据 code 查找描述
  */
 export function findDescByCode(

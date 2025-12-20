@@ -43,7 +43,7 @@ export function DataTable<T extends object>({
   return (
     <div className='bg-card border-border/50 relative h-full overflow-hidden rounded-xl border shadow-sm'>
       <div className='h-full overflow-auto'>
-        <Table className='h-full'>
+        <Table>
           <TableHeader className='bg-muted/30 sticky top-0 z-10'>
             <TableRow className='bg-muted/30 hover:bg-muted/30 border-border/50'>
               {columns.map((column) => (
@@ -93,10 +93,10 @@ export function DataTable<T extends object>({
                     <TableCell key={column.key} className={column.className}>
                       {column.render
                         ? column.render(
-                            record[column.key as keyof T],
-                            record,
-                            index
-                          )
+                          record[column.key as keyof T],
+                          record,
+                          index
+                        )
                         : (record[column.key as keyof T] as React.ReactNode)}
                     </TableCell>
                   ))}

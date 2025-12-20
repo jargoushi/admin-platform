@@ -5,18 +5,20 @@
 'use client';
 
 import { useMemo, useCallback } from 'react';
-import { Play, Square, Trash2 } from 'lucide-react';
+import { Play, Square, Trash2, Info } from 'lucide-react';
 import { DataTable, type Column } from '@/components/table/data-table';
 import {
     ActionDropdown,
     type ActionItem
 } from '@/components/table/action-dropdown';
 import { useConfirmation } from '@/hooks/use-confirmation';
+import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
 import { BrowserApiService } from '@/service/api/browser.api';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/shared/status-badge';
 import { toast } from 'sonner';
-import type { BrowserListItem } from '../types';
+import type { BrowserListItem, BrowserDetail } from '../types';
 import { BROWSER_STATUS } from '../constants';
+import { BrowserDetailView } from './BrowserDetailView';
 
 interface BrowserTableProps {
     data: BrowserListItem[];
@@ -30,6 +32,17 @@ export function BrowserTable({
     onRefresh
 }: BrowserTableProps) {
     const { confirm, ConfirmDialog } = useConfirmation();
+
+    // Scheme 2: 使用通用对话框管理
+    const { openDialog, DialogsContainer } = useGenericDialogs<BrowserDetail>({
+        dialogs: {
+            detail: {
+                title: '浏览器详情',
+                description: '查看指纹及环境配置信息',
+                component: BrowserDetailView
+            }
+        }
+    });
 
     const handleOpen = useCallback(
         async (record: BrowserListItem) => {
@@ -75,6 +88,18 @@ export function BrowserTable({
         [confirm, onRefresh]
     );
 
+    const handleViewDetail = useCallback(
+        async (record: BrowserListItem) => {
+            try {
+                const detail = await BrowserApiService.getDetail(record.id);
+                openDialog('detail', detail);
+            } catch (error) {
+                toast.error('获取详情失败');
+            }
+        },
+        [openDialog]
+    );
+
     const columns = useMemo<Column<BrowserListItem>[]>(
         () => [
             {
@@ -96,28 +121,23 @@ export function BrowserTable({
                 key: 'status',
                 title: '状态',
                 className: 'w-[100px] text-center',
-                render: (_, record) => {
-                    const status = BROWSER_STATUS[record.status as keyof typeof BROWSER_STATUS] || BROWSER_STATUS[0];
-                    return (
-                        <Badge className={`${status.bg} ${status.color} border-none hover:bg-opacity-80`}>
-                            {status.label}
-                        </Badge>
-                    );
-                }
+                render: (_, record) => (
+                    <StatusBadge code={record.status} configMap={BROWSER_STATUS} />
+                )
             },
             {
                 key: 'proxy',
                 title: '代理信息',
                 className: 'min-w-[200px]',
                 render: (_, record) => (
-                    <div className='text-xs space-y-1'>
+                    <div className='text-xs'>
                         {record.proxyType ? (
-                            <>
-                                <div className='font-medium text-primary'>{record.proxyType.toUpperCase()}</div>
-                                <div className='text-muted-foreground'>{record.host}:{record.port}</div>
-                            </>
+                            <div className='flex items-center space-x-1'>
+                                <span className='font-medium text-primary'>{record.proxyType.toUpperCase()}</span>
+                                <span className='text-muted-foreground'>({record.host}:{record.port})</span>
+                            </div>
                         ) : (
-                            <span className='text-muted-foreground'>直连</span>
+                            <span className='text-muted-foreground italic'>直连</span>
                         )}
                     </div>
                 )
@@ -133,6 +153,12 @@ export function BrowserTable({
                 className: 'w-[120px] text-center',
                 render: (_, record) => {
                     const actions: ActionItem[] = [
+                        {
+                            key: 'detail',
+                            label: '查看详情',
+                            icon: <Info className='mr-2 h-4 w-4' />,
+                            onClick: () => handleViewDetail(record)
+                        },
                         {
                             key: 'open',
                             label: '打开窗口',
@@ -160,13 +186,14 @@ export function BrowserTable({
                 }
             }
         ],
-        [handleOpen, handleClose, handleDelete]
+        [handleOpen, handleClose, handleDelete, handleViewDetail]
     );
 
     return (
         <>
             <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
             <ConfirmDialog />
+            <DialogsContainer />
         </>
     );
 }

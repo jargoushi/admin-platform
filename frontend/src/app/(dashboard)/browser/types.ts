@@ -1,8 +1,8 @@
 /**
- * 浏览器管理模块类型 definition
+ * 浏览器管理模块类型定义
  */
 
-import { PageResponse } from '@/lib/http';
+import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
  * 浏览器指纹对象
@@ -22,8 +22,8 @@ export interface BrowserFingerPrint {
 /**
  * 浏览器列表项
  */
-export interface BrowserListItem {
-    id: string;
+export interface BrowserListItem extends BaseEntity {
+    id: string; // 覆盖 BaseEntity 的 string | number
     name: string;
     status: number; // 0: 未打开, 1: 已打开, 2: 异常
     seq: number;
@@ -44,12 +44,9 @@ export interface BrowserDetail extends BrowserListItem {
 /**
  * 浏览器列表查询参数
  */
-export interface BrowserListRequest {
-    page?: number;
-    size?: number;
+export interface BrowserListRequest extends BaseQueryRequest {
     groupId?: string;
     name?: string;
-    [key: string]: string | number | undefined;
 }
 
 /**

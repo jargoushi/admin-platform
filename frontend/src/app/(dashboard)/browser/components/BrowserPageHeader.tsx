@@ -47,25 +47,19 @@ export function BrowserPageHeader({ onRefresh }: BrowserPageHeaderProps) {
     };
 
     return (
-        <div className='flex items-center justify-between'>
-            <div>
-                <h1 className='text-2xl font-bold tracking-tight'>浏览器管理</h1>
-                <p className='text-muted-foreground'>管理比特浏览器窗口及自动化状态</p>
-            </div>
-            <div className='flex items-center space-x-2'>
-                <Button variant='outline' onClick={handleHealthCheck}>
-                    <HeartPulse className='mr-2 h-4 w-4' />
-                    健康检查
-                </Button>
-                <Button variant='outline' onClick={handleArrange}>
-                    <LayoutGrid className='mr-2 h-4 w-4' />
-                    一键排列
-                </Button>
-                <Button variant='destructive' onClick={handleCloseAll}>
-                    <Square className='mr-2 h-4 w-4' />
-                    关闭全部
-                </Button>
-            </div>
+        <div className='flex items-center justify-end space-x-2'>
+            <Button variant='outline' onClick={handleHealthCheck}>
+                <HeartPulse className='mr-2 h-4 w-4' />
+                健康检查
+            </Button>
+            <Button variant='outline' onClick={handleArrange}>
+                <LayoutGrid className='mr-2 h-4 w-4' />
+                一键排列
+            </Button>
+            <Button variant='destructive' onClick={handleCloseAll}>
+                <Square className='mr-2 h-4 w-4' />
+                关闭全部
+            </Button>
             <ConfirmDialog />
         </div>
     );

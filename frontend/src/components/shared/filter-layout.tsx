@@ -10,7 +10,8 @@ import {
   FieldValues,
   Path,
   UseFormHandleSubmit,
-  useWatch
+  useWatch,
+  useForm
 } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -63,8 +64,7 @@ export type FilterFieldConfig<T extends FieldValues> =
 
 interface FilterLayoutProps<T extends FieldValues> {
   config: FilterFieldConfig<T>[];
-  control: Control<T>;
-  handleSubmit: UseFormHandleSubmit<T>;
+  values: T; // 当前筛选条件值
   onSearch: (data: T) => void;
   onReset: () => void;
   loading?: boolean;
@@ -235,9 +235,9 @@ function FilterDateRange<T extends FieldValues>({
   const value: DateRange | undefined =
     startValue && endValue
       ? {
-          from: new Date(startValue as string),
-          to: new Date(endValue as string)
-        }
+        from: new Date(startValue as string),
+        to: new Date(endValue as string)
+      }
       : undefined;
 
   return (
@@ -301,13 +301,21 @@ function FilterField<T extends FieldValues>({
 
 export function FilterLayout<T extends FieldValues>({
   config,
-  control,
-  handleSubmit,
+  values,
   onSearch,
   onReset,
   loading = false
 }: FilterLayoutProps<T>) {
+  const { control, handleSubmit, reset } = useForm<T>({
+    defaultValues: values as any
+  });
+
   const [isExpanded, setIsExpanded] = React.useState(false);
+
+  // 核心：自动同步外部传入的 values (例如分页或 URL 变化时)
+  React.useEffect(() => {
+    reset(values as any);
+  }, [values, reset]);
 
   const primaryFilters = config.filter((c) => !c.advanced);
   const advancedFilters = config.filter((c) => c.advanced);
@@ -315,7 +323,7 @@ export function FilterLayout<T extends FieldValues>({
 
   return (
     <form
-      onSubmit={handleSubmit(onSearch)}
+      onSubmit={(handleSubmit as any)(onSearch)}
       className='bg-card border-border/50 rounded-xl border p-5 shadow-sm'
     >
       <div className='flex flex-col gap-4 md:flex-row'>
