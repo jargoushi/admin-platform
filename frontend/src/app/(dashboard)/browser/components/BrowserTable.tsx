@@ -56,7 +56,7 @@ export function BrowserTable({
                         `窗口 [${record.name}] 启动失败: ${result.results[0]?.error}`
                     );
                 }
-            } catch (e) {
+            } catch {
                 toast.error('打开浏览器失败');
             }
         },
@@ -69,7 +69,7 @@ export function BrowserTable({
                 await BrowserApiService.close(record.id);
                 toast.success(`窗口 [${record.name}] 已关闭`);
                 onRefresh?.();
-            } catch (e) {
+            } catch {
                 toast.error('关闭浏览器失败');
             }
         },
@@ -95,7 +95,7 @@ export function BrowserTable({
             try {
                 const detail = await BrowserApiService.getDetail(record.id);
                 openDialog('detail', detail);
-            } catch (e) {
+            } catch {
                 toast.error('获取详情失败');
             }
         },

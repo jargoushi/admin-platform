@@ -21,7 +21,7 @@ export function BrowserPageHeader({ onRefresh }: BrowserPageHeaderProps) {
     try {
       await BrowserApiService.healthCheck();
       toast.success('比特浏览器 Local Server 连接正常');
-    } catch (error) {
+    } catch {
       toast.error('无法连接到比特浏览器 Local Server');
     }
   };

@@ -29,8 +29,7 @@ interface MonitorTaskTableProps {
 
 export function MonitorTaskTable({
   data,
-  loading = false,
-  onRefresh
+  loading = false
 }: MonitorTaskTableProps) {
   /** 列配置 */
   const columns = useMemo<Column<MonitorTask>[]>(
