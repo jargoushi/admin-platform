@@ -45,9 +45,6 @@ export default function MonitorTaskManagementPage() {
       onPageChange={(page) => setFilters({ page })}
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
     >
-      <CurdLayout.Header>
-        <div className='flex h-8 items-center font-semibold'>任务执行记录</div>
-      </CurdLayout.Header>
 
       <CurdLayout.Filters>
         <FilterLayout<MonitorTaskQueryRequest>

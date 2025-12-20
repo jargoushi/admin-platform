@@ -46,7 +46,7 @@ export default function UserManagementPage() {
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
     >
       <CurdLayout.Header>
-        <UserPageHeader onSuccess={refresh} />
+        <UserPageHeader />
       </CurdLayout.Header>
 
       <CurdLayout.Filters>
