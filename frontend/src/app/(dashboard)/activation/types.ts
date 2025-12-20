@@ -1,17 +1,10 @@
-/**
- * 激活码管理模块类型定义
- *
- * @description
- * 定义激活码模块所需的所有 TypeScript 接口和类型
- * 包括后端 API 约定的类型和前端特有的类型
- */
+```typescript
+import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
  * 激活码实体（与后端 ActivationCodeResponse 一致）
  */
-export interface ActivationCode {
-  /** 激活码 ID */
-  id: number;
+export interface ActivationCode extends BaseEntity {
   /** 激活码字符串 */
   activation_code: string;
   /** 激活码类型码 (0=日卡, 1=月卡, 2=年卡, 3=永久卡) */
@@ -28,10 +21,6 @@ export interface ActivationCode {
   activated_at?: string;
   /** 过期时间 */
   expire_time?: string;
-  /** 创建时间 */
-  created_at: string;
-  /** 更新时间 */
-  updated_at: string;
 }
 
 /**
@@ -99,11 +88,7 @@ export interface ActivationCodeInvalidateRequest {
 /**
  * 激活码列表查询参数
  */
-export interface ActivationCodeQueryRequest {
-  /** 当前页码 */
-  page?: number;
-  /** 每页数量 */
-  size?: number;
+export interface ActivationCodeQueryRequest extends BaseQueryRequest {
   /** 激活码类型 (0-3) */
   type?: number;
   /** 激活码（精准匹配） */
@@ -125,3 +110,4 @@ export interface ActivationCodeQueryRequest {
   /** QueryParams 兼容索引签名 */
   [key: string]: string | number | undefined;
 }
+```

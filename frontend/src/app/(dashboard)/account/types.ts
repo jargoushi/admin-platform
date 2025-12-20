@@ -1,19 +1,11 @@
-/**
- * 账号管理模块类型定义
- *
- * @description
- * 定义账号模块所需的所有 TypeScript 接口和类型
- * 与后端 account_router.py 接口保持一致
- */
+import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 // ==================== 账号相关 ====================
 
 /**
  * 账号实体（与后端 AccountResponse 一致）
  */
-export interface Account {
-  /** 账号 ID */
-  id: number;
+export interface Account extends BaseEntity {
   /** 账号名称 */
   name: string;
   /** 第三方平台账号 */
@@ -22,18 +14,12 @@ export interface Account {
   platform_password?: string;
   /** 账号描述 */
   description?: string;
-  /** 创建时间 */
-  created_at: string;
 }
 
 /**
  * 账号分页查询请求（与后端 AccountQueryRequest 一致）
  */
-export interface AccountQueryRequest {
-  /** 当前页码 */
-  page?: number;
-  /** 每页数量 */
-  size?: number;
+export interface AccountQueryRequest extends BaseQueryRequest {
   /** 用户 ID（不传则查询所有） */
   user_id?: number;
   /** 账号名称（模糊搜索） */

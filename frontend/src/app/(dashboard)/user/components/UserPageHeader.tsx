@@ -12,6 +12,10 @@ import { PageHeader } from '@/components/table/page-header';
 /**
  * 用户页面头部组件
  */
-export function UserPageHeader() {
+interface UserPageHeaderProps {
+  onSuccess?: () => void;
+}
+
+export function UserPageHeader({ onSuccess }: UserPageHeaderProps) {
   return <PageHeader />;
 }

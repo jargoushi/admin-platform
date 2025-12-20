@@ -1,17 +1,9 @@
-/**
- * 监控配置模块类型定义
- *
- * @description
- * 定义监控配置模块所需的所有 TypeScript 接口和类型
- * 包括后端 API 约定的类型和前端特有的类型
- */
+import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
  * 监控配置实体（与后端 MonitorConfigResponse 一致）
  */
-export interface MonitorConfig {
-  /** 配置ID */
-  id: number;
+export interface MonitorConfig extends BaseEntity {
   /** 用户ID */
   user_id: number;
   /** 渠道编码 (1-5) */
@@ -32,10 +24,6 @@ export interface MonitorConfig {
   last_run_at?: string;
   /** 上次执行结果 */
   last_run_status?: number;
-  /** 创建时间 */
-  created_at: string;
-  /** 更新时间 */
-  updated_at: string;
 }
 
 /**
@@ -71,11 +59,7 @@ export interface MonitorConfigToggleRequest {
 /**
  * 监控配置查询参数
  */
-export interface MonitorConfigQueryRequest {
-  /** 当前页码 */
-  page?: number;
-  /** 每页数量 */
-  size?: number;
+export interface MonitorConfigQueryRequest extends BaseQueryRequest {
   /** 账号名称（模糊查询） */
   account_name?: string;
   /** 渠道编码 (1-5) */

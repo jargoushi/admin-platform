@@ -22,9 +22,10 @@ import {
   type ActionItem
 } from '@/components/table/action-dropdown';
 import type { ActivationCode } from '../types';
-import { ACTIVATION_CODE_TYPES, ACTIVATION_CODE_STATUSES } from '../constants';
+import { ACTIVATION_CODE_TYPES, ACTIVATION_CODE_STATUSES, ACTIVATION_STATUS_CONFIG } from '../constants';
 import { findDescByCode } from '@/types/common';
 import { ActivationApiService } from '@/service/api/activation.api';
+import { StatusBadge } from '@/components/shared/status-badge';
 import { ActivationCodeDetailView } from './ActivationCodeDetailView';
 
 /**
@@ -135,22 +136,12 @@ export function ActivationCodeTable({
         key: 'status',
         title: '状态',
         className: 'w-[100px]',
-        render: (_, record) => {
-          const statusColors: Record<
-            number,
-            'secondary' | 'info' | 'success' | 'destructive'
-          > = {
-            0: 'secondary', // 未使用
-            1: 'info', // 已分发
-            2: 'success', // 已激活
-            3: 'destructive' // 作废
-          };
-          return (
-            <Badge variant={statusColors[record.status] || 'secondary'}>
-              {findDescByCode(ACTIVATION_CODE_STATUSES, record.status)}
-            </Badge>
-          );
-        }
+        render: (_, record) => (
+          <StatusBadge
+            code={record.status}
+            configMap={ACTIVATION_STATUS_CONFIG}
+          />
+        )
       },
       {
         key: 'distributed_at',

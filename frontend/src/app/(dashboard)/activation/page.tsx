@@ -8,19 +8,14 @@
 
 'use client';
 
-import PageContainer from '@/components/layout/page-container';
-import { Pagination } from '@/components/table/pagination';
 import { usePageList } from '@/hooks/use-page-list';
-import { createFilterParsers } from '@/components/shared/filter-layout';
+import { FilterLayout, createFilterParsers } from '@/components/shared/filter-layout';
+import { CurdLayout } from '@/components/shared/curd-layout';
 import { ActivationApiService } from '@/service/api/activation.api';
 
-import {
-  ActivationCodeFilters,
-  FILTERS_CONFIG
-} from './components/ActivationCodeFilters';
 import { ActivationCodePageHeader } from './components/ActivationCodePageHeader';
 import { ActivationCodeTable } from './components/ActivationCodeTable';
-import { DEFAULT_QUERY_PARAMS } from './constants';
+import { DEFAULT_QUERY_PARAMS, FILTERS_CONFIG } from './constants';
 import type { ActivationCode, ActivationCodeQueryRequest } from './types';
 
 // 从筛选配置自动生成 parsers
@@ -43,37 +38,27 @@ export default function ActivationCodeManagementPage() {
   );
 
   return (
-    <PageContainer scrollable={false}>
-      <div className='flex h-[calc(100vh-8rem)] w-full flex-col space-y-4'>
-        {/* 页面头部 */}
-        <ActivationCodePageHeader onSuccess={refresh} />
-
-        {/* 筛选区域 */}
-        <ActivationCodeFilters
-          filters={filters}
+    <CurdLayout
+      pagination={pagination}
+      onPageChange={(page) => setFilters({ page })}
+      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      header={<ActivationCodePageHeader onSuccess={refresh} />}
+      filters={
+        <FilterLayout<ActivationCodeQueryRequest>
+          config={FILTERS_CONFIG}
+          values={filters}
           onSearch={search}
           onReset={resetFilters}
+          loading={loading}
         />
-
-        {/* 表格区域 */}
-        <div className='flex min-h-0 flex-1 flex-col'>
-          <div className='min-h-0'>
-            <ActivationCodeTable
-              data={items}
-              loading={loading}
-              onRefresh={refresh}
-            />
-          </div>
-
-          <div className='shrink-0 pt-4'>
-            <Pagination
-              pagination={pagination}
-              onPageChange={(page) => setFilters({ page })}
-              onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-            />
-          </div>
-        </div>
-      </div>
-    </PageContainer>
+      }
+      table={
+        <ActivationCodeTable
+          data={items}
+          loading={loading}
+          onRefresh={refresh}
+        />
+      }
+    />
   );
 }

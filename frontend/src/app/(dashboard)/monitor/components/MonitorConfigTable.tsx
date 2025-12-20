@@ -21,12 +21,12 @@ import {
   type ActionItem
 } from '@/components/table/action-dropdown';
 import type { MonitorConfig } from '../types';
-import { CHANNEL_TYPES, ACTIVE_STATUSES } from '../constants';
 import { findDescByCode } from '@/types/common';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { MonitorConfigUpdateForm } from './MonitorConfigUpdateForm';
 import { MonitorDailyStatsChart } from './MonitorDailyStatsChart';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/shared/status-badge';
+import { ACTIVE_STATUS_CONFIG, CHANNEL_TYPES, ACTIVE_STATUSES } from '../constants';
 
 /**
  * 表格组件属性
@@ -164,9 +164,10 @@ export function MonitorConfigTable({
         title: '状态',
         className: 'w-[100px] text-center',
         render: (_, record) => (
-          <Badge variant={record.is_active === 1 ? 'default' : 'secondary'}>
-            {findDescByCode(ACTIVE_STATUSES, record.is_active)}
-          </Badge>
+          <StatusBadge
+            code={record.is_active}
+            configMap={ACTIVE_STATUS_CONFIG}
+          />
         )
       },
       {

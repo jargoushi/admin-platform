@@ -1,17 +1,9 @@
-/**
- * 任务管理模块类型定义
- *
- * @description
- * 定义任务管理模块所需的所有 TypeScript 接口和类型
- * 包括后端 API 约定的类型和前端特有的类型
- */
+import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
  * 任务实体（与后端 MonitorTaskResponse 一致）
  */
-export interface MonitorTask {
-  /** 任务ID */
-  id: number;
+export interface MonitorTask extends BaseEntity {
   /** 渠道编码 (1-5) */
   channel_code: number;
   /** 渠道名称 */
@@ -32,8 +24,6 @@ export interface MonitorTask {
   error_msg?: string;
   /** 耗时(ms) */
   duration_ms: number;
-  /** 创建时间 */
-  created_at: string;
   /** 开始时间 */
   started_at?: string;
   /** 结束时间 */
@@ -43,11 +33,7 @@ export interface MonitorTask {
 /**
  * 任务查询参数
  */
-export interface MonitorTaskQueryRequest {
-  /** 当前页码 */
-  page?: number;
-  /** 每页数量 */
-  size?: number;
+export interface MonitorTaskQueryRequest extends BaseQueryRequest {
   /** 渠道编码 (1-5) */
   channel_code?: number;
   /** 任务类型 (1=每日数据采集, 2=手动刷新) */

@@ -17,6 +17,7 @@ import type { User } from '../types';
 interface UserTableProps {
   data: User[];
   loading?: boolean;
+  onRefresh?: () => void;
 }
 
 export function UserTable({ data, loading = false }: UserTableProps) {

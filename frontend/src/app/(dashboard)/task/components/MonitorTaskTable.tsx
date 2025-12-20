@@ -10,9 +10,9 @@
 import { useMemo } from 'react';
 import { DataTable, type Column } from '@/components/table/data-table';
 import type { MonitorTask } from '../types';
-import { CHANNEL_TYPES, TASK_TYPES, TASK_STATUSES } from '../constants';
 import { findDescByCode } from '@/types/common';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/shared/status-badge';
+import { TASK_STATUS_CONFIG, CHANNEL_TYPES, TASK_TYPES, TASK_STATUSES } from '../constants';
 
 /**
  * 表格组件属性
@@ -26,23 +26,6 @@ export function MonitorTaskTable({
   data,
   loading = false
 }: MonitorTaskTableProps) {
-  /**
-   * 根据任务状态返回对应的 Badge 样式
-   */
-  const getStatusVariant = (status: number) => {
-    switch (status) {
-      case 0:
-        return 'secondary'; // 待执行
-      case 1:
-        return 'default'; // 进行中
-      case 2:
-        return 'default'; // 成功
-      case 3:
-        return 'destructive'; // 失败
-      default:
-        return 'secondary';
-    }
-  };
 
   /** 列配置 */
   const columns = useMemo<Column<MonitorTask>[]>(
@@ -82,9 +65,10 @@ export function MonitorTaskTable({
         title: '任务状态',
         className: 'w-[120px] text-center',
         render: (_, record) => (
-          <Badge variant={getStatusVariant(record.task_status)}>
-            {findDescByCode(TASK_STATUSES, record.task_status)}
-          </Badge>
+          <StatusBadge
+            code={record.task_status}
+            configMap={TASK_STATUS_CONFIG}
+          />
         )
       },
       {

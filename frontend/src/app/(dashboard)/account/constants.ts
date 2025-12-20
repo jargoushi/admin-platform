@@ -7,6 +7,7 @@
 
 import type { AccountQueryRequest } from './types';
 import { DEFAULT_PAGE_REQUEST } from '@/constants/pagination';
+import { FilterFieldConfig, FILTER_TYPES } from '@/components/shared/filter-layout';
 
 // ==================== 默认查询参数 ====================
 
@@ -27,3 +28,13 @@ export const DEFAULT_ACCOUNT_FORM = {
   platform_password: '',
   description: ''
 };
+
+// ==================== 筛选字段配置 ====================
+
+export const FILTERS_CONFIG: FilterFieldConfig<AccountQueryRequest>[] = [
+  {
+    key: 'name',
+    label: '账号名称',
+    type: FILTER_TYPES.INPUT
+  }
+];
