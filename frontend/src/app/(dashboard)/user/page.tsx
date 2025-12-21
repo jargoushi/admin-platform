@@ -40,11 +40,7 @@ export default function UserManagementPage() {
   );
 
   return (
-    <CurdLayout
-      pagination={pagination}
-      onPageChange={(page) => setFilters({ page })}
-      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-    >
+    <CurdLayout>
       <CurdLayout.Header>
         <UserPageHeader onSuccess={refresh} />
       </CurdLayout.Header>
@@ -62,6 +58,12 @@ export default function UserManagementPage() {
       <CurdLayout.Table>
         <UserTable data={items} loading={loading} onSuccess={refresh} />
       </CurdLayout.Table>
+
+      <CurdLayout.Pagination
+        pagination={pagination}
+        onPageChange={(page) => setFilters({ page })}
+        onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      />
     </CurdLayout>
   );
 }

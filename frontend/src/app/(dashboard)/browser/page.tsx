@@ -36,11 +36,7 @@ export default function BrowserManagementPage() {
   );
 
   return (
-    <CurdLayout
-      pagination={pagination}
-      onPageChange={(page) => setFilters({ page })}
-      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-    >
+    <CurdLayout>
       <CurdLayout.Header>
         <BrowserPageHeader onSuccess={refresh} />
       </CurdLayout.Header>
@@ -58,6 +54,12 @@ export default function BrowserManagementPage() {
       <CurdLayout.Table>
         <BrowserTable data={items} loading={loading} onRefresh={refresh} />
       </CurdLayout.Table>
+
+      <CurdLayout.Pagination
+        pagination={pagination}
+        onPageChange={(page) => setFilters({ page })}
+        onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      />
     </CurdLayout>
   );
 }

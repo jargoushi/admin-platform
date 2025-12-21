@@ -41,11 +41,7 @@ export default function ActivationCodeManagementPage() {
   );
 
   return (
-    <CurdLayout
-      pagination={pagination}
-      onPageChange={(page) => setFilters({ page })}
-      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-    >
+    <CurdLayout>
       <CurdLayout.Header>
         <ActivationCodePageHeader onSuccess={refresh} />
       </CurdLayout.Header>
@@ -67,6 +63,12 @@ export default function ActivationCodeManagementPage() {
           onRefresh={refresh}
         />
       </CurdLayout.Table>
+
+      <CurdLayout.Pagination
+        pagination={pagination}
+        onPageChange={(page) => setFilters({ page })}
+        onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      />
     </CurdLayout>
   );
 }

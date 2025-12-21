@@ -41,11 +41,7 @@ export default function MonitorConfigManagementPage() {
   );
 
   return (
-    <CurdLayout
-      pagination={pagination}
-      onPageChange={(page) => setFilters({ page })}
-      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-    >
+    <CurdLayout>
       <CurdLayout.Header>
         <MonitorConfigPageHeader onSuccess={refresh} />
       </CurdLayout.Header>
@@ -67,6 +63,12 @@ export default function MonitorConfigManagementPage() {
           onRefresh={refresh}
         />
       </CurdLayout.Table>
+
+      <CurdLayout.Pagination
+        pagination={pagination}
+        onPageChange={(page) => setFilters({ page })}
+        onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      />
     </CurdLayout>
   );
 }

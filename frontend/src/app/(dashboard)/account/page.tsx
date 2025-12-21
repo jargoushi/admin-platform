@@ -41,11 +41,7 @@ export default function AccountManagementPage() {
   );
 
   return (
-    <CurdLayout
-      pagination={pagination}
-      onPageChange={(page) => setFilters({ page })}
-      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-    >
+    <CurdLayout>
       <CurdLayout.Header>
         <AccountPageHeader onSuccess={refresh} />
       </CurdLayout.Header>
@@ -63,6 +59,12 @@ export default function AccountManagementPage() {
       <CurdLayout.Table>
         <AccountTable data={items} loading={loading} onRefresh={refresh} />
       </CurdLayout.Table>
+
+      <CurdLayout.Pagination
+        pagination={pagination}
+        onPageChange={(page) => setFilters({ page })}
+        onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      />
     </CurdLayout>
   );
 }

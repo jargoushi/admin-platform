@@ -54,41 +54,44 @@ function Table({ children }: TableProps) {
     return <div className='min-h-0 flex-1 overflow-auto'>{children}</div>;
 }
 
+interface PaginationProps {
+    /** 分页信息 */
+    pagination: PaginationInfo;
+    /** 分页变化回调 */
+    onPageChange: (page: number) => void;
+    /** 每页数量变化回调 */
+    onPageSizeChange: (size: number) => void;
+}
+
+function CurdPagination({
+    pagination,
+    onPageChange,
+    onPageSizeChange
+}: PaginationProps) {
+    return (
+        <div className='shrink-0'>
+            <Pagination
+                pagination={pagination}
+                onPageChange={onPageChange}
+                onPageSizeChange={onPageSizeChange}
+            />
+        </div>
+    );
+}
+
 // ==================== 主组件 ====================
 
 interface CurdLayoutProps {
     children: ReactNode;
-    /** 分页信息 (可选，如果不传则不显示分页组件) */
-    pagination?: PaginationInfo;
-    /** 分页变化回调 */
-    onPageChange?: (page: number) => void;
-    /** 每页数量变化回调 */
-    onPageSizeChange?: (size: number) => void;
     /** 是否需要容器滚动 */
     scrollable?: boolean;
 }
 
-function CurdLayout({
-    children,
-    pagination,
-    onPageChange,
-    onPageSizeChange,
-    scrollable = false
-}: CurdLayoutProps) {
+function CurdLayout({ children, scrollable = false }: CurdLayoutProps) {
     return (
         <PageContainer scrollable={scrollable}>
             <div className='flex h-[calc(100vh-8rem)] w-full flex-col space-y-4'>
                 {children}
-
-                {pagination && onPageChange && onPageSizeChange && (
-                    <div className='shrink-0'>
-                        <Pagination
-                            pagination={pagination}
-                            onPageChange={onPageChange}
-                            onPageSizeChange={onPageSizeChange}
-                        />
-                    </div>
-                )}
             </div>
         </PageContainer>
     );
@@ -99,5 +102,7 @@ function CurdLayout({
 CurdLayout.Header = Header;
 CurdLayout.Filters = Filters;
 CurdLayout.Table = Table;
+CurdLayout.Pagination = CurdPagination;
 
 export { CurdLayout };
+

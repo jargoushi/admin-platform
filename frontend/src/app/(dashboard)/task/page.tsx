@@ -40,12 +40,7 @@ export default function MonitorTaskManagementPage() {
   );
 
   return (
-    <CurdLayout
-      pagination={pagination}
-      onPageChange={(page) => setFilters({ page })}
-      onPageSizeChange={(size) => setFilters({ size, page: 1 })}
-    >
-
+    <CurdLayout>
       <CurdLayout.Filters>
         <FilterLayout<MonitorTaskQueryRequest>
           config={FILTERS_CONFIG}
@@ -59,6 +54,12 @@ export default function MonitorTaskManagementPage() {
       <CurdLayout.Table>
         <MonitorTaskTable data={items} loading={loading} onRefresh={refresh} />
       </CurdLayout.Table>
+
+      <CurdLayout.Pagination
+        pagination={pagination}
+        onPageChange={(page) => setFilters({ page })}
+        onPageSizeChange={(size) => setFilters({ size, page: 1 })}
+      />
     </CurdLayout>
   );
 }
