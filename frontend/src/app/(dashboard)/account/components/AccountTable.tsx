@@ -3,28 +3,26 @@
  *
  * @description
  * 显示账号列表，支持编辑、删除、绑定管理操作
- * 组件内部管理对话框状态
+ * 采用 useGenericDialogs 管理弹窗状态
  */
 
 'use client';
 
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 import { Pencil, Trash2, Link2 } from 'lucide-react';
-import { toast } from 'sonner';
 import { DataTable, type Column } from '@/components/table/data-table';
 import {
   ActionDropdown,
   type ActionItem
 } from '@/components/table/action-dropdown';
 import { useConfirmation } from '@/hooks/use-confirmation';
+import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
 import { AccountApiService } from '@/service/api/account.api';
-import { AccountDialog } from './AccountDialogs';
+import { AccountEditForm } from './AccountEditForm';
 import { BindingManageDialog } from './BindingManageDialog';
-import type {
-  Account,
-  AccountCreateRequest,
-  AccountUpdateRequest
-} from '../types';
+import { toast } from 'sonner';
+import type { Account } from '../types';
+import { useState } from 'react';
 
 /**
  * 表格组件属性
@@ -41,14 +39,22 @@ export function AccountTable({
   loading = false,
   onRefresh
 }: AccountTableProps) {
-  // 编辑对话框状态
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  // 绑定管理弹窗状态
+  // 绑定管理弹窗状态（暂保留，因为 BindingManageDialog 较复杂）
   const [bindingDialogOpen, setBindingDialogOpen] = useState(false);
   const [bindingAccount, setBindingAccount] = useState<Account | null>(null);
+
+  // 编辑弹窗使用 useGenericDialogs
+  const { openDialog, DialogsContainer } = useGenericDialogs<Account>({
+    dialogs: {
+      edit: {
+        title: '编辑账号',
+        description: '修改账号信息',
+        component: AccountEditForm,
+        className: 'sm:max-w-[500px]'
+      }
+    },
+    onClose: () => onRefresh?.()
+  });
 
   // 确认弹窗
   const { confirm, ConfirmDialog } = useConfirmation();
@@ -56,10 +62,12 @@ export function AccountTable({
   /**
    * 处理编辑
    */
-  const handleEdit = useCallback((account: Account) => {
-    setCurrentAccount(account);
-    setEditDialogOpen(true);
-  }, []);
+  const handleEdit = useCallback(
+    (account: Account) => {
+      openDialog('edit', account);
+    },
+    [openDialog]
+  );
 
   /**
    * 处理绑定管理
@@ -84,31 +92,6 @@ export function AccountTable({
       });
     },
     [confirm, onRefresh]
-  );
-
-  /**
-   * 提交编辑
-   */
-  const handleSubmitEdit = useCallback(
-    async (data: AccountCreateRequest) => {
-      if (!currentAccount) return;
-      setSubmitting(true);
-      try {
-        const updateData: AccountUpdateRequest = {
-          id: currentAccount.id,
-          ...data
-        };
-        await AccountApiService.update(updateData);
-        toast.success('账号更新成功');
-        setEditDialogOpen(false);
-        onRefresh?.();
-      } catch (error) {
-        console.error('更新失败', error);
-      } finally {
-        setSubmitting(false);
-      }
-    },
-    [currentAccount, onRefresh]
   );
 
   /** 列配置 */
@@ -178,14 +161,8 @@ export function AccountTable({
     <>
       <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
 
-      {/* 编辑对话框 */}
-      <AccountDialog
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
-        account={currentAccount}
-        onSubmit={handleSubmitEdit}
-        loading={submitting}
-      />
+      {/* 编辑弹窗容器 */}
+      <DialogsContainer />
 
       {/* 绑定管理弹窗 */}
       <BindingManageDialog

@@ -17,7 +17,8 @@ import type { User } from '../types';
 interface UserTableProps {
   data: User[];
   loading?: boolean;
-  onRefresh?: () => void;
+  /** 操作成功后的回调(用于刷新列表) */
+  onSuccess?: () => void;
 }
 
 export function UserTable({ data, loading = false }: UserTableProps) {

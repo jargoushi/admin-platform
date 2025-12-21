@@ -20,22 +20,20 @@ import type { BrowserListItem, BrowserListRequest } from './types';
 const filterParsers = createFilterParsers(FILTERS_CONFIG);
 
 export default function BrowserManagementPage() {
-  const pageList = usePageList<BrowserListItem, BrowserListRequest>(
-    BrowserApiService.getPageList,
-    DEFAULT_QUERY_PARAMS,
-    filterParsers
-  );
-
   const {
     filters,
     search,
+    setFilters,
     resetFilters,
     items,
     loading,
     pagination,
-    setFilters,
     refresh
-  } = pageList;
+  } = usePageList<BrowserListItem, BrowserListRequest>(
+    BrowserApiService.getPageList,
+    DEFAULT_QUERY_PARAMS,
+    filterParsers
+  );
 
   return (
     <CurdLayout
@@ -44,7 +42,7 @@ export default function BrowserManagementPage() {
       onPageSizeChange={(size) => setFilters({ size, page: 1 })}
     >
       <CurdLayout.Header>
-        <BrowserPageHeader onRefresh={refresh} />
+        <BrowserPageHeader onSuccess={refresh} />
       </CurdLayout.Header>
 
       <CurdLayout.Filters>

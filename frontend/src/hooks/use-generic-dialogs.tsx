@@ -20,13 +20,6 @@ export interface UseGenericDialogsOptions {
  * 采用 Hook + 组件一体化设计，参考 useConfirmation 模式
  * 隐藏内部状态，只暴露 openDialog 和 DialogsContainer
  *
- * @example
- * const { openDialog, DialogsContainer } = useGenericDialogs({
- *   configs: DIALOG_CONFIGS,
- *   propsMap: { init: { onSubmit: handleSubmit } },
- *   onCloseCallback: refreshList
- * });
- *
  * @returns { openDialog, DialogsContainer }
  */
 export function useGenericDialogs<T = unknown>(

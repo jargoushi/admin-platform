@@ -1,20 +1,25 @@
 /**
- * 浏览器管理页面头部
+ * 浏览器管理页面头部组件
+ *
+ * @description
+ * 负责页面标题和操作按钮
+ * 采用组件自治原则，内部管理弹窗逻辑，通过回调通知父组件
  */
 
 'use client';
 
 import { LayoutGrid, Square, HeartPulse } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/table/page-header';
 import { useConfirmation } from '@/hooks/use-confirmation';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { toast } from 'sonner';
 
 interface BrowserPageHeaderProps {
-  onRefresh: () => void;
+  /** 操作成功后的回调(用于刷新列表) */
+  onSuccess?: () => void;
 }
 
-export function BrowserPageHeader({ onRefresh }: BrowserPageHeaderProps) {
+export function BrowserPageHeader({ onSuccess }: BrowserPageHeaderProps) {
   const { confirm, ConfirmDialog } = useConfirmation();
 
   const handleHealthCheck = async () => {
@@ -32,7 +37,7 @@ export function BrowserPageHeader({ onRefresh }: BrowserPageHeaderProps) {
       onConfirm: async () => {
         await BrowserApiService.closeAll();
         toast.success('已发送关闭所有窗口指令');
-        onRefresh();
+        onSuccess?.();
       }
     });
   };
@@ -42,25 +47,37 @@ export function BrowserPageHeader({ onRefresh }: BrowserPageHeaderProps) {
       await BrowserApiService.arrange();
       toast.success('窗口已自动排列');
     } catch {
-      toast.error('自愈检查失败');
+      toast.error('排列窗口失败');
     }
   };
 
   return (
-    <div className='flex items-center justify-end space-x-2'>
-      <Button variant='outline' onClick={handleHealthCheck}>
-        <HeartPulse className='mr-2 h-4 w-4' />
-        健康检查
-      </Button>
-      <Button variant='outline' onClick={handleArrange}>
-        <LayoutGrid className='mr-2 h-4 w-4' />
-        一键排列
-      </Button>
-      <Button variant='destructive' onClick={handleCloseAll}>
-        <Square className='mr-2 h-4 w-4' />
-        关闭全部
-      </Button>
+    <>
+      <PageHeader
+        actions={[
+          {
+            label: '健康检查',
+            onClick: handleHealthCheck,
+            icon: <HeartPulse className='mr-2 h-4 w-4' />,
+            variant: 'outline'
+          },
+          {
+            label: '一键排列',
+            onClick: handleArrange,
+            icon: <LayoutGrid className='mr-2 h-4 w-4' />,
+            variant: 'outline'
+          },
+          {
+            label: '关闭全部',
+            onClick: handleCloseAll,
+            icon: <Square className='mr-2 h-4 w-4' />,
+            variant: 'destructive'
+          }
+        ]}
+      />
+
+      {/* 确认弹窗 */}
       <ConfirmDialog />
-    </div>
+    </>
   );
 }
