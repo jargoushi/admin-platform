@@ -11,7 +11,7 @@ import {
     ActionDropdown,
     type ActionItem
 } from '@/components/table/action-dropdown';
-import { useConfirmation } from '@/hooks/use-confirmation';
+import { useConfirmation } from '@/contexts/confirmation-provider';
 import { useDialog } from '@/contexts/dialog-provider';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { StatusBadge } from '@/components/shared/status-badge';
@@ -31,7 +31,7 @@ export function BrowserTable({
     loading = false,
     onRefresh
 }: BrowserTableProps) {
-    const { confirm, ConfirmDialog } = useConfirmation();
+    const { confirm } = useConfirmation();
     const { open } = useDialog();
 
     // ... ( handleOpen, handleClose, handleDelete 不变)
@@ -195,10 +195,7 @@ export function BrowserTable({
     );
 
     return (
-        <>
-            <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
-            <ConfirmDialog />
-        </>
+        <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
     );
 }
 

@@ -15,7 +15,7 @@ import {
   ActionDropdown,
   type ActionItem
 } from '@/components/table/action-dropdown';
-import { useConfirmation } from '@/hooks/use-confirmation';
+import { useConfirmation } from '@/contexts/confirmation-provider';
 import { useDialog } from '@/contexts/dialog-provider';
 import { AccountApiService } from '@/service/api/account.api';
 import { AccountEditForm } from './AccountEditForm';
@@ -47,7 +47,7 @@ export function AccountTable({
   const { open } = useDialog();
 
   // 确认弹窗
-  const { confirm, ConfirmDialog } = useConfirmation();
+  const { confirm } = useConfirmation();
 
   /**
    * 处理编辑
@@ -165,9 +165,6 @@ export function AccountTable({
         onOpenChange={setBindingDialogOpen}
         account={bindingAccount}
       />
-
-      {/* 确认弹窗 */}
-      <ConfirmDialog />
     </>
   );
 }

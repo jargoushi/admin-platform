@@ -13,7 +13,7 @@ import { Edit, Power, Trash2, BarChart3 } from 'lucide-react';
 
 // 引入弹窗基础设施
 import { useDialog } from '@/contexts/dialog-provider';
-import { useConfirmation } from '@/hooks/use-confirmation';
+import { useConfirmation } from '@/contexts/confirmation-provider';
 
 import { DataTable, type Column } from '@/components/table/data-table';
 import {
@@ -50,7 +50,7 @@ export function MonitorConfigTable({
   const { open } = useDialog();
 
   // 管理确认弹窗
-  const { confirm, ConfirmDialog } = useConfirmation();
+  const { confirm } = useConfirmation();
 
   /**
    * 处理修改操作
@@ -230,10 +230,7 @@ export function MonitorConfigTable({
   );
 
   return (
-    <>
-      <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
-      <ConfirmDialog />
-    </>
+    <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
   );
 }
 

@@ -10,7 +10,7 @@
 
 import { LayoutGrid, Square, HeartPulse } from 'lucide-react';
 import { PageHeader } from '@/components/table/page-header';
-import { useConfirmation } from '@/hooks/use-confirmation';
+import { useConfirmation } from '@/contexts/confirmation-provider';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { toast } from 'sonner';
 
@@ -20,7 +20,7 @@ interface BrowserPageHeaderProps {
 }
 
 export function BrowserPageHeader({ onSuccess }: BrowserPageHeaderProps) {
-  const { confirm, ConfirmDialog } = useConfirmation();
+  const { confirm } = useConfirmation();
 
   const handleHealthCheck = async () => {
     try {
@@ -52,32 +52,27 @@ export function BrowserPageHeader({ onSuccess }: BrowserPageHeaderProps) {
   };
 
   return (
-    <>
-      <PageHeader
-        actions={[
-          {
-            label: '健康检查',
-            onClick: handleHealthCheck,
-            icon: <HeartPulse className='mr-2 h-4 w-4' />,
-            variant: 'outline'
-          },
-          {
-            label: '一键排列',
-            onClick: handleArrange,
-            icon: <LayoutGrid className='mr-2 h-4 w-4' />,
-            variant: 'outline'
-          },
-          {
-            label: '关闭全部',
-            onClick: handleCloseAll,
-            icon: <Square className='mr-2 h-4 w-4' />,
-            variant: 'destructive'
-          }
-        ]}
-      />
-
-      {/* 确认弹窗 */}
-      <ConfirmDialog />
-    </>
+    <PageHeader
+      actions={[
+        {
+          label: '健康检查',
+          onClick: handleHealthCheck,
+          icon: <HeartPulse className='mr-2 h-4 w-4' />,
+          variant: 'outline'
+        },
+        {
+          label: '一键排列',
+          onClick: handleArrange,
+          icon: <LayoutGrid className='mr-2 h-4 w-4' />,
+          variant: 'outline'
+        },
+        {
+          label: '关闭全部',
+          onClick: handleCloseAll,
+          icon: <Square className='mr-2 h-4 w-4' />,
+          variant: 'destructive'
+        }
+      ]}
+    />
   );
 }

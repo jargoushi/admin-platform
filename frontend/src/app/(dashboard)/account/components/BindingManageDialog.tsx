@@ -44,7 +44,7 @@ import {
   type BindingFormData,
   type BindingUpdateFormData
 } from '../account.schema';
-import { useConfirmation } from '@/hooks/use-confirmation';
+import { useConfirmation } from '@/contexts/confirmation-provider';
 import { AccountApiService } from '@/service/api/account.api';
 import { CommonApiService, type EnumItem } from '@/service/api/common.api';
 import type { Account, Binding } from '../types';
@@ -96,7 +96,7 @@ export function BindingManageDialog({
   });
 
   // 确认弹窗
-  const { confirm, ConfirmDialog } = useConfirmation();
+  const { confirm } = useConfirmation();
 
   // 转换渠道为 MultiSelect 选项格式
   const channelOptions = useMemo(
@@ -493,8 +493,6 @@ export function BindingManageDialog({
           </div>
         </DialogContent>
       </Dialog>
-
-      <ConfirmDialog />
     </>
   );
 }
