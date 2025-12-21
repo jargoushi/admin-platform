@@ -6,6 +6,8 @@ import { BaseEntity, BaseQueryRequest } from '@/types/common';
  * 账号实体（与后端 AccountResponse 一致）
  */
 export interface Account extends BaseEntity {
+  /** 账号 ID (覆盖 BaseEntity 的 string | number) */
+  id: number;
   /** 账号名称 */
   name: string;
   /** 第三方平台账号 */
