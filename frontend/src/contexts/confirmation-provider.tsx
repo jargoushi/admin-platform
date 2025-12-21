@@ -110,7 +110,7 @@ export function ConfirmationProvider({ children }: { children: ReactNode }) {
             {children}
 
             <Dialog open={state.isOpen} onOpenChange={(open) => !open && close()}>
-                <DialogContent className='sm:max-w-xl'>
+                <DialogContent className='sm:max-w-md'>
                     <DialogHeader className='space-y-3'>
                         <DialogTitle>{state.title}</DialogTitle>
                         <DialogDescription asChild>
@@ -120,7 +120,7 @@ export function ConfirmationProvider({ children }: { children: ReactNode }) {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <DialogFooter className='gap-2 pt-2 sm:gap-0'>
+                    <DialogFooter className='flex items-center justify-end gap-3 pt-2'>
                         <Button variant='outline' onClick={close} disabled={state.isLoading}>
                             {state.cancelText}
                         </Button>
