@@ -10,6 +10,7 @@ import { geistSans, geistMono } from '@/lib/fonts';
 import '@/app/globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { DialogProvider } from '@/contexts/dialog-provider';
 
 export const metadata: Metadata = {
   title: {
@@ -30,8 +31,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground relative min-h-screen antialiased`}
       >
         <NuqsAdapter>
-          <Toaster />
-          {children}
+          <DialogProvider>
+            <Toaster />
+            {children}
+          </DialogProvider>
         </NuqsAdapter>
       </body>
     </html>

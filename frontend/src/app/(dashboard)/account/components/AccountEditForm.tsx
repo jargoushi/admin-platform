@@ -21,13 +21,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema, type AccountFormData } from '../account.schema';
 import { AccountApiService } from '@/service/api/account.api';
 import { DEFAULT_ACCOUNT_FORM } from '../constants';
-import type { DialogComponentProps } from '@/components/shared/generic-dialogs';
+import type { DialogComponentProps } from '@/contexts/dialog-provider';
 import type { Account } from '../types';
 
 /**
  * 账号编辑表单
  */
-export function AccountEditForm({ data, onCancel }: DialogComponentProps<Account>) {
+export function AccountEditForm({ data, onClose }: DialogComponentProps<Account>) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
@@ -62,14 +62,14 @@ export function AccountEditForm({ data, onCancel }: DialogComponentProps<Account
                     ...formData
                 });
                 toast.success('账号更新成功');
-                onCancel();
+                onClose();
             } catch (error) {
                 console.error('更新失败', error);
             } finally {
                 setIsSubmitting(false);
             }
         },
-        [data, onCancel]
+        [data, onClose]
     );
 
     return (
@@ -118,7 +118,7 @@ export function AccountEditForm({ data, onCancel }: DialogComponentProps<Account
             </div>
 
             <DialogFooter>
-                <Button type='button' variant='outline' onClick={onCancel}>
+                <Button type='button' variant='outline' onClick={onClose}>
                     取消
                 </Button>
                 <Button type='submit' disabled={isSubmitting}>

@@ -37,8 +37,9 @@ import { findDescByCode } from '@/types/common';
 import { BaseFormLayout } from '@/components/shared/base-form-layout';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { useFormSubmit } from '@/hooks/use-form-submit';
+import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
-export function ActivationCodeInitForm() {
+export function ActivationCodeInitForm({ onClose }: DialogComponentProps) {
   // 使用通用 Hook 管理提交状态
   const {
     result,

@@ -11,6 +11,7 @@ import { formatDateTime } from '@/lib/date';
 import type { ActivationCode } from '../types';
 import { ACTIVATION_CODE_TYPES, ACTIVATION_CODE_STATUSES } from '../constants';
 import { findDescByCode } from '@/types/common';
+import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
 /**
  * 激活码详情视图配置
@@ -76,17 +77,12 @@ const CODE_DETAIL_CONFIG: FieldConfig<ActivationCode>[] = [
   }
 ];
 
-interface ActivationCodeDetailViewProps {
-  /** 详情数据 */
-  data: ActivationCode | null;
-}
-
 /**
  * 激活码详情视图组件
  */
 export function ActivationCodeDetailView({
   data
-}: ActivationCodeDetailViewProps) {
+}: DialogComponentProps<ActivationCode>) {
   if (!data) {
     return null;
   }

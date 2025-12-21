@@ -12,7 +12,7 @@ import {
     type ActionItem
 } from '@/components/table/action-dropdown';
 import { useConfirmation } from '@/hooks/use-confirmation';
-import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
+import { useDialog } from '@/contexts/dialog-provider';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { toast } from 'sonner';
@@ -32,17 +32,9 @@ export function BrowserTable({
     onRefresh
 }: BrowserTableProps) {
     const { confirm, ConfirmDialog } = useConfirmation();
+    const { open } = useDialog();
 
-    // Scheme 2: 使用通用对话框管理
-    const { openDialog, DialogsContainer } = useGenericDialogs<BrowserDetail>({
-        dialogs: {
-            detail: {
-                title: '浏览器详情',
-                description: '查看指纹及环境配置信息',
-                component: BrowserDetailView
-            }
-        }
-    });
+    // ... ( handleOpen, handleClose, handleDelete 不变)
 
     const handleOpen = useCallback(
         async (record: BrowserListItem) => {
@@ -94,13 +86,20 @@ export function BrowserTable({
         async (record: BrowserListItem) => {
             try {
                 const detail = await BrowserApiService.getDetail(record.id);
-                openDialog('detail', detail);
+                open({
+                    title: '浏览器详情',
+                    description: '查看指纹及环境配置信息',
+                    component: BrowserDetailView,
+                    data: detail
+                });
             } catch {
                 toast.error('获取详情失败');
             }
         },
-        [openDialog]
+        [open]
     );
+
+    // ... (columns 不变)
 
     const columns = useMemo<Column<BrowserListItem>[]>(
         () => [
@@ -199,7 +198,7 @@ export function BrowserTable({
         <>
             <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
             <ConfirmDialog />
-            <DialogsContainer />
         </>
     );
 }
+

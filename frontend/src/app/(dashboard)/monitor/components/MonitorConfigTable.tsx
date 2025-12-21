@@ -12,7 +12,7 @@ import { useMemo, useCallback } from 'react';
 import { Edit, Power, Trash2, BarChart3 } from 'lucide-react';
 
 // 引入弹窗基础设施
-import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
+import { useDialog } from '@/contexts/dialog-provider';
 import { useConfirmation } from '@/hooks/use-confirmation';
 
 import { DataTable, type Column } from '@/components/table/data-table';
@@ -46,23 +46,8 @@ export function MonitorConfigTable({
   loading = false,
   onRefresh
 }: MonitorConfigTableProps) {
-  // 管理修改和数据统计弹窗
-  const { openDialog, DialogsContainer } = useGenericDialogs<MonitorConfig>({
-    dialogs: {
-      update: {
-        title: '修改监控配置',
-        description: '修改监控目标链接',
-        component: MonitorConfigUpdateForm
-      },
-      stats: {
-        title: '每日数据统计',
-        description: '查看监控配置的每日数据趋势',
-        component: MonitorDailyStatsChart,
-        className: 'sm:max-w-6xl max-h-[90vh] overflow-y-auto'
-      }
-    },
-    onClose: () => onRefresh?.()
-  });
+  // 全局弹窗
+  const { open } = useDialog();
 
   // 管理确认弹窗
   const { confirm, ConfirmDialog } = useConfirmation();
@@ -72,9 +57,15 @@ export function MonitorConfigTable({
    */
   const handleUpdate = useCallback(
     (config: MonitorConfig) => {
-      openDialog('update', config);
+      open({
+        title: '修改监控配置',
+        description: '修改监控目标链接',
+        component: MonitorConfigUpdateForm,
+        data: config,
+        onClose: () => onRefresh?.()
+      });
     },
-    [openDialog]
+    [open, onRefresh]
   );
 
   /**
@@ -82,10 +73,18 @@ export function MonitorConfigTable({
    */
   const handleViewStats = useCallback(
     (config: MonitorConfig) => {
-      openDialog('stats', config);
+      open({
+        title: '每日数据统计',
+        description: '查看监控配置的每日数据趋势',
+        component: MonitorDailyStatsChart,
+        data: config,
+        className: 'sm:max-w-6xl max-h-[90vh] overflow-y-auto'
+      });
     },
-    [openDialog]
+    [open]
   );
+
+  // ... (handleToggle, handleDelete, columns 渲染其余逻辑保持不变)
 
   /**
    * 处理切换状态操作
@@ -233,10 +232,8 @@ export function MonitorConfigTable({
   return (
     <>
       <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
-
-      {/* 弹窗容器 */}
-      <DialogsContainer />
       <ConfirmDialog />
     </>
   );
 }
+

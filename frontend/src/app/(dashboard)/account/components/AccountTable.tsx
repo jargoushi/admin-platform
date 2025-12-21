@@ -16,7 +16,7 @@ import {
   type ActionItem
 } from '@/components/table/action-dropdown';
 import { useConfirmation } from '@/hooks/use-confirmation';
-import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
+import { useDialog } from '@/contexts/dialog-provider';
 import { AccountApiService } from '@/service/api/account.api';
 import { AccountEditForm } from './AccountEditForm';
 import { BindingManageDialog } from './BindingManageDialog';
@@ -43,18 +43,8 @@ export function AccountTable({
   const [bindingDialogOpen, setBindingDialogOpen] = useState(false);
   const [bindingAccount, setBindingAccount] = useState<Account | null>(null);
 
-  // 编辑弹窗使用 useGenericDialogs
-  const { openDialog, DialogsContainer } = useGenericDialogs<Account>({
-    dialogs: {
-      edit: {
-        title: '编辑账号',
-        description: '修改账号信息',
-        component: AccountEditForm,
-        className: 'sm:max-w-[500px]'
-      }
-    },
-    onClose: () => onRefresh?.()
-  });
+  // 全局弹窗
+  const { open } = useDialog();
 
   // 确认弹窗
   const { confirm, ConfirmDialog } = useConfirmation();
@@ -64,9 +54,15 @@ export function AccountTable({
    */
   const handleEdit = useCallback(
     (account: Account) => {
-      openDialog('edit', account);
+      open({
+        title: '编辑账号',
+        description: '修改账号信息',
+        component: AccountEditForm,
+        data: account,
+        className: 'sm:max-w-[500px]'
+      });
     },
-    [openDialog]
+    [open]
   );
 
   /**
@@ -95,6 +91,8 @@ export function AccountTable({
   );
 
   /** 列配置 */
+  // ... (保持 columns 渲染逻辑不变)
+
   const columns = useMemo<Column<Account>[]>(
     () => [
       {
@@ -161,9 +159,6 @@ export function AccountTable({
     <>
       <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
 
-      {/* 编辑弹窗容器 */}
-      <DialogsContainer />
-
       {/* 绑定管理弹窗 */}
       <BindingManageDialog
         open={bindingDialogOpen}
@@ -176,3 +171,4 @@ export function AccountTable({
     </>
   );
 }
+

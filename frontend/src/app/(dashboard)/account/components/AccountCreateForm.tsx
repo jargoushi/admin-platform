@@ -21,12 +21,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { accountSchema, type AccountFormData } from '../account.schema';
 import { AccountApiService } from '@/service/api/account.api';
 import { DEFAULT_ACCOUNT_FORM } from '../constants';
-import type { DialogComponentProps } from '@/components/shared/generic-dialogs';
+import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
 /**
  * 账号创建表单
  */
-export function AccountCreateForm({ onCancel }: DialogComponentProps) {
+export function AccountCreateForm({ onClose }: DialogComponentProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
@@ -44,14 +44,14 @@ export function AccountCreateForm({ onCancel }: DialogComponentProps) {
             try {
                 await AccountApiService.create(data);
                 toast.success('账号创建成功');
-                onCancel();
+                onClose();
             } catch (error) {
                 console.error('创建失败', error);
             } finally {
                 setIsSubmitting(false);
             }
         },
-        [onCancel]
+        [onClose]
     );
 
     return (
@@ -100,7 +100,7 @@ export function AccountCreateForm({ onCancel }: DialogComponentProps) {
             </div>
 
             <DialogFooter>
-                <Button type='button' variant='outline' onClick={onCancel}>
+                <Button type='button' variant='outline' onClick={onClose}>
                     取消
                 </Button>
                 <Button type='submit' disabled={isSubmitting}>

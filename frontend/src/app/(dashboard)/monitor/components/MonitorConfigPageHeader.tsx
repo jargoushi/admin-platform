@@ -13,7 +13,7 @@ import { Plus } from 'lucide-react';
 import { PageHeader } from '@/components/table/page-header';
 
 // 引入弹窗基础设施
-import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
+import { useDialog } from '@/contexts/dialog-provider';
 import { MonitorConfigCreateForm } from './MonitorConfigCreateForm';
 
 interface MonitorConfigPageHeaderProps {
@@ -24,32 +24,26 @@ interface MonitorConfigPageHeaderProps {
 export function MonitorConfigPageHeader({
   onSuccess
 }: MonitorConfigPageHeaderProps) {
-  // 管理创建弹窗
-  const { openDialog, DialogsContainer } = useGenericDialogs({
-    dialogs: {
-      create: {
-        title: '创建监控配置',
-        description: '添加新的监控目标，系统将自动采集数据',
-        component: MonitorConfigCreateForm
-      }
-    },
-    onClose: () => onSuccess?.()
-  });
+  const { open } = useDialog();
+
+  const handleCreate = () => {
+    open({
+      title: '创建监控配置',
+      description: '添加新的监控目标，系统将自动采集数据',
+      component: MonitorConfigCreateForm,
+      onClose: () => onSuccess?.()
+    });
+  };
 
   return (
-    <>
-      <PageHeader
-        actions={[
-          {
-            label: '创建监控',
-            onClick: () => openDialog('create'),
-            icon: <Plus className='mr-2 h-4 w-4' />
-          }
-        ]}
-      />
-
-      {/* 弹窗容器 */}
-      <DialogsContainer />
-    </>
+    <PageHeader
+      actions={[
+        {
+          label: '创建监控',
+          onClick: handleCreate,
+          icon: <Plus className='mr-2 h-4 w-4' />
+        }
+      ]}
+    />
   );
 }

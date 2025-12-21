@@ -13,7 +13,7 @@ import { Check, X, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 // 引入弹窗基础设施
-import { useGenericDialogs } from '@/hooks/use-generic-dialogs';
+import { useDialog } from '@/contexts/dialog-provider';
 import { useConfirmation } from '@/hooks/use-confirmation';
 
 import { DataTable, type Column } from '@/components/table/data-table';
@@ -46,16 +46,8 @@ export function ActivationCodeTable({
   loading = false,
   onRefresh
 }: ActivationCodeTableProps) {
-  // 管理详情弹窗
-  const { openDialog, DialogsContainer } = useGenericDialogs<ActivationCode>({
-    dialogs: {
-      detail: {
-        title: '激活码详情',
-        component: ActivationCodeDetailView,
-        className: 'sm:max-w-[600px]'
-      }
-    }
-  });
+  // 全局弹窗
+  const { open } = useDialog();
 
   // 管理确认弹窗
   const { confirm, ConfirmDialog } = useConfirmation();
@@ -67,11 +59,17 @@ export function ActivationCodeTable({
     async (code: ActivationCode) => {
       const detail = await ActivationApiService.getDetail(code.activation_code);
       if (detail) {
-        openDialog('detail', detail);
+        open({
+          title: '激活码详情',
+          component: ActivationCodeDetailView,
+          data: detail,
+          className: 'sm:max-w-[600px]'
+        });
       }
     },
-    [openDialog]
+    [open]
   );
+  // ... (handleActivate, handleInvalidate, columns 等保持不变)
 
   /**
    * 处理激活操作
@@ -222,8 +220,6 @@ export function ActivationCodeTable({
         rowKey='activation_code'
       />
 
-      {/* 弹窗容器 */}
-      <DialogsContainer />
       <ConfirmDialog />
     </>
   );

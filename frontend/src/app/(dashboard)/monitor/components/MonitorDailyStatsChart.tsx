@@ -25,15 +25,12 @@ import type {
 import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
-
-interface MonitorDailyStatsChartProps {
-  /** 监控配置（从 GenericDialogs 传递） */
-  data?: MonitorConfig;
-}
+import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
 export function MonitorDailyStatsChart({
-  data: config
-}: MonitorDailyStatsChartProps) {
+  data: config,
+  onClose
+}: DialogComponentProps<MonitorConfig>) {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState<MonitorDailyStats[]>([]);
 
@@ -53,7 +50,7 @@ export function MonitorDailyStatsChart({
     setLoading(true);
     try {
       const request: MonitorDailyStatsQueryRequest = {
-        config_id: config.id,
+        config_id: Number(config.id),
         start_date: format(dateRange!.from!, 'yyyy-MM-dd'),
         end_date: format(dateRange!.to!, 'yyyy-MM-dd')
       };

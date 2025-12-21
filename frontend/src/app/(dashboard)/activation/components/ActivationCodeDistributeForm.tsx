@@ -30,8 +30,9 @@ import { ACTIVATION_CODE_TYPES, DISTRIBUTE_COUNT_RANGE } from '../constants';
 import { BaseFormLayout } from '@/components/shared/base-form-layout';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { useFormSubmit } from '@/hooks/use-form-submit';
+import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
-export function ActivationCodeDistributeForm() {
+export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) {
   // 使用通用 Hook 管理提交状态
   const {
     result,

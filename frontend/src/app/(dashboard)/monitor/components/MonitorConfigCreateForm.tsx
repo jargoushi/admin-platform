@@ -26,21 +26,17 @@ import { CHANNEL_TYPES } from '../constants';
 import { BaseFormLayout } from '@/components/shared/base-form-layout';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { useFormSubmit } from '@/hooks/use-form-submit';
-
-interface MonitorConfigCreateFormProps {
-  /** 取消回调（从 GenericDialogs 传递） */
-  onCancel?: () => void;
-}
+import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
 export function MonitorConfigCreateForm({
-  onCancel
-}: MonitorConfigCreateFormProps = {}) {
+  onClose
+}: DialogComponentProps) {
   // 使用通用 Hook 管理提交状态
   const { isLoading, handleSubmit: onApiSubmit } = useFormSubmit(
     async (data: MonitorConfigFormData) => {
       await MonitorApiService.create(data);
       // 提交成功后直接关闭弹窗
-      onCancel?.();
+      onClose();
     }
   );
 

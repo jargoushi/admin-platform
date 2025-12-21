@@ -5,15 +5,13 @@
 'use client';
 
 import React from 'react';
-import { BrowserDetail } from '../types';
+import { type BrowserDetail } from '../types';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { BROWSER_STATUS } from '../constants';
+import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
-interface BrowserDetailViewProps {
-  data: BrowserDetail;
-}
-
-export function BrowserDetailView({ data }: BrowserDetailViewProps) {
+export function BrowserDetailView({ data }: DialogComponentProps<BrowserDetail>) {
+  if (!data) return null;
   const fingerPrint = data.browserFingerPrint || {};
 
   const detailItems = [
