@@ -78,8 +78,10 @@ export function DialogProvider({ children }: { children: ReactNode }) {
         options?.onClose?.();
 
         // 延迟清空配置，避免关闭动画中内容突变
+        // 保存当前 options 引用，只清空当前弹窗的配置
+        const currentOptions = options;
         setTimeout(() => {
-            setOptions(null);
+            setOptions((prev) => (prev === currentOptions ? null : prev));
         }, 300);
     }, [options]);
 

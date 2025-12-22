@@ -55,11 +55,16 @@ export function ActionGroup<T>({
         try {
           // 处理弹窗逻辑
           if (action.dialog) {
+            // 只有当 record 存在或 extraData 存在时才传递 data
+            const dialogData = record || action.dialog.extraData
+              ? { ...record, ...action.dialog.extraData }
+              : undefined;
+
             open({
               title: action.dialog.title,
               description: action.dialog.description,
               component: action.dialog.component,
-              data: { ...record, ...action.dialog.extraData },
+              data: dialogData,
               className: action.dialog.className,
               onClose: () => onRefresh?.()
             });
