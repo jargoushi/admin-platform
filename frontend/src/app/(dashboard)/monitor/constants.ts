@@ -15,7 +15,7 @@ import { SmartEnum } from '@/lib/enum';
 
 // ==================== 枚举配置 (单一事实来源) ====================
 
-/** 渠道类型枚举 - 与后端 ChannelEnum 保持一致 */
+/** 渠道类型枚举 */
 export const CHANNEL_ENUM = new SmartEnum([
   {
     code: 1,
@@ -82,7 +82,7 @@ export const TASK_STATUS_ENUM = new SmartEnum([
 // ==================== 默认查询参数 ====================
 
 /**
- * 默认查询参数(与后端 API 一致)
+ * 默认查询参数
  * 使用全局分页配置
  */
 export const DEFAULT_QUERY_PARAMS: MonitorConfigQueryRequest = {

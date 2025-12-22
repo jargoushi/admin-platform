@@ -10,7 +10,7 @@ import { http } from '@/lib/http';
 // ==================== 枚举类型 ====================
 
 /**
- * 枚举响应类型（与后端 EnumResponse 一致）
+ * 枚举响应类型
  */
 export interface EnumItem {
   /** 枚举 code */

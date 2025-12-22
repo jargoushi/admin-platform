@@ -15,7 +15,7 @@ import {
 // ==================== 默认查询参数 ====================
 
 /**
- * 默认查询参数(与后端 API 一致)
+ * 默认查询参数
  * 使用全局分页配置
  */
 export const DEFAULT_QUERY_PARAMS: UserQueryRequest = {

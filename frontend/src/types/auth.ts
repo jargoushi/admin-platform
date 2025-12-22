@@ -3,7 +3,6 @@
  *
  * @description
  * 定义认证模块所需的所有 TypeScript 接口和类型
- * 与后端 auth_router.py 接口保持一致
  */
 
 /**
@@ -17,7 +16,7 @@ export interface LoginResponse {
 }
 
 /**
- * 用户档案（与后端 /auth/profile 返回一致）
+ * 用户档案
  */
 export interface UserProfile {
   /** 用户 ID */
@@ -31,7 +30,7 @@ export interface UserProfile {
 }
 
 /**
- * 修改密码请求（与后端 ChangePasswordRequest 一致）
+ * 修改密码请求
  */
 export interface ChangePasswordRequest {
   /** 新密码（8-20位，必须包含大小写字母和数字） */

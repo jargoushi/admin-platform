@@ -1,7 +1,7 @@
 import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
- * 激活码实体（与后端 ActivationCodeResponse 一致）
+ * 激活码实体
  */
 export interface ActivationCode extends BaseEntity {
   /** 激活码字符串 */

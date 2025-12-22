@@ -1,7 +1,7 @@
 import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
- * 用户实体（与后端 UserResponse 一致）
+ * 用户实体
  */
 export interface User extends BaseEntity {
   /** 用户名 */
@@ -15,7 +15,7 @@ export interface User extends BaseEntity {
 }
 
 /**
- * 用户注册请求（与后端 UserRegisterRequest 一致）
+ * 用户注册请求
  */
 export interface UserRegisterRequest {
   /** 用户名（2-50位，只能包含字母、数字和下划线） */
@@ -27,7 +27,7 @@ export interface UserRegisterRequest {
 }
 
 /**
- * 用户更新请求（与后端 UserUpdateRequest 一致）
+ * 用户更新请求
  */
 export interface UserUpdateRequest {
   /** 用户名（可选，2-50位） */
@@ -39,7 +39,7 @@ export interface UserUpdateRequest {
 }
 
 /**
- * 用户列表查询参数（与后端 UserQueryRequest 一致）
+ * 用户列表查询参数
  */
 export interface UserQueryRequest extends BaseQueryRequest {
   /** 用户名模糊查询 */

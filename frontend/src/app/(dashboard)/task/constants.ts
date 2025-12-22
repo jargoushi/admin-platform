@@ -19,38 +19,31 @@ import { SmartEnum } from '@/lib/enum';
 export const CHANNEL_ENUM = new SmartEnum([
   {
     code: 1,
-    label: '小红书',
-    variant: 'outline',
-    bg: 'bg-red-50',
-    color: 'text-red-500'
-  },
-  {
-    code: 2,
-    label: '哔哩哔哩',
+    label: '抖音',
     variant: 'outline',
     bg: 'bg-pink-50',
     color: 'text-pink-500'
   },
   {
-    code: 3,
+    code: 2,
     label: 'YouTube',
     variant: 'outline',
     bg: 'bg-red-100',
     color: 'text-red-600'
   },
   {
+    code: 3,
+    label: '哔哩哔哩',
+    variant: 'outline',
+    bg: 'bg-blue-50',
+    color: 'text-blue-500'
+  },
+  {
     code: 4,
-    label: '微信公众号',
+    label: '视频号',
     variant: 'outline',
     bg: 'bg-green-50',
     color: 'text-green-500'
-  },
-  {
-    code: 5,
-    label: '微信视频号',
-    variant: 'outline',
-    bg: 'bg-emerald-50',
-    color: 'text-emerald-500'
   }
 ]);
 
@@ -95,7 +88,7 @@ export const TASK_STATUS_ENUM = new SmartEnum([
 // ==================== 默认查询参数 ====================
 
 /**
- * 默认查询参数(与后端 API 一致)
+ * 默认查询参数
  * 使用全局分页配置
  */
 export const DEFAULT_QUERY_PARAMS: MonitorTaskQueryRequest = {

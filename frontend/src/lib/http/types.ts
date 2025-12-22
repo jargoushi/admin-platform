@@ -1,7 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 /**
- * 统一的 API 响应结构（与后端 Python ApiResponse 模型一致）
+ * 统一的 API 响应结构
  * @template T - 响应数据的类型
  */
 export interface ApiResponse<T = unknown> {
@@ -18,7 +18,7 @@ export interface ApiResponse<T = unknown> {
 }
 
 /**
- * 分页响应数据结构(与后端 Python PageResponse 模型一致)
+ * 分页响应数据结构
  * @template T - 列表项的类型
  */
 export interface PageResponse<T = unknown> {
@@ -41,7 +41,7 @@ export interface PageResponse<T = unknown> {
 export type PaginationInfo = Omit<PageResponse, 'items'>;
 
 /**
- * 分页请求参数（与后端 Python PageRequest 模型一致）
+ * 分页请求参数
  */
 export interface PageRequest {
   /** 当前页码，从1开始 */

@@ -3,7 +3,7 @@ import { BaseEntity, BaseQueryRequest } from '@/types/common';
 // ==================== 账号相关 ====================
 
 /**
- * 账号实体（与后端 AccountResponse 一致）
+ * 账号实体
  */
 export interface Account extends BaseEntity {
   /** 账号 ID (覆盖 BaseEntity 的 string | number) */
@@ -19,7 +19,7 @@ export interface Account extends BaseEntity {
 }
 
 /**
- * 账号分页查询请求（与后端 AccountQueryRequest 一致）
+ * 账号分页查询请求
  */
 export interface AccountQueryRequest extends BaseQueryRequest {
   /** 用户 ID（不传则查询所有） */
@@ -29,7 +29,7 @@ export interface AccountQueryRequest extends BaseQueryRequest {
 }
 
 /**
- * 创建账号请求（与后端 AccountCreateRequest 一致）
+ * 创建账号请求
  */
 export interface AccountCreateRequest {
   /** 账号名称（必填，最长100字符） */
@@ -43,7 +43,7 @@ export interface AccountCreateRequest {
 }
 
 /**
- * 更新账号请求（与后端 AccountUpdateRequest 一致）
+ * 更新账号请求
  */
 export interface AccountUpdateRequest {
   /** 账号 ID（必填） */
@@ -69,7 +69,7 @@ export interface AccountDeleteRequest {
 // ==================== 项目渠道绑定相关 ====================
 
 /**
- * 绑定实体（与后端 BindingResponse 一致）
+ * 绑定实体
  */
 export interface Binding {
   /** 绑定 ID */
@@ -87,7 +87,7 @@ export interface Binding {
 }
 
 /**
- * 绑定请求（与后端 BindingRequest 一致）
+ * 绑定请求
  */
 export interface BindingRequest {
   /** 项目枚举 code */
@@ -121,7 +121,7 @@ export interface BindingDeleteRequest {
 // ==================== 账号配置相关 ====================
 
 /**
- * 配置项（与后端 SettingResponse 一致）
+ * 配置项
  */
 export interface Setting {
   /** 配置项编码 */

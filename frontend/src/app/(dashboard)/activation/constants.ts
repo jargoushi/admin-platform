@@ -65,7 +65,7 @@ export const ACTIVATION_STATUS_ENUM = new SmartEnum([
 
 
 /**
- * 默认查询参数(与后端 API 一致)
+ * 默认查询参数
  * 使用全局分页配置
  */
 export const DEFAULT_QUERY_PARAMS: ActivationCodeQueryRequest = {
@@ -73,11 +73,6 @@ export const DEFAULT_QUERY_PARAMS: ActivationCodeQueryRequest = {
 };
 
 // ==================== 验证规则 ====================
-
-/**
- * 批量初始化最大项数
- */
-export const MAX_INIT_ITEMS = ACTIVATION_TYPE_ENUM.items.length;
 
 // ... (INIT_COUNT_RANGE, DISTRIBUTE_COUNT_RANGE 不变)
 

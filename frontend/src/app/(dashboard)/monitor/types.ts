@@ -1,7 +1,7 @@
 import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
- * 监控配置实体（与后端 MonitorConfigResponse 一致）
+ * 监控配置实体
  */
 export interface MonitorConfig extends BaseEntity {
   /** 用户ID */

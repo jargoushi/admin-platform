@@ -22,15 +22,6 @@ export const DEFAULT_QUERY_PARAMS: AccountQueryRequest = {
   ...DEFAULT_PAGE_REQUEST
 };
 
-/**
- * 账号表单默认值
- */
-export const DEFAULT_ACCOUNT_FORM = {
-  name: '',
-  platform_account: '',
-  platform_password: '',
-  description: ''
-};
 
 // ==================== 筛选字段配置 ====================
 

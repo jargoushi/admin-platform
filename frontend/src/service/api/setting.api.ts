@@ -10,7 +10,7 @@ import { http } from '@/lib/http';
 // ==================== 类型定义 ====================
 
 /**
- * 配置项响应（与后端 SettingResponse 一致）
+ * 配置项响应
  */
 export interface Setting {
   /** 配置项编码 */

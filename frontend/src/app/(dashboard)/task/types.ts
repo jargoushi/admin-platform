@@ -1,7 +1,7 @@
 import { BaseEntity, BaseQueryRequest } from '@/types/common';
 
 /**
- * 任务实体（与后端 MonitorTaskResponse 一致）
+ * 任务实体
  */
 export interface MonitorTask extends BaseEntity {
   /** 渠道编码 (1-5) */
