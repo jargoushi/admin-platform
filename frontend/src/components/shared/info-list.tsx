@@ -1,9 +1,9 @@
 /**
- * 描述列表组件 (DescriptionList)
+ * 信息列表组件 (InfoList)
  *
  * @description
  * 统一的详情展示组件，支持分组、自适应网格布局和声明式配置。
- * 抛弃历史包袱，采用语义化的 dl/dt/dd 结构。
+ * 采用简洁的命名体系，替代原有的 DescriptionList。
  */
 
 'use client';
@@ -12,9 +12,9 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 /**
- * 单个描述项配置
+ * 单个信息项配置
  */
-export interface DescriptionItem<T = any> {
+export interface InfoItem<T = any> {
   /** 字段键名 */
   key: keyof T | string;
   /** 标签文字 */
@@ -34,36 +34,36 @@ export interface DescriptionItem<T = any> {
 /**
  * 分组配置
  */
-export interface DescriptionSection<T = any> {
+export interface InfoSection<T = any> {
   /** 分组标题 */
   title?: React.ReactNode;
   /** 分组描述 */
   description?: React.ReactNode;
   /** 字段项配置 */
-  items: DescriptionItem<T>[];
+  items: InfoItem<T>[];
   /** 列数 (默认 2) */
   columns?: number;
   /** 额外类名 */
   className?: string;
 }
 
-interface DescriptionListProps<T extends object> {
+interface InfoListProps<T extends object> {
   /** 数据对象 */
   data: T;
   /** 分组配置列表 */
-  sections: DescriptionSection<T>[];
+  sections: InfoSection<T>[];
   /** 整体类名 */
   className?: string;
 }
 
 /**
- * 描述列表组件
+ * 信息列表组件
  */
-export function DescriptionList<T extends object>({
+export function InfoList<T extends object>({
   data,
   sections,
   className
-}: DescriptionListProps<T>) {
+}: InfoListProps<T>) {
   return (
     <div className={cn('space-y-8', className)}>
       {sections.map((section, sIdx) => (

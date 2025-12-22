@@ -13,7 +13,7 @@ import { BrowserApiService } from '@/service/api/browser.api';
 import { StatusBadge } from '@/components/shared/status-badge';
 import type { BrowserListItem } from '../types';
 import { BROWSER_STATUS_ENUM } from '../constants';
-import { BrowserDetailView } from './BrowserDetailView';
+import { BrowserInfo } from './BrowserInfo';
 
 interface BrowserTableProps {
     data: BrowserListItem[];
@@ -90,7 +90,7 @@ export function BrowserTable({
                             dialog: {
                                 title: '浏览器详情',
                                 description: '查看指纹及环境配置信息',
-                                component: BrowserDetailView
+                                component: BrowserInfo
                             }
                         },
                         {

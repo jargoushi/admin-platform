@@ -20,7 +20,7 @@ import {
 } from '../constants';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { StatusBadge } from '@/components/shared/status-badge';
-import { ActivationCodeDetailView } from './ActivationCodeDetailView';
+import { ActivationCodeInfo } from './ActivationCodeInfo';
 
 /**
  * 表格组件属性
@@ -127,7 +127,7 @@ export function ActivationCodeTable({
               icon: Eye,
               dialog: {
                 title: '激活码详情',
-                component: ActivationCodeDetailView,
+                component: ActivationCodeInfo,
                 className: 'sm:max-w-[600px]'
               }
             }

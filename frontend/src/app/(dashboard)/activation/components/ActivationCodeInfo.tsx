@@ -1,17 +1,17 @@
 /**
- * 激活码详情视图组件
+ * 激活码信息展示组件
  *
  * @description
- * 使用全新的 DescriptionList 体系重构，提供更高级的视觉呈现。
+ * 使用 InfoList 体系，提供简洁的激活码详情展示。
  */
 
 'use client';
 
 import React from 'react';
 import {
-  DescriptionList,
-  type DescriptionSection
-} from '@/components/shared/description-list';
+  InfoList,
+  type InfoSection
+} from '@/components/shared/info-list';
 import { formatDateTime } from '@/lib/date';
 import type { ActivationCode } from '../types';
 import {
@@ -20,12 +20,12 @@ import {
 } from '../constants';
 import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
-export function ActivationCodeDetailView({
+export function ActivationCodeInfo({
   data
 }: DialogComponentProps<ActivationCode>) {
   if (!data) return null;
 
-  const sections: DescriptionSection<ActivationCode>[] = [
+  const sections: InfoSection<ActivationCode>[] = [
     {
       title: '基本信息',
       items: [
@@ -89,5 +89,5 @@ export function ActivationCodeDetailView({
     }
   ];
 
-  return <DescriptionList data={data} sections={sections} />;
+  return <InfoList data={data} sections={sections} />;
 }

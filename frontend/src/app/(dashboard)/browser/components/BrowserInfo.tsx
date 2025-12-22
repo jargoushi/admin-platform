@@ -1,30 +1,30 @@
 /**
- * 浏览器详情展示组件
+ * 浏览器信息展示组件
  *
  * @description
- * 使用全新的 DescriptionList 体系重构，彻底移除手动 HTML。
+ * 使用 InfoList 体系，提供简洁的浏览器详情展示。
  */
 
 'use client';
 
 import React from 'react';
 import {
-  DescriptionList,
-  type DescriptionSection
-} from '@/components/shared/description-list';
+  InfoList,
+  type InfoSection
+} from '@/components/shared/info-list';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { BROWSER_STATUS_ENUM } from '../constants';
 import { type DialogComponentProps } from '@/contexts/dialog-provider';
 import { type BrowserDetail } from '../types';
 
-export function BrowserDetailView({
+export function BrowserInfo({
   data
 }: DialogComponentProps<BrowserDetail>) {
   if (!data) return null;
 
   const fingerPrint = data.browserFingerPrint || {};
 
-  const sections: DescriptionSection<BrowserDetail>[] = [
+  const sections: InfoSection<BrowserDetail>[] = [
     {
       title: '基本信息',
       items: [
@@ -73,5 +73,5 @@ export function BrowserDetailView({
     }
   ];
 
-  return <DescriptionList data={data} sections={sections} />;
+  return <InfoList data={data} sections={sections} />;
 }
