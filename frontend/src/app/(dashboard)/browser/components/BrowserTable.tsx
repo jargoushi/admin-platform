@@ -6,15 +6,11 @@
 
 import { useMemo } from 'react';
 import { Play, Square, Trash2, Info } from 'lucide-react';
-import { useTableActions } from '@/hooks/use-table-actions';
 import { DataTable, type Column } from '@/components/table/data-table';
-import {
-    ActionDropdown,
-    type ActionItem
-} from '@/components/table/action-dropdown';
+import { ActionDropdown } from '@/components/table/action-dropdown';
+import { Action } from '@/types/action';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { StatusBadge } from '@/components/shared/status-badge';
-import { toast } from 'sonner';
 import type { BrowserListItem } from '../types';
 import { BROWSER_STATUS_ENUM } from '../constants';
 import { BrowserDetailView } from './BrowserDetailView';
@@ -30,8 +26,6 @@ export function BrowserTable({
     loading = false,
     onRefresh
 }: BrowserTableProps) {
-    const { openDialog } = useTableActions({ onRefresh });
-
     const columns = useMemo<Column<BrowserListItem>[]>(
         () => [
             {
@@ -53,8 +47,8 @@ export function BrowserTable({
                 key: 'status',
                 title: '状态',
                 className: 'w-[100px] text-center',
-                render: (_: unknown, record: BrowserListItem) => (
-                    <StatusBadge code={record.status} enum={BROWSER_STATUS_ENUM} />
+                render: (value: string | number | undefined) => (
+                    <StatusBadge code={value as number} enum={BROWSER_STATUS_ENUM} />
                 )
             },
             {
@@ -88,80 +82,48 @@ export function BrowserTable({
                 title: '操作',
                 className: 'w-[120px] text-center',
                 render: (_: unknown, record: BrowserListItem) => {
-                    const actions: ActionItem<BrowserListItem>[] = [
+                    const actions: Action<BrowserListItem>[] = [
                         {
                             key: 'detail',
                             label: '查看详情',
-                            icon: <Info className='h-4 w-4' />,
-                            onClick: async (r) => {
-                                try {
-                                    const detail = await BrowserApiService.getDetail(r.id);
-                                    openDialog({
-                                        title: '浏览器详情',
-                                        description: '查看指纹及环境配置信息',
-                                        component: BrowserDetailView,
-                                        data: detail
-                                    });
-                                } catch {
-                                    toast.error('获取详情失败');
-                                }
+                            icon: Info,
+                            dialog: {
+                                title: '浏览器详情',
+                                description: '查看指纹及环境配置信息',
+                                component: BrowserDetailView
                             }
                         },
                         {
                             key: 'open',
                             label: '打开窗口',
-                            icon: <Play className='h-4 w-4' />,
+                            icon: Play,
                             disabled: (r) => r.status === 1,
-                            onClick: async (r) => {
-                                try {
-                                    const result = await BrowserApiService.open({ ids: [r.id] });
-                                    if (result.success_count > 0) {
-                                        toast.success(`窗口 [${r.name}] 已启动`);
-                                        onRefresh?.();
-                                    } else {
-                                        toast.error(`窗口 [${r.name}] 启动失败: ${result.results[0]?.error}`);
-                                    }
-                                } catch {
-                                    toast.error('打开浏览器失败');
-                                }
-                            }
+                            onClick: (r) => BrowserApiService.open({ ids: [r.id] })
                         },
                         {
                             key: 'close',
                             label: '关闭窗口',
-                            icon: <Square className='h-4 w-4' />,
+                            icon: Square,
                             disabled: (r) => r.status !== 1,
-                            onClick: async (r) => {
-                                try {
-                                    await BrowserApiService.close(r.id);
-                                    toast.success(`窗口 [${r.name}] 已关闭`);
-                                    onRefresh?.();
-                                } catch {
-                                    toast.error('关闭浏览器失败');
-                                }
-                            }
+                            onClick: (r) => BrowserApiService.close(r.id)
                         },
                         {
                             key: 'delete',
                             label: '彻底删除',
-                            icon: <Trash2 className='h-4 w-4' />,
+                            icon: Trash2,
                             className: 'text-destructive focus:text-destructive',
                             confirm: {
                                 description: (r) => `确定要彻底删除窗口 [${r.name}] 吗？此操作不可恢复。`
                             },
-                            onClick: async (r) => {
-                                await BrowserApiService.delete(r.id);
-                                toast.success('窗口已删除');
-                                onRefresh?.();
-                            }
+                            onClick: (r) => BrowserApiService.delete(r.id)
                         }
                     ];
 
-                    return <ActionDropdown record={record} actions={actions} />;
+                    return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
                 }
             }
         ],
-        [openDialog, onRefresh]
+        [onRefresh]
     );
 
 

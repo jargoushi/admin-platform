@@ -10,12 +10,9 @@
 
 import { useMemo } from 'react';
 import { Edit, Power, Trash2, BarChart3 } from 'lucide-react';
-import { useTableActions } from '@/hooks/use-table-actions';
 import { DataTable, type Column } from '@/components/table/data-table';
-import {
-  ActionDropdown,
-  type ActionItem
-} from '@/components/table/action-dropdown';
+import { ActionDropdown } from '@/components/table/action-dropdown';
+import { Action } from '@/types/action';
 import type { MonitorConfig } from '../types';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { MonitorConfigUpdateForm } from './MonitorConfigUpdateForm';
@@ -41,8 +38,6 @@ export function MonitorConfigTable({
   loading = false,
   onRefresh
 }: MonitorConfigTableProps) {
-  const { openDialog } = useTableActions({ onRefresh });
-
   /** 列配置 */
   const columns = useMemo<Column<MonitorConfig>[]>(
     () => [
@@ -55,9 +50,9 @@ export function MonitorConfigTable({
         key: 'channel_code',
         title: '渠道',
         className: 'w-[120px]',
-        render: (_: unknown, record: MonitorConfig) => (
+        render: (value: string | number | undefined) => (
           <StatusBadge
-            code={record.channel_code}
+            code={value as number}
             enum={CHANNEL_ENUM}
           />
         )
@@ -66,9 +61,9 @@ export function MonitorConfigTable({
         key: 'account_name',
         title: '账号名称',
         className: 'min-w-[150px]',
-        render: (_: unknown, record: MonitorConfig) => (
+        render: (value: string | number | undefined) => (
           <span className='text-sm'>
-            {record.account_name || (
+            {(value as string) || (
               <span className='text-muted-foreground'>未知</span>
             )}
           </span>
@@ -78,9 +73,9 @@ export function MonitorConfigTable({
         key: 'target_url',
         title: '目标链接',
         className: 'min-w-[200px] max-w-[300px]',
-        render: (_: unknown, record: MonitorConfig) => (
+        render: (value: string | number | undefined) => (
           <span className='line-clamp-2 text-sm break-all'>
-            {record.target_url}
+            {value as string}
           </span>
         )
       },
@@ -88,9 +83,9 @@ export function MonitorConfigTable({
         key: 'is_active',
         title: '状态',
         className: 'w-[100px] text-center',
-        render: (_: unknown, record: MonitorConfig) => (
+        render: (value: string | number | undefined) => (
           <StatusBadge
-            code={record.is_active}
+            code={value as number}
             enum={ACTIVE_STATUS_ENUM}
           />
         )
@@ -99,9 +94,9 @@ export function MonitorConfigTable({
         key: 'last_run_at',
         title: '上次执行时间',
         className: 'w-[180px]',
-        render: (_: unknown, record: MonitorConfig) => (
+        render: (value: string | number | undefined) => (
           <span className='text-sm'>
-            {record.last_run_at || (
+            {(value as string) || (
               <span className='text-muted-foreground'>未执行</span>
             )}
           </span>
@@ -117,56 +112,54 @@ export function MonitorConfigTable({
         title: '操作',
         className: 'w-[120px] text-center',
         render: (_: unknown, record: MonitorConfig) => {
-          const actions: ActionItem<MonitorConfig>[] = [
+          const actions: Action<MonitorConfig>[] = [
             {
               key: 'stats',
               label: '查看数据',
-              icon: <BarChart3 className='h-4 w-4' />,
-              onClick: (r) => openDialog({
+              icon: BarChart3,
+              dialog: {
                 title: '每日数据统计',
                 description: '查看监控配置的每日数据趋势',
                 component: MonitorDailyStatsChart,
-                data: r,
                 className: 'sm:max-w-6xl max-h-[90vh] overflow-y-auto'
-              })
+              }
             },
             {
               key: 'update',
               label: '修改',
-              icon: <Edit className='h-4 w-4' />,
-              onClick: (r) => openDialog({
+              icon: Edit,
+              dialog: {
                 title: '修改监控配置',
                 description: '修改监控目标链接',
-                component: MonitorConfigUpdateForm,
-                data: r
-              })
+                component: MonitorConfigUpdateForm
+              }
             },
             {
               key: 'toggle',
               label: record.is_active === 1 ? '禁用' : '启用',
-              icon: <Power className='h-4 w-4' />,
+              icon: Power,
               confirm: {
                 description: (r) => `确定要${r.is_active === 1 ? '禁用' : '启用'}该监控配置吗？`
               },
-              onClick: async (r) => { await MonitorApiService.toggle(Number(r.id), r.is_active === 1 ? 0 : 1); }
+              onClick: (r) => MonitorApiService.toggle(Number(r.id), r.is_active === 1 ? 0 : 1)
             },
             {
               key: 'delete',
               label: '删除',
-              icon: <Trash2 className='h-4 w-4' />,
+              icon: Trash2,
               className: 'text-destructive focus:text-destructive',
               confirm: {
                 description: (r) => `确定要删除该监控配置吗？\n\n账号：${r.account_name || '未知'}\n删除后将无法恢复！`
               },
-              onClick: async (r) => { await MonitorApiService.delete(Number(r.id)); }
+              onClick: (r) => MonitorApiService.delete(Number(r.id))
             }
           ];
 
-          return <ActionDropdown record={record} actions={actions} />;
+          return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
         }
       }
     ],
-    [openDialog]
+    [onRefresh]
   );
 
   return (

@@ -10,12 +10,9 @@
 
 import { useMemo } from 'react';
 import { Check, X, Eye } from 'lucide-react';
-import { useTableActions } from '@/hooks/use-table-actions';
 import { DataTable, type Column } from '@/components/table/data-table';
-import {
-  ActionDropdown,
-  type ActionItem
-} from '@/components/table/action-dropdown';
+import { ActionDropdown } from '@/components/table/action-dropdown';
+import { Action } from '@/types/action';
 import type { ActivationCode } from '../types';
 import {
   ACTIVATION_STATUS_ENUM,
@@ -40,8 +37,6 @@ export function ActivationCodeTable({
   loading = false,
   onRefresh
 }: ActivationCodeTableProps) {
-  const { openDialog } = useTableActions({ onRefresh });
-
   /** 列配置 */
   const columns = useMemo<Column<ActivationCode>[]>(
     () => [
@@ -54,9 +49,9 @@ export function ActivationCodeTable({
         key: 'type',
         title: '类型',
         className: 'w-[100px]',
-        render: (_, record) => (
+        render: (value: string | number | undefined) => (
           <StatusBadge
-            code={record.type}
+            code={value as number}
             enum={ACTIVATION_TYPE_ENUM}
           />
         )
@@ -65,9 +60,9 @@ export function ActivationCodeTable({
         key: 'status',
         title: '状态',
         className: 'w-[100px]',
-        render: (_, record) => (
+        render: (value: string | number | undefined) => (
           <StatusBadge
-            code={record.status}
+            code={value as number}
             enum={ACTIVATION_STATUS_ENUM}
           />
         )
@@ -105,50 +100,44 @@ export function ActivationCodeTable({
         title: '操作',
         className: 'w-[120px] text-center',
         render: (_: unknown, record: ActivationCode) => {
-          const actions: ActionItem<ActivationCode>[] = [
+          const actions: Action<ActivationCode>[] = [
             {
               key: 'activate',
               label: '激活',
-              icon: <Check className='h-4 w-4' />,
+              icon: Check,
               hidden: (r) => r.status !== 1,
               confirm: {
                 description: (r) => `确定要激活"${r.activation_code}" 吗？`
               },
-              onClick: async (r) => { await ActivationApiService.activate(r.activation_code); }
+              onClick: (r) => ActivationApiService.activate(r.activation_code)
             },
             {
               key: 'invalidate',
               label: '作废',
-              icon: <X className='h-4 w-4' />,
+              icon: X,
               hidden: (r) => r.status !== 1 && r.status !== 2,
               confirm: {
                 description: (r) => `确定要作废激活码 "${r.activation_code}" 吗？\n\n作废后将无法恢复！`
               },
-              onClick: async (r) => { await ActivationApiService.invalidate({ activation_code: r.activation_code }); }
+              onClick: (r) => ActivationApiService.invalidate({ activation_code: r.activation_code })
             },
             {
               key: 'detail',
               label: '详情',
-              icon: <Eye className='h-4 w-4' />,
-              onClick: async (r) => {
-                const detail = await ActivationApiService.getDetail(r.activation_code);
-                if (detail) {
-                  openDialog({
-                    title: '激活码详情',
-                    component: ActivationCodeDetailView,
-                    data: detail,
-                    className: 'sm:max-w-[600px]'
-                  });
-                }
+              icon: Eye,
+              dialog: {
+                title: '激活码详情',
+                component: ActivationCodeDetailView,
+                className: 'sm:max-w-[600px]'
               }
             }
           ];
 
-          return <ActionDropdown record={record} actions={actions} />;
+          return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
         }
       }
     ],
-    [openDialog]
+    [onRefresh]
   );
 
   return (

@@ -8,13 +8,10 @@
 
 'use client';
 
-import React from 'react';
 import { Plus } from 'lucide-react';
 import { PageHeader } from '@/components/table/page-header';
-
-// 引入弹窗基础设施
-import { useDialog } from '@/contexts/dialog-provider';
 import { MonitorConfigCreateForm } from './MonitorConfigCreateForm';
+import { Action } from '@/types/action';
 
 interface MonitorConfigPageHeaderProps {
   /** 操作成功后的回调(用于刷新列表) */
@@ -24,26 +21,18 @@ interface MonitorConfigPageHeaderProps {
 export function MonitorConfigPageHeader({
   onSuccess
 }: MonitorConfigPageHeaderProps) {
-  const { open } = useDialog();
+  const actions: Action[] = [
+    {
+      key: 'create',
+      label: '创建监控',
+      icon: Plus,
+      dialog: {
+        title: '创建监控配置',
+        description: '添加新的监控目标，系统将自动采集数据',
+        component: MonitorConfigCreateForm
+      }
+    }
+  ];
 
-  const handleCreate = () => {
-    open({
-      title: '创建监控配置',
-      description: '添加新的监控目标，系统将自动采集数据',
-      component: MonitorConfigCreateForm,
-      onClose: () => onSuccess?.()
-    });
-  };
-
-  return (
-    <PageHeader
-      actions={[
-        {
-          label: '创建监控',
-          onClick: handleCreate,
-          icon: <Plus className='mr-2 h-4 w-4' />
-        }
-      ]}
-    />
-  );
+  return <PageHeader actions={actions} onRefresh={onSuccess} />;
 }

@@ -22,7 +22,7 @@ import {
   monitorConfigSchema,
   type MonitorConfigFormData
 } from '../monitor.schema';
-import { CHANNEL_TYPES } from '../constants';
+import { CHANNEL_ENUM } from '../constants';
 import { BaseFormLayout } from '@/components/shared/base-form-layout';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { useFormSubmit } from '@/hooks/use-form-submit';
@@ -81,9 +81,9 @@ export function MonitorConfigCreateForm({
                   <SelectValue placeholder='请选择渠道类型' />
                 </SelectTrigger>
                 <SelectContent>
-                  {CHANNEL_TYPES.map((option) => (
+                  {CHANNEL_ENUM.items.map((option) => (
                     <SelectItem key={option.code} value={String(option.code)}>
-                      {option.desc}
+                      {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -8,11 +8,10 @@
 
 'use client';
 
-import React from 'react';
 import { Plus } from 'lucide-react';
 import { PageHeader } from '@/components/table/page-header';
-import { useDialog } from '@/contexts/dialog-provider';
 import { AccountCreateForm } from './AccountCreateForm';
+import { Action } from '@/types/action';
 
 interface AccountPageHeaderProps {
   /** 操作成功后的回调（用于刷新列表） */
@@ -20,28 +19,20 @@ interface AccountPageHeaderProps {
 }
 
 export function AccountPageHeader({ onSuccess }: AccountPageHeaderProps) {
-  const { open } = useDialog();
+  const actions: Action[] = [
+    {
+      key: 'create',
+      label: '新建账号',
+      icon: Plus,
+      dialog: {
+        title: '新建账号',
+        description: '创建一个新的账号',
+        component: AccountCreateForm,
+        className: 'sm:max-w-[500px]'
+      }
+    }
+  ];
 
-  const handleCreate = () => {
-    open({
-      title: '新建账号',
-      description: '创建一个新的账号',
-      component: AccountCreateForm,
-      className: 'sm:max-w-[500px]',
-      onClose: () => onSuccess?.()
-    });
-  };
-
-  return (
-    <PageHeader
-      actions={[
-        {
-          label: '新建账号',
-          onClick: handleCreate,
-          icon: <Plus className='mr-2 h-4 w-4' />
-        }
-      ]}
-    />
-  );
+  return <PageHeader actions={actions} onRefresh={onSuccess} />;
 }
 
