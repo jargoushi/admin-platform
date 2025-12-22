@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { MultiSelect, type MultiSelectOption } from '@/components/ui/multi-select';
 import { Loader2 } from 'lucide-react';
 import { SmartEnum, EnumItem, EnumOption } from '@/lib/enum';
 import type { UseDialogFormReturn } from '@/hooks/use-dialog-form';
@@ -73,10 +74,16 @@ interface SelectFieldConfig<T extends FieldValues> extends BaseFieldConfig<T> {
   options: EnumOption[] | SmartEnum<EnumItem>;
 }
 
+interface MultiSelectFieldConfig<T extends FieldValues> extends BaseFieldConfig<T> {
+  type: 'multiselect';
+  options: MultiSelectOption[];
+}
+
 export type FormFieldConfig<T extends FieldValues> =
   | InputFieldConfig<T>
   | TextareaFieldConfig<T>
-  | SelectFieldConfig<T>;
+  | SelectFieldConfig<T>
+  | MultiSelectFieldConfig<T>;
 
 interface DialogFormProps<T extends FieldValues> {
   form: UseDialogFormReturn<T, any>;
@@ -154,6 +161,24 @@ function FormField<T extends FieldValues>({
                   ))}
                 </SelectContent>
               </Select>
+            )}
+          />
+        );
+      }
+
+      case 'multiselect': {
+        const msConfig = config as MultiSelectFieldConfig<T>;
+        return (
+          <Controller
+            name={name}
+            control={form.control}
+            render={({ field }) => (
+              <MultiSelect
+                options={msConfig.options}
+                value={field.value || []}
+                onChange={field.onChange}
+                placeholder={placeholder ?? `请选择${label}`}
+              />
             )}
           />
         );
