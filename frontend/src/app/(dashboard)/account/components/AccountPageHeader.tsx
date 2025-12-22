@@ -10,7 +10,7 @@
 
 import { Plus } from 'lucide-react';
 import { PageHeader } from '@/components/table/page-header';
-import { AccountCreateForm } from './AccountCreateForm';
+import { AccountForm } from './AccountForm';
 import { Action } from '@/types/action';
 
 interface AccountPageHeaderProps {
@@ -27,7 +27,7 @@ export function AccountPageHeader({ onSuccess }: AccountPageHeaderProps) {
       dialog: {
         title: '新建账号',
         description: '创建一个新的账号',
-        component: AccountCreateForm,
+        component: AccountForm,
         className: 'sm:max-w-[500px]'
       }
     }

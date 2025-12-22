@@ -15,7 +15,7 @@ import { ActionDropdown } from '@/components/table/action-dropdown';
 import { Action } from '@/types/action';
 import type { MonitorConfig } from '../types';
 import { MonitorApiService } from '@/service/api/monitor.api';
-import { MonitorConfigUpdateForm } from './MonitorConfigUpdateForm';
+import { MonitorConfigForm } from './MonitorConfigForm';
 import { MonitorDailyStatsChart } from './MonitorDailyStatsChart';
 import { StatusBadge } from '@/components/shared/status-badge';
 import {
@@ -131,7 +131,7 @@ export function MonitorConfigTable({
               dialog: {
                 title: '修改监控配置',
                 description: '修改监控目标链接',
-                component: MonitorConfigUpdateForm
+                component: MonitorConfigForm
               }
             },
             {

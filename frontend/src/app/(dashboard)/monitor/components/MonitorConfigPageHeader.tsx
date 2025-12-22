@@ -10,7 +10,7 @@
 
 import { Plus } from 'lucide-react';
 import { PageHeader } from '@/components/table/page-header';
-import { MonitorConfigCreateForm } from './MonitorConfigCreateForm';
+import { MonitorConfigForm } from './MonitorConfigForm';
 import { Action } from '@/types/action';
 
 interface MonitorConfigPageHeaderProps {
@@ -29,7 +29,7 @@ export function MonitorConfigPageHeader({
       dialog: {
         title: '创建监控配置',
         description: '添加新的监控目标，系统将自动采集数据',
-        component: MonitorConfigCreateForm
+        component: MonitorConfigForm
       }
     }
   ];

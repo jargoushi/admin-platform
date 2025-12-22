@@ -14,7 +14,7 @@ import { DataTable, type Column } from '@/components/table/data-table';
 import { ActionDropdown } from '@/components/table/action-dropdown';
 import { Action } from '@/types/action';
 import { AccountApiService } from '@/service/api/account.api';
-import { AccountEditForm } from './AccountEditForm';
+import { AccountForm } from './AccountForm';
 import { BindingManageDialog } from './BindingManageDialog';
 import type { Account } from '../types';
 
@@ -87,7 +87,7 @@ export function AccountTable({
               dialog: {
                 title: '编辑账号',
                 description: '修改账号信息',
-                component: AccountEditForm,
+                component: AccountForm,
                 className: 'sm:max-w-[500px]'
               }
             },
