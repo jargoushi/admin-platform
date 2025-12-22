@@ -26,8 +26,6 @@ export interface AccountQueryRequest extends BaseQueryRequest {
   user_id?: number;
   /** 账号名称（模糊搜索） */
   name?: string;
-  /** QueryParams 兼容索引签名 */
-  [key: string]: string | number | undefined;
 }
 
 /**

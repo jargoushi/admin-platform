@@ -10,8 +10,7 @@ import {
   FieldValues,
   Path,
   useForm,
-  useWatch,
-  type DefaultValues
+  useWatch
 } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -24,7 +23,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { DateRangePicker, DateRange } from '@/components/ui/date-range-picker';
-import { OptionConfig } from '@/types/common';
+import { SmartEnum, EnumItem, EnumOption } from '@/lib/enum';
 
 // ==================== 类型定义 ====================
 
@@ -47,7 +46,7 @@ export interface InputConfig<T extends FieldValues> extends BaseFieldConfig {
 export interface SelectConfig<T extends FieldValues> extends BaseFieldConfig {
   type: typeof FILTER_TYPES.SELECT;
   key: Path<T>;
-  options: OptionConfig[];
+  options: EnumOption[] | SmartEnum<EnumItem>;
 }
 
 export interface DateRangeConfig<T extends FieldValues>
@@ -176,6 +175,8 @@ function FilterSelect<T extends FieldValues>({
   control: Control<T>;
   loading?: boolean;
 }) {
+  const options = config.options instanceof SmartEnum ? config.options.options : config.options;
+
   return (
     <Controller
       name={config.key}
@@ -187,7 +188,7 @@ function FilterSelect<T extends FieldValues>({
             <Select
               value={hasValue ? String(field.value) : ''}
               onValueChange={(val) => {
-                const option = config.options.find(
+                const option = options.find(
                   (opt) => String(opt.code) === val
                 );
                 field.onChange(option?.code);
@@ -201,7 +202,7 @@ function FilterSelect<T extends FieldValues>({
                 <SelectValue placeholder='请选择' />
               </SelectTrigger>
               <SelectContent>
-                {config.options.map((opt) => (
+                {options.map((opt) => (
                   <SelectItem key={opt.code} value={String(opt.code)}>
                     {opt.desc}
                   </SelectItem>

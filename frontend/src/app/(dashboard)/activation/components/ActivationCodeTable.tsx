@@ -10,7 +10,6 @@
 
 import { useMemo, useCallback } from 'react';
 import { Check, X, Eye } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 // 引入弹窗基础设施
 import { useDialog } from '@/contexts/dialog-provider';
@@ -23,10 +22,9 @@ import {
 } from '@/components/table/action-dropdown';
 import type { ActivationCode } from '../types';
 import {
-  ACTIVATION_CODE_TYPES,
-  ACTIVATION_STATUS_CONFIG
+  ACTIVATION_STATUS_ENUM,
+  ACTIVATION_TYPE_ENUM
 } from '../constants';
-import { findDescByCode } from '@/types/common';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { ActivationCodeDetailView } from './ActivationCodeDetailView';
@@ -116,22 +114,12 @@ export function ActivationCodeTable({
         key: 'type',
         title: '类型',
         className: 'w-[100px]',
-        render: (_, record) => {
-          const typeColors: Record<
-            number,
-            'secondary' | 'info' | 'warning' | 'default'
-          > = {
-            0: 'secondary', // 日卡
-            1: 'info', // 月卡
-            2: 'warning', // 年卡
-            3: 'default' // 永久卡
-          };
-          return (
-            <Badge variant={typeColors[record.type] || 'secondary'}>
-              {findDescByCode(ACTIVATION_CODE_TYPES, record.type)}
-            </Badge>
-          );
-        }
+        render: (_, record) => (
+          <StatusBadge
+            code={record.type}
+            enum={ACTIVATION_TYPE_ENUM}
+          />
+        )
       },
       {
         key: 'status',
@@ -140,7 +128,7 @@ export function ActivationCodeTable({
         render: (_, record) => (
           <StatusBadge
             code={record.status}
-            configMap={ACTIVATION_STATUS_CONFIG}
+            enum={ACTIVATION_STATUS_ENUM}
           />
         )
       },

@@ -28,8 +28,7 @@ import { zhCN } from 'date-fns/locale';
 import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
 export function MonitorDailyStatsChart({
-  data: config,
-  onClose
+  data: config
 }: DialogComponentProps<MonitorConfig>) {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState<MonitorDailyStats[]>([]);

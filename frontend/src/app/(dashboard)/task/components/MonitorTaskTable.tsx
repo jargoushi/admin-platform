@@ -10,12 +10,11 @@
 import { useMemo } from 'react';
 import { DataTable, type Column } from '@/components/table/data-table';
 import type { MonitorTask } from '../types';
-import { findDescByCode } from '@/types/common';
 import { StatusBadge } from '@/components/shared/status-badge';
 import {
-  TASK_STATUS_CONFIG,
-  CHANNEL_TYPES,
-  TASK_TYPES
+  TASK_STATUS_ENUM,
+  CHANNEL_ENUM,
+  TASK_TYPE_ENUM
 } from '../constants';
 
 /**
@@ -44,9 +43,10 @@ export function MonitorTaskTable({
         title: '渠道',
         className: 'w-[120px]',
         render: (_, record) => (
-          <span className='text-sm'>
-            {findDescByCode(CHANNEL_TYPES, record.channel_code)}
-          </span>
+          <StatusBadge
+            code={record.channel_code}
+            enum={CHANNEL_ENUM}
+          />
         )
       },
       {
@@ -54,9 +54,10 @@ export function MonitorTaskTable({
         title: '任务类型',
         className: 'w-[140px]',
         render: (_, record) => (
-          <span className='text-sm'>
-            {findDescByCode(TASK_TYPES, record.task_type)}
-          </span>
+          <StatusBadge
+            code={record.task_type}
+            enum={TASK_TYPE_ENUM}
+          />
         )
       },
       {
@@ -71,7 +72,7 @@ export function MonitorTaskTable({
         render: (_, record) => (
           <StatusBadge
             code={record.task_status}
-            configMap={TASK_STATUS_CONFIG}
+            enum={TASK_STATUS_ENUM}
           />
         )
       },

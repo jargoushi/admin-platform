@@ -1,33 +1,25 @@
-/**
- * 通用状态徽章组件
- */
-
-'use client';
-
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-
-export interface StatusConfig {
-  label: string;
-  color?: string; // 文字颜色类名
-  bg?: string; // 背景颜色类名
-  variant?: 'default' | 'secondary' | 'destructive' | 'outline';
-}
+import { SmartEnum, EnumItem } from '@/lib/enum';
 
 export interface StatusBadgeProps {
-  code: number | string;
-  configMap: Record<number | string, StatusConfig>;
-  fallback?: StatusConfig;
+  /** 业务代码 */
+  code: number | string | undefined | null;
+  /** 智能枚举实例 */
+  enum: SmartEnum<EnumItem>;
+  /** 回退配置 */
+  fallback?: Partial<EnumItem>;
+  /** 额外类名 */
   className?: string;
 }
 
 export function StatusBadge({
   code,
-  configMap,
+  enum: enumInstance,
   fallback = { label: '未知', variant: 'outline' },
   className = ''
 }: StatusBadgeProps) {
-  const config = configMap[code] || fallback;
+  const config = enumInstance.get(code) || fallback;
 
   return (
     <Badge
@@ -38,3 +30,4 @@ export function StatusBadge({
     </Badge>
   );
 }
+

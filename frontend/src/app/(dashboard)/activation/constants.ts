@@ -6,39 +6,63 @@
  */
 
 import type { ActivationCodeQueryRequest } from './types';
-import type { OptionConfig } from '@/types/common';
 import { DEFAULT_PAGE_REQUEST } from '@/constants/pagination';
 import {
   FilterFieldConfig,
   FILTER_TYPES
 } from '@/components/shared/filter-layout';
-import { StatusConfig } from '@/components/shared/status-badge';
+import { SmartEnum } from '@/lib/enum';
 
-// ==================== 激活码类型配置 ====================
+// ==================== 枚举配置 (单一事实来源) ====================
 
-/**
- * 激活码类型统一配置
- */
-export const ACTIVATION_CODE_TYPES: OptionConfig[] = [
-  { code: 0, desc: '日卡' },
-  { code: 1, desc: '月卡' },
-  { code: 2, desc: '年卡' },
-  { code: 3, desc: '永久卡' }
-];
+/** 激活码类型枚举 */
+export const ACTIVATION_TYPE_ENUM = new SmartEnum([
+  { code: 0, label: '日卡', variant: 'secondary' },
+  {
+    code: 1,
+    label: '月卡',
+    variant: 'outline',
+    bg: 'bg-blue-50',
+    color: 'text-blue-500'
+  },
+  {
+    code: 2,
+    label: '年卡',
+    variant: 'outline',
+    bg: 'bg-amber-50',
+    color: 'text-amber-500'
+  },
+  {
+    code: 3,
+    label: '永久卡',
+    variant: 'default',
+    bg: 'bg-purple-100',
+    color: 'text-purple-600'
+  }
+]);
 
-// ==================== 激活码状态配置 ====================
-
-/**
- * 激活码状态统一配置
- */
-export const ACTIVATION_CODE_STATUSES: OptionConfig[] = [
-  { code: 0, desc: '未使用' },
-  { code: 1, desc: '已分发' },
-  { code: 2, desc: '已激活' },
-  { code: 3, desc: '作废' }
-];
+/** 激活码状态枚举 */
+export const ACTIVATION_STATUS_ENUM = new SmartEnum([
+  { code: 0, label: '未使用', variant: 'secondary' },
+  {
+    code: 1,
+    label: '已分发',
+    variant: 'outline',
+    bg: 'bg-blue-50',
+    color: 'text-blue-500'
+  },
+  {
+    code: 2,
+    label: '已激活',
+    variant: 'default',
+    bg: 'bg-green-100',
+    color: 'text-green-600'
+  },
+  { code: 3, label: '作废', variant: 'destructive' }
+]);
 
 // ==================== 默认查询参数 ====================
+
 
 /**
  * 默认查询参数(与后端 API 一致)
@@ -52,10 +76,10 @@ export const DEFAULT_QUERY_PARAMS: ActivationCodeQueryRequest = {
 
 /**
  * 批量初始化最大项数
- * 根据激活码类型数量动态计算
- * 每种激活码类型只能初始化一次
  */
-export const MAX_INIT_ITEMS = ACTIVATION_CODE_TYPES.length;
+export const MAX_INIT_ITEMS = ACTIVATION_TYPE_ENUM.items.length;
+
+// ... (INIT_COUNT_RANGE, DISTRIBUTE_COUNT_RANGE 不变)
 
 /**
  * 单次生成数量范围
@@ -73,25 +97,6 @@ export const DISTRIBUTE_COUNT_RANGE = {
   MAX: 100
 } as const;
 
-// ==================== 状态 Badge 配置 ====================
-
-export const ACTIVATION_STATUS_CONFIG: Record<number, StatusConfig> = {
-  0: { label: '未使用', variant: 'secondary' },
-  1: {
-    label: '已分发',
-    variant: 'outline',
-    bg: 'bg-blue-50',
-    color: 'text-blue-500'
-  },
-  2: {
-    label: '已激活',
-    variant: 'default',
-    bg: 'bg-green-100',
-    color: 'text-green-600'
-  },
-  3: { label: '作废', variant: 'destructive' }
-};
-
 // ==================== 筛选字段配置 ====================
 
 export const FILTERS_CONFIG: FilterFieldConfig<ActivationCodeQueryRequest>[] = [
@@ -104,13 +109,13 @@ export const FILTERS_CONFIG: FilterFieldConfig<ActivationCodeQueryRequest>[] = [
     key: 'type',
     label: '类型',
     type: FILTER_TYPES.SELECT,
-    options: ACTIVATION_CODE_TYPES
+    options: ACTIVATION_TYPE_ENUM
   },
   {
     key: 'status',
     label: '状态',
     type: FILTER_TYPES.SELECT,
-    options: ACTIVATION_CODE_STATUSES
+    options: ACTIVATION_STATUS_ENUM
   },
   {
     startKey: 'activated_at_start',

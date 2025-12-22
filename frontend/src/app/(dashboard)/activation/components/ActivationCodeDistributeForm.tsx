@@ -26,13 +26,12 @@ import {
   activationCodeDistributeSchema,
   type ActivationCodeDistributeFormData
 } from '../activation.schema';
-import { ACTIVATION_CODE_TYPES, DISTRIBUTE_COUNT_RANGE } from '../constants';
+import { ACTIVATION_TYPE_ENUM, DISTRIBUTE_COUNT_RANGE } from '../constants';
 import { BaseFormLayout } from '@/components/shared/base-form-layout';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { useFormSubmit } from '@/hooks/use-form-submit';
-import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
-export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) {
+export function ActivationCodeDistributeForm() {
   // 使用通用 Hook 管理提交状态
   const {
     result,
@@ -79,7 +78,7 @@ export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) 
           </Button>
         </div>
         <div className='mt-2 max-h-48 space-y-1 overflow-y-auto text-sm'>
-          {result.map((code) => (
+          {result.map((code: string) => (
             <code key={code} className='text-muted-foreground block font-mono'>
               {code}
             </code>
@@ -114,7 +113,7 @@ export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) 
                   <SelectValue placeholder='请选择激活码类型' />
                 </SelectTrigger>
                 <SelectContent>
-                  {ACTIVATION_CODE_TYPES.map((option) => (
+                  {ACTIVATION_TYPE_ENUM.options.map((option) => (
                     <SelectItem key={option.code} value={String(option.code)}>
                       {option.desc}
                     </SelectItem>

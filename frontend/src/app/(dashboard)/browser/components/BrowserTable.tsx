@@ -16,8 +16,8 @@ import { useDialog } from '@/contexts/dialog-provider';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { StatusBadge } from '@/components/shared/status-badge';
 import { toast } from 'sonner';
-import type { BrowserListItem, BrowserDetail } from '../types';
-import { BROWSER_STATUS } from '../constants';
+import type { BrowserListItem } from '../types';
+import { BROWSER_STATUS_ENUM } from '../constants';
 import { BrowserDetailView } from './BrowserDetailView';
 
 interface BrowserTableProps {
@@ -123,7 +123,7 @@ export function BrowserTable({
                 title: '状态',
                 className: 'w-[100px] text-center',
                 render: (_, record) => (
-                    <StatusBadge code={record.status} configMap={BROWSER_STATUS} />
+                    <StatusBadge code={record.status} enum={BROWSER_STATUS_ENUM} />
                 )
             },
             {

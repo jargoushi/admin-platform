@@ -21,14 +21,13 @@ import {
   type ActionItem
 } from '@/components/table/action-dropdown';
 import type { MonitorConfig } from '../types';
-import { findDescByCode } from '@/types/common';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { MonitorConfigUpdateForm } from './MonitorConfigUpdateForm';
 import { MonitorDailyStatsChart } from './MonitorDailyStatsChart';
 import { StatusBadge } from '@/components/shared/status-badge';
 import {
-  ACTIVE_STATUS_CONFIG,
-  CHANNEL_TYPES
+  ACTIVE_STATUS_ENUM,
+  CHANNEL_ENUM
 } from '../constants';
 
 /**
@@ -134,9 +133,10 @@ export function MonitorConfigTable({
         title: '渠道',
         className: 'w-[120px]',
         render: (_, record) => (
-          <span className='text-sm'>
-            {findDescByCode(CHANNEL_TYPES, record.channel_code)}
-          </span>
+          <StatusBadge
+            code={record.channel_code}
+            enum={CHANNEL_ENUM}
+          />
         )
       },
       {
@@ -168,7 +168,7 @@ export function MonitorConfigTable({
         render: (_, record) => (
           <StatusBadge
             code={record.is_active}
-            configMap={ACTIVE_STATUS_CONFIG}
+            enum={ACTIVE_STATUS_ENUM}
           />
         )
       },

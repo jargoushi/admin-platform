@@ -31,15 +31,13 @@ import {
 import {
   MAX_INIT_ITEMS,
   INIT_COUNT_RANGE,
-  ACTIVATION_CODE_TYPES
+  ACTIVATION_TYPE_ENUM
 } from '../constants';
-import { findDescByCode } from '@/types/common';
 import { BaseFormLayout } from '@/components/shared/base-form-layout';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { useFormSubmit } from '@/hooks/use-form-submit';
-import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
-export function ActivationCodeInitForm({ onClose }: DialogComponentProps) {
+export function ActivationCodeInitForm() {
   // 使用通用 Hook 管理提交状态
   const {
     result,
@@ -80,9 +78,9 @@ export function ActivationCodeInitForm({ onClose }: DialogComponentProps) {
   const handleAddItem = useCallback(() => {
     if (fields.length >= MAX_INIT_ITEMS) return;
 
-    const nextType = ACTIVATION_CODE_TYPES.find(
-      (opt) => !selectedTypes.has(opt.code as number)
-    )?.code as number | undefined;
+    const nextType = ACTIVATION_TYPE_ENUM.items.find(
+      (item) => !selectedTypes.has(item.code)
+    )?.code;
 
     const newType = nextType !== undefined ? nextType : 0;
 
@@ -164,7 +162,7 @@ export function ActivationCodeInitForm({ onClose }: DialogComponentProps) {
                           <SelectValue placeholder='请选择激活码类型' />
                         </SelectTrigger>
                         <SelectContent>
-                          {ACTIVATION_CODE_TYPES.map((option) => {
+                          {ACTIVATION_TYPE_ENUM.items.map((option) => {
                             const typeValue = option.code as 0 | 1 | 2 | 3;
                             return (
                               <SelectItem
@@ -175,11 +173,8 @@ export function ActivationCodeInitForm({ onClose }: DialogComponentProps) {
                                   typeValue !== selectField.value
                                 }
                               >
-                                {option.desc} (
-                                {findDescByCode(
-                                  ACTIVATION_CODE_TYPES,
-                                  typeValue
-                                )}
+                                {option.label} (
+                                {ACTIVATION_TYPE_ENUM.getLabel(typeValue)}
                                 )
                               </SelectItem>
                             );
