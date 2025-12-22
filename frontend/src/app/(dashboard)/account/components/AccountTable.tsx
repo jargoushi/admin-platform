@@ -8,7 +8,7 @@
 
 'use client';
 
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback } from 'react';
 import { Pencil, Trash2, Link2 } from 'lucide-react';
 import { DataTable, type Column } from '@/components/table/data-table';
 import { ActionDropdown } from '@/components/table/action-dropdown';
@@ -33,18 +33,6 @@ export function AccountTable({
   loading = false,
   onRefresh
 }: AccountTableProps) {
-  // 绑定管理弹窗状态（暂保留，因为 BindingManageDialog 较复杂，且需要 openChange 回调）
-  const [bindingDialogOpen, setBindingDialogOpen] = useState(false);
-  const [bindingAccount, setBindingAccount] = useState<Account | null>(null);
-
-  /**
-   * 处理绑定管理
-   */
-  const handleBinding = useCallback((account: Account) => {
-    setBindingAccount(account);
-    setBindingDialogOpen(true);
-  }, []);
-
   /** 列配置 */
   const columns = useMemo<Column<Account>[]>(
     () => [
@@ -85,7 +73,12 @@ export function AccountTable({
               key: 'binding',
               label: '绑定管理',
               icon: Link2,
-              onClick: (r) => handleBinding(r)
+              dialog: {
+                title: `绑定管理 - ${record.name}`,
+                description: '管理该账号的项目渠道绑定关系',
+                component: BindingManageDialog,
+                className: 'sm:max-w-[700px]'
+              }
             },
             {
               key: 'edit',
@@ -113,20 +106,11 @@ export function AccountTable({
         }
       }
     ],
-    [handleBinding, onRefresh]
+    [onRefresh]
   );
 
   return (
-    <>
-      <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
-
-      {/* 绑定管理弹窗 */}
-      <BindingManageDialog
-        open={bindingDialogOpen}
-        onOpenChange={setBindingDialogOpen}
-        account={bindingAccount}
-      />
-    </>
+    <DataTable columns={columns} data={data} loading={loading} rowKey='id' />
   );
 }
 
