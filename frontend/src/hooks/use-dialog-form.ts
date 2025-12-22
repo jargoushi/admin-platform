@@ -1,16 +1,13 @@
 /**
  * 弹窗表单 Hook
  *
- * 封装弹窗表单的状态管理：
- * - useForm + zodResolver
- * - 编辑数据自动同步
- * - 提交状态管理
+ * 封装表单状态管理，使用显式配置，简单可靠
  */
 
 'use client';
 
-import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { useForm, UseFormReturn, Path } from 'react-hook-form';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useForm, UseFormReturn, DefaultValues, Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 
@@ -19,6 +16,8 @@ import { toast } from 'sonner';
 export interface UseDialogFormOptions<TFormData extends Record<string, any>, TEntity> {
   /** Zod Schema */
   schema: any;
+  /** 默认值（必须提供） */
+  defaultValues: DefaultValues<TFormData>;
   /** 编辑数据（新建时为 undefined） */
   data?: TEntity;
   /** 提交处理 */
@@ -27,6 +26,8 @@ export interface UseDialogFormOptions<TFormData extends Record<string, any>, TEn
   onClose: () => void;
   /** 成功提示（传了才显示） */
   successMessage?: string;
+  /** 数据转换：将实体转为表单数据（编辑模式必须提供） */
+  dataToForm?: (data: TEntity) => Partial<TFormData>;
 }
 
 export interface UseDialogFormReturn<TFormData extends Record<string, any>> {
@@ -37,37 +38,16 @@ export interface UseDialogFormReturn<TFormData extends Record<string, any>> {
   onClose: () => void;
 }
 
-// ==================== 工具函数 ====================
-
-/** 从 Zod Schema 提取默认值 */
-function getSchemaDefaults(schema: any): Record<string, any> {
-  const defaults: Record<string, any> = {};
-  const shape = schema?.shape || schema?._def?.schema?.shape;
-
-  if (!shape) return defaults;
-
-  Object.keys(shape).forEach((key) => {
-    const field = shape[key];
-    const typeName = field?._def?.typeName;
-
-    if (typeName === 'ZodNumber') {
-      defaults[key] = 0;
-    } else {
-      defaults[key] = '';
-    }
-  });
-
-  return defaults;
-}
-
 // ==================== Hook 实现 ====================
 
 export function useDialogForm<TFormData extends Record<string, any>, TEntity = unknown>({
   schema,
+  defaultValues,
   data,
   onSubmit,
   onClose,
-  successMessage
+  successMessage,
+  dataToForm
 }: UseDialogFormOptions<TFormData, TEntity>): UseDialogFormReturn<TFormData> {
 
   const isEdit = !!data;
@@ -76,29 +56,28 @@ export function useDialogForm<TFormData extends Record<string, any>, TEntity = u
   // Refs: 保持函数引用稳定
   const onSubmitRef = useRef(onSubmit);
   const onCloseRef = useRef(onClose);
+  const dataToFormRef = useRef(dataToForm);
   onSubmitRef.current = onSubmit;
   onCloseRef.current = onClose;
-
-  // 从 schema 推导默认值
-  const defaultValues = useMemo(() => getSchemaDefaults(schema), [schema]);
+  dataToFormRef.current = dataToForm;
 
   // 表单实例
   const form = useForm<TFormData>({
     resolver: zodResolver(schema) as any,
-    defaultValues: defaultValues as any
+    defaultValues
   });
 
   // 编辑模式: 同步数据到表单
   useEffect(() => {
-    if (!data) return;
-
-    Object.keys(defaultValues).forEach((key) => {
-      const value = (data as any)[key];
-      if (value !== undefined) {
-        form.setValue(key as Path<TFormData>, value);
-      }
-    });
-  }, [data, defaultValues, form]);
+    if (data && dataToFormRef.current) {
+      const formData = dataToFormRef.current(data);
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== undefined) {
+          form.setValue(key as Path<TFormData>, value as any);
+        }
+      });
+    }
+  }, [data, form]);
 
   // 提交处理
   const handleSubmit = useCallback(async () => {
@@ -109,7 +88,6 @@ export function useDialogForm<TFormData extends Record<string, any>, TEntity = u
     try {
       await onSubmitRef.current(form.getValues(), isEdit);
 
-      // 只有传了 message 才显示 toast
       if (successMessage) {
         toast.success(successMessage);
       }

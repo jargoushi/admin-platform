@@ -15,7 +15,6 @@ import { ResultDialog, type ResultDialogData } from '@/components/shared/result-
 import { ActivationApiService } from '@/service/api/activation.api';
 import { useDialog, type DialogComponentProps } from '@/contexts/dialog-provider';
 
-// 字段配置
 const FORM_FIELDS: FormFieldConfig<ActivationCodeDistributeFormData>[] = [
   {
     name: 'type',
@@ -33,25 +32,28 @@ const FORM_FIELDS: FormFieldConfig<ActivationCodeDistributeFormData>[] = [
   }
 ];
 
+const DEFAULT_VALUES: ActivationCodeDistributeFormData = {
+  type: 0,
+  count: 1
+};
+
 export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) {
   const dialog = useDialog();
 
   const form = useDialogForm<ActivationCodeDistributeFormData>({
     schema: activationCodeDistributeSchema,
+    defaultValues: DEFAULT_VALUES,
     onSubmit: async (formData) => {
       const result = await ActivationApiService.distribute(formData);
 
-      // 打开结果弹窗
       if (result && result.length > 0) {
-        const resultData: ResultDialogData = {
-          message: `共派发 ${result.length} 个激活码。`,
-          results: [{ title: '派发激活码列表', items: result }]
-        };
-
         dialog.open({
           title: '派发结果',
           component: ResultDialog,
-          data: resultData,
+          data: {
+            message: `共派发 ${result.length} 个激活码。`,
+            results: [{ title: '派发激活码列表', items: result }]
+          },
           className: 'sm:max-w-[600px]'
         });
       }
@@ -60,5 +62,5 @@ export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) 
     successMessage: '派发成功'
   });
 
-  return <DialogForm form={form} fields={FORM_FIELDS} submitText='立即派发' />;
+  return <DialogForm form={form} fields={FORM_FIELDS} />;
 }

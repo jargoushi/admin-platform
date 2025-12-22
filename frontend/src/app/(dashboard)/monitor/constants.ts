@@ -15,42 +15,35 @@ import { SmartEnum } from '@/lib/enum';
 
 // ==================== 枚举配置 (单一事实来源) ====================
 
-/** 渠道类型枚举 */
+/** 渠道类型枚举 - 与后端 ChannelEnum 保持一致 */
 export const CHANNEL_ENUM = new SmartEnum([
   {
     code: 1,
-    label: '小红书',
-    variant: 'outline',
-    bg: 'bg-red-50',
-    color: 'text-red-500'
-  },
-  {
-    code: 2,
-    label: '哔哩哔哩',
+    label: '抖音',
     variant: 'outline',
     bg: 'bg-pink-50',
     color: 'text-pink-500'
   },
   {
-    code: 3,
+    code: 2,
     label: 'YouTube',
     variant: 'outline',
     bg: 'bg-red-100',
     color: 'text-red-600'
   },
   {
+    code: 3,
+    label: '哔哩哔哩',
+    variant: 'outline',
+    bg: 'bg-blue-50',
+    color: 'text-blue-500'
+  },
+  {
     code: 4,
-    label: '微信公众号',
+    label: '视频号',
     variant: 'outline',
     bg: 'bg-green-50',
     color: 'text-green-500'
-  },
-  {
-    code: 5,
-    label: '微信视频号',
-    variant: 'outline',
-    bg: 'bg-emerald-50',
-    color: 'text-emerald-500'
   }
 ]);
 

@@ -24,6 +24,29 @@ import { Loader2 } from 'lucide-react';
 import { SmartEnum, EnumItem, EnumOption } from '@/lib/enum';
 import type { UseDialogFormReturn } from '@/hooks/use-dialog-form';
 
+// ==================== DialogFormFooter ====================
+
+interface DialogFormFooterProps {
+  isLoading: boolean;
+  onCancel: () => void;
+  isEdit?: boolean;
+}
+
+/** 统一的弹窗表单底部按钮，可单独使用 */
+export function DialogFormFooter({ isLoading, onCancel, isEdit = false }: DialogFormFooterProps) {
+  return (
+    <DialogFooter>
+      <Button type='button' variant='outline' onClick={onCancel} disabled={isLoading}>
+        取消
+      </Button>
+      <Button type='submit' disabled={isLoading}>
+        {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+        {isEdit ? '保存修改' : '确定'}
+      </Button>
+    </DialogFooter>
+  );
+}
+
 // ==================== 类型定义 ====================
 
 interface BaseFieldConfig<T extends FieldValues> {
@@ -59,7 +82,6 @@ export type FormFieldConfig<T extends FieldValues> =
 interface DialogFormProps<T extends FieldValues> {
   form: UseDialogFormReturn<T>;
   fields: FormFieldConfig<T>[];
-  submitText?: string;
   /** 编辑数据，用于只读字段显示 */
   editData?: any;
 }
@@ -147,7 +169,7 @@ function FormField<T extends FieldValues>({
             type={fieldType === 'input' ? 'text' : fieldType}
             placeholder={placeholder ?? `请输入${label}`}
             disabled={isLoading}
-            {...form.register(name)}
+            {...form.register(name, fieldType === 'number' ? { valueAsNumber: true } : {})}
           />
         );
     }
@@ -177,7 +199,6 @@ function FormField<T extends FieldValues>({
 export function DialogForm<T extends FieldValues>({
   form,
   fields,
-  submitText,
   editData
 }: DialogFormProps<T>) {
   const { isEdit, isLoading, handleSubmit, onClose } = form;
@@ -206,7 +227,7 @@ export function DialogForm<T extends FieldValues>({
         </Button>
         <Button type='submit' disabled={isLoading}>
           {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
-          {submitText ?? (isEdit ? '保存修改' : '立即创建')}
+          {isEdit ? '保存修改' : '确定'}
         </Button>
       </DialogFooter>
     </form>

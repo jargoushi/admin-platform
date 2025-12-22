@@ -12,7 +12,6 @@ import { CHANNEL_ENUM } from '../constants';
 import type { DialogComponentProps } from '@/contexts/dialog-provider';
 import type { MonitorConfig } from '../types';
 
-// 字段配置
 const FORM_FIELDS: FormFieldConfig<MonitorConfigFormData>[] = [
   {
     name: 'channel_code',
@@ -31,12 +30,18 @@ const FORM_FIELDS: FormFieldConfig<MonitorConfigFormData>[] = [
   }
 ];
 
+const DEFAULT_VALUES: MonitorConfigFormData = {
+  channel_code: 1,
+  target_url: ''
+};
+
 export function MonitorConfigForm({
   data: config,
   onClose
 }: DialogComponentProps<MonitorConfig>) {
   const form = useDialogForm<MonitorConfigFormData, MonitorConfig>({
     schema: monitorConfigSchema,
+    defaultValues: DEFAULT_VALUES,
     data: config,
     onSubmit: async (formData, isEdit) => {
       if (isEdit && config) {
@@ -45,7 +50,12 @@ export function MonitorConfigForm({
         await MonitorApiService.create(formData);
       }
     },
-    onClose
+    onClose,
+    successMessage: config ? '保存成功' : '创建成功',
+    dataToForm: (c) => ({
+      channel_code: c.channel_code,
+      target_url: c.target_url
+    })
   });
 
   return <DialogForm form={form} fields={FORM_FIELDS} editData={config} />;
