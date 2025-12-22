@@ -27,8 +27,7 @@ const FORM_FIELDS: FormFieldConfig<ActivationCodeDistributeFormData>[] = [
     name: 'count',
     label: '派发数量',
     type: 'number',
-    required: true,
-    help: `可派发 ${DISTRIBUTE_COUNT_RANGE.MIN}-${DISTRIBUTE_COUNT_RANGE.MAX} 个`
+    required: true
   }
 ];
 

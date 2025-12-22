@@ -54,7 +54,6 @@ interface BaseFieldConfig<T extends FieldValues> {
   label: string;
   required?: boolean;
   placeholder?: string;
-  help?: string;
   /** 编辑模式下只读，需配合 editDisplayValue 使用 */
   editReadonly?: boolean;
   editDisplayValue?: (data: any) => string;
@@ -80,10 +79,8 @@ export type FormFieldConfig<T extends FieldValues> =
   | SelectFieldConfig<T>;
 
 interface DialogFormProps<T extends FieldValues> {
-  form: UseDialogFormReturn<T>;
+  form: UseDialogFormReturn<T, any>;
   fields: FormFieldConfig<T>[];
-  /** 编辑数据，用于只读字段显示 */
-  editData?: any;
 }
 
 // ==================== 字段渲染 ====================
@@ -99,7 +96,7 @@ function FormField<T extends FieldValues>({
   isEdit: boolean;
   editData?: any;
 }) {
-  const { name, label, required, placeholder, help, editReadonly, editDisplayValue } = config;
+  const { name, label, required, placeholder, editReadonly, editDisplayValue } = config;
   const isLoading = form.formState.isSubmitting;
   const error = form.formState.errors[name];
   const fieldType = (config as any).type ?? 'input';
@@ -187,9 +184,6 @@ function FormField<T extends FieldValues>({
       {error && (
         <p className='text-destructive text-xs'>{error.message as string}</p>
       )}
-      {!error && help && (
-        <p className='text-muted-foreground text-xs'>{help}</p>
-      )}
     </div>
   );
 }
@@ -198,10 +192,9 @@ function FormField<T extends FieldValues>({
 
 export function DialogForm<T extends FieldValues>({
   form,
-  fields,
-  editData
+  fields
 }: DialogFormProps<T>) {
-  const { isEdit, isLoading, handleSubmit, onClose } = form;
+  const { isEdit, isLoading, handleSubmit, onClose, data: editData } = form;
 
   return (
     <form

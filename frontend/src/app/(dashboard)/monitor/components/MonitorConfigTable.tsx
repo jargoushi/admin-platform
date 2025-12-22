@@ -130,7 +130,6 @@ export function MonitorConfigTable({
               icon: Edit,
               dialog: {
                 title: '修改监控配置',
-                description: '修改监控目标链接',
                 component: MonitorConfigForm
               }
             },

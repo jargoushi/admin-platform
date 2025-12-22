@@ -30,12 +30,14 @@ export interface UseDialogFormOptions<TFormData extends Record<string, any>, TEn
   dataToForm?: (data: TEntity) => Partial<TFormData>;
 }
 
-export interface UseDialogFormReturn<TFormData extends Record<string, any>> {
+export interface UseDialogFormReturn<TFormData extends Record<string, any>, TEntity = unknown> {
   form: UseFormReturn<TFormData>;
   isEdit: boolean;
   isLoading: boolean;
   handleSubmit: () => Promise<void>;
   onClose: () => void;
+  /** 原始编辑数据 */
+  data?: TEntity;
 }
 
 // ==================== Hook 实现 ====================
@@ -100,5 +102,5 @@ export function useDialogForm<TFormData extends Record<string, any>, TEntity = u
     }
   }, [form, isEdit, successMessage]);
 
-  return { form, isEdit, isLoading, handleSubmit, onClose };
+  return { form, isEdit, isLoading, handleSubmit, onClose, data };
 }

@@ -25,8 +25,7 @@ const FORM_FIELDS: FormFieldConfig<MonitorConfigFormData>[] = [
   {
     name: 'target_url',
     label: '监控目标链接',
-    required: true,
-    help: '请输入完整的目标链接地址（最多512个字符）'
+    required: true
   }
 ];
 
@@ -58,5 +57,5 @@ export function MonitorConfigForm({
     })
   });
 
-  return <DialogForm form={form} fields={FORM_FIELDS} editData={config} />;
+  return <DialogForm form={form} fields={FORM_FIELDS} />;
 }
