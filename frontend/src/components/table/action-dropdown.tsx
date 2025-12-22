@@ -79,7 +79,7 @@ export function ActionDropdown<T>({
           <MoreHorizontal className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
+      <DropdownMenuContent align='end' className='min-w-[120px]'>
         {visibleActions.map((action) => {
           const isDisabled =
             typeof action.disabled === 'function'
@@ -90,11 +90,11 @@ export function ActionDropdown<T>({
             <DropdownMenuItem
               key={action.key}
               onClick={() => handleActionClick(action)}
-              className={`${action.className || ''} cursor-pointer`}
+              className={`${action.className || ''} cursor-pointer py-2`}
               disabled={isDisabled}
             >
-              {action.icon && <span className='mr-2'>{action.icon}</span>}
-              {action.label}
+              {action.icon && <span className='mr-2 flex-shrink-0'>{action.icon}</span>}
+              <span className='flex-1'>{action.label}</span>
             </DropdownMenuItem>
           );
         })}

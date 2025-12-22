@@ -121,7 +121,7 @@ export function MonitorConfigTable({
             {
               key: 'stats',
               label: '查看数据',
-              icon: <BarChart3 className='mr-2 h-4 w-4' />,
+              icon: <BarChart3 className='h-4 w-4' />,
               onClick: (r) => openDialog({
                 title: '每日数据统计',
                 description: '查看监控配置的每日数据趋势',
@@ -133,7 +133,7 @@ export function MonitorConfigTable({
             {
               key: 'update',
               label: '修改',
-              icon: <Edit className='mr-2 h-4 w-4' />,
+              icon: <Edit className='h-4 w-4' />,
               onClick: (r) => openDialog({
                 title: '修改监控配置',
                 description: '修改监控目标链接',
@@ -144,7 +144,7 @@ export function MonitorConfigTable({
             {
               key: 'toggle',
               label: record.is_active === 1 ? '禁用' : '启用',
-              icon: <Power className='mr-2 h-4 w-4' />,
+              icon: <Power className='h-4 w-4' />,
               confirm: {
                 description: (r) => `确定要${r.is_active === 1 ? '禁用' : '启用'}该监控配置吗？`
               },
@@ -153,7 +153,7 @@ export function MonitorConfigTable({
             {
               key: 'delete',
               label: '删除',
-              icon: <Trash2 className='mr-2 h-4 w-4' />,
+              icon: <Trash2 className='h-4 w-4' />,
               className: 'text-destructive focus:text-destructive',
               confirm: {
                 description: (r) => `确定要删除该监控配置吗？\n\n账号：${r.account_name || '未知'}\n删除后将无法恢复！`

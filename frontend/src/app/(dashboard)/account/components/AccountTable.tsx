@@ -92,13 +92,13 @@ export function AccountTable({
             {
               key: 'binding',
               label: '绑定管理',
-              icon: <Link2 className='mr-2 h-4 w-4' />,
+              icon: <Link2 className='h-4 w-4' />,
               onClick: (r) => handleBinding(r)
             },
             {
               key: 'edit',
               label: '编辑',
-              icon: <Pencil className='mr-2 h-4 w-4' />,
+              icon: <Pencil className='h-4 w-4' />,
               onClick: (r) => openDialog({
                 title: '编辑账号',
                 description: '修改账号信息',
@@ -110,7 +110,7 @@ export function AccountTable({
             {
               key: 'delete',
               label: '删除',
-              icon: <Trash2 className='mr-2 h-4 w-4' />,
+              icon: <Trash2 className='h-4 w-4' />,
               className: 'text-destructive',
               confirm: {
                 description: (r) => `确定要删除账号 "${r.name}" 吗？\n\n删除后将无法恢复！`

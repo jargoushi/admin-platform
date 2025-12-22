@@ -109,7 +109,7 @@ export function ActivationCodeTable({
             {
               key: 'activate',
               label: '激活',
-              icon: <Check className='mr-2 h-4 w-4' />,
+              icon: <Check className='h-4 w-4' />,
               hidden: (r) => r.status !== 1,
               confirm: {
                 description: (r) => `确定要激活"${r.activation_code}" 吗？`
@@ -119,7 +119,7 @@ export function ActivationCodeTable({
             {
               key: 'invalidate',
               label: '作废',
-              icon: <X className='mr-2 h-4 w-4' />,
+              icon: <X className='h-4 w-4' />,
               hidden: (r) => r.status !== 1 && r.status !== 2,
               confirm: {
                 description: (r) => `确定要作废激活码 "${r.activation_code}" 吗？\n\n作废后将无法恢复！`
@@ -129,7 +129,7 @@ export function ActivationCodeTable({
             {
               key: 'detail',
               label: '详情',
-              icon: <Eye className='mr-2 h-4 w-4' />,
+              icon: <Eye className='h-4 w-4' />,
               onClick: async (r) => {
                 const detail = await ActivationApiService.getDetail(r.activation_code);
                 if (detail) {

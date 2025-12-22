@@ -92,7 +92,7 @@ export function BrowserTable({
                         {
                             key: 'detail',
                             label: '查看详情',
-                            icon: <Info className='mr-2 h-4 w-4' />,
+                            icon: <Info className='h-4 w-4' />,
                             onClick: async (r) => {
                                 try {
                                     const detail = await BrowserApiService.getDetail(r.id);
@@ -110,7 +110,7 @@ export function BrowserTable({
                         {
                             key: 'open',
                             label: '打开窗口',
-                            icon: <Play className='mr-2 h-4 w-4' />,
+                            icon: <Play className='h-4 w-4' />,
                             disabled: (r) => r.status === 1,
                             onClick: async (r) => {
                                 try {
@@ -129,7 +129,7 @@ export function BrowserTable({
                         {
                             key: 'close',
                             label: '关闭窗口',
-                            icon: <Square className='mr-2 h-4 w-4' />,
+                            icon: <Square className='h-4 w-4' />,
                             disabled: (r) => r.status !== 1,
                             onClick: async (r) => {
                                 try {
@@ -144,7 +144,7 @@ export function BrowserTable({
                         {
                             key: 'delete',
                             label: '彻底删除',
-                            icon: <Trash2 className='mr-2 h-4 w-4' />,
+                            icon: <Trash2 className='h-4 w-4' />,
                             className: 'text-destructive focus:text-destructive',
                             confirm: {
                                 description: (r) => `确定要彻底删除窗口 [${r.name}] 吗？此操作不可恢复。`
