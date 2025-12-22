@@ -9,8 +9,10 @@ import {
 } from '@/components/shared/entity-detail-view';
 import { formatDateTime } from '@/lib/date';
 import type { ActivationCode } from '../types';
-import { ACTIVATION_CODE_TYPES, ACTIVATION_CODE_STATUSES } from '../constants';
-import { findDescByCode } from '@/types/common';
+import {
+  ACTIVATION_STATUS_ENUM,
+  ACTIVATION_TYPE_ENUM
+} from '../constants';
 import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
 /**
@@ -31,7 +33,7 @@ const CODE_DETAIL_CONFIG: FieldConfig<ActivationCode>[] = [
     key: 'type',
     render: (_, data: ActivationCode) => (
       <span className='text-sm'>
-        {findDescByCode(ACTIVATION_CODE_TYPES, data.type)}
+        {ACTIVATION_TYPE_ENUM.getLabel(data.type)}
       </span>
     )
   },
@@ -40,7 +42,7 @@ const CODE_DETAIL_CONFIG: FieldConfig<ActivationCode>[] = [
     key: 'status',
     render: (_, data: ActivationCode) => (
       <span className='text-sm'>
-        {findDescByCode(ACTIVATION_CODE_STATUSES, data.status)}
+        {ACTIVATION_STATUS_ENUM.getLabel(data.status)}
       </span>
     )
   },

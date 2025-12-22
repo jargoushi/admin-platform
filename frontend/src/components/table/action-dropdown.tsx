@@ -9,44 +9,69 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
+import { useConfirmation } from '@/contexts/confirmation-provider';
 
-export interface ActionItem {
+export interface ActionItem<T = any> {
   key: string;
   label: string;
   icon?: React.ReactNode;
-  onClick?: () => void;
+  onClick: (record: T) => void | Promise<void>;
+  /** 声明式隐藏逻辑 */
+  hidden?: boolean | ((record: T) => boolean);
+  /** 声明式禁用逻辑 */
+  disabled?: boolean | ((record: T) => boolean);
+  /** 自动确认配置 */
+  confirm?: {
+    title?: string;
+    description: string | ((record: T) => string);
+  };
   className?: string;
-  disabled?: boolean;
 }
 
-export interface DeleteAction {
-  title?: string;
-  description: string;
-  onConfirm: () => void;
-}
-
-interface ActionDropdownProps {
-  actions: ActionItem[];
-  deleteAction?: DeleteAction;
+interface ActionDropdownProps<T> {
+  /** 当前行数据 */
+  record: T;
+  /** 操作项列表 */
+  actions: ActionItem<T>[];
+  /** 触发按钮类名 */
   triggerClassName?: string;
 }
 
-export function ActionDropdown({
+export function ActionDropdown<T>({
+  record,
   actions,
-  deleteAction,
   triggerClassName = 'h-8 w-8 p-0 cursor-pointer'
-}: ActionDropdownProps) {
+}: ActionDropdownProps<T>) {
+  const { confirm } = useConfirmation();
+
+  // 过滤掉隐藏的项
+  const visibleActions = actions.filter((action) => {
+    if (typeof action.hidden === 'function') {
+      return !action.hidden(record);
+    }
+    return !action.hidden;
+  });
+
+  if (visibleActions.length === 0) return null;
+
+  const handleActionClick = (action: ActionItem<T>) => {
+    // 如果配置了确认逻辑
+    if (action.confirm) {
+      const description =
+        typeof action.confirm.description === 'function'
+          ? action.confirm.description(record)
+          : action.confirm.description;
+
+      confirm({
+        title: action.confirm.title || '确认操作',
+        description,
+        onConfirm: () => action.onClick(record)
+      });
+    } else {
+      action.onClick(record);
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -55,50 +80,24 @@ export function ActionDropdown({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>
-        {actions.map((action) => (
-          <DropdownMenuItem
-            key={action.key}
-            onClick={action.onClick}
-            className={`${action.className} cursor-pointer`}
-            disabled={action.disabled}
-          >
-            {action.label}
-          </DropdownMenuItem>
-        ))}
+        {visibleActions.map((action) => {
+          const isDisabled =
+            typeof action.disabled === 'function'
+              ? action.disabled(record)
+              : action.disabled;
 
-        {deleteAction && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <DropdownMenuItem
-                onSelect={(e) => e.preventDefault()}
-                className='cursor-pointer'
-              >
-                删除
-              </DropdownMenuItem>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {deleteAction.title || '确认删除'}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {deleteAction.description}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel className='cursor-pointer'>
-                  取消
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={deleteAction.onConfirm}
-                  className='hover:bg-destructive/90 cursor-pointer'
-                >
-                  删除
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
+          return (
+            <DropdownMenuItem
+              key={action.key}
+              onClick={() => handleActionClick(action)}
+              className={`${action.className || ''} cursor-pointer`}
+              disabled={isDisabled}
+            >
+              {action.icon && <span className='mr-2'>{action.icon}</span>}
+              {action.label}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

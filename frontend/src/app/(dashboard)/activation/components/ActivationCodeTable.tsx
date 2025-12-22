@@ -8,13 +8,9 @@
 
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 import { Check, X, Eye } from 'lucide-react';
-
-// 引入弹窗基础设施
-import { useDialog } from '@/contexts/dialog-provider';
-import { useConfirmation } from '@/contexts/confirmation-provider';
-
+import { useTableActions } from '@/hooks/use-table-actions';
 import { DataTable, type Column } from '@/components/table/data-table';
 import {
   ActionDropdown,
@@ -44,64 +40,8 @@ export function ActivationCodeTable({
   loading = false,
   onRefresh
 }: ActivationCodeTableProps) {
-  // 全局弹窗
-  const { open } = useDialog();
+  const { openDialog } = useTableActions({ onRefresh });
 
-  // 管理确认弹窗
-  const { confirm } = useConfirmation();
-
-  /**
-   * 处理查看详情
-   */
-  const handleViewDetail = useCallback(
-    async (code: ActivationCode) => {
-      const detail = await ActivationApiService.getDetail(code.activation_code);
-      if (detail) {
-        open({
-          title: '激活码详情',
-          component: ActivationCodeDetailView,
-          data: detail,
-          className: 'sm:max-w-[600px]'
-        });
-      }
-    },
-    [open]
-  );
-  // ... (handleActivate, handleInvalidate, columns 等保持不变)
-
-  /**
-   * 处理激活操作
-   */
-  const handleActivate = useCallback(
-    (code: ActivationCode) => {
-      confirm({
-        description: `确定要激活"${code.activation_code}" 吗？`,
-        onConfirm: async () => {
-          await ActivationApiService.activate(code.activation_code);
-          onRefresh?.();
-        }
-      });
-    },
-    [confirm, onRefresh]
-  );
-
-  /**
-   * 处理作废操作
-   */
-  const handleInvalidate = useCallback(
-    (code: ActivationCode) => {
-      confirm({
-        description: `确定要作废激活码 "${code.activation_code}" 吗？\n\n作废后将无法恢复！`,
-        onConfirm: async () => {
-          await ActivationApiService.invalidate({
-            activation_code: code.activation_code
-          });
-          onRefresh?.();
-        }
-      });
-    },
-    [confirm, onRefresh]
-  );
   /** 列配置 */
   const columns = useMemo<Column<ActivationCode>[]>(
     () => [
@@ -165,38 +105,50 @@ export function ActivationCodeTable({
         title: '操作',
         className: 'w-[120px] text-center',
         render: (_: unknown, record: ActivationCode) => {
-          const actions: ActionItem[] = [];
-
-          if (record.status === 1) {
-            actions.push({
+          const actions: ActionItem<ActivationCode>[] = [
+            {
               key: 'activate',
               label: '激活',
               icon: <Check className='mr-2 h-4 w-4' />,
-              onClick: () => handleActivate(record)
-            });
-          }
-
-          if (record.status === 1 || record.status === 2) {
-            actions.push({
+              hidden: (r) => r.status !== 1,
+              confirm: {
+                description: (r) => `确定要激活"${r.activation_code}" 吗？`
+              },
+              onClick: async (r) => { await ActivationApiService.activate(r.activation_code); }
+            },
+            {
               key: 'invalidate',
               label: '作废',
               icon: <X className='mr-2 h-4 w-4' />,
-              onClick: () => handleInvalidate(record)
-            });
-          }
+              hidden: (r) => r.status !== 1 && r.status !== 2,
+              confirm: {
+                description: (r) => `确定要作废激活码 "${r.activation_code}" 吗？\n\n作废后将无法恢复！`
+              },
+              onClick: async (r) => { await ActivationApiService.invalidate({ activation_code: r.activation_code }); }
+            },
+            {
+              key: 'detail',
+              label: '详情',
+              icon: <Eye className='mr-2 h-4 w-4' />,
+              onClick: async (r) => {
+                const detail = await ActivationApiService.getDetail(r.activation_code);
+                if (detail) {
+                  openDialog({
+                    title: '激活码详情',
+                    component: ActivationCodeDetailView,
+                    data: detail,
+                    className: 'sm:max-w-[600px]'
+                  });
+                }
+              }
+            }
+          ];
 
-          actions.push({
-            key: 'detail',
-            label: '详情',
-            icon: <Eye className='mr-2 h-4 w-4' />,
-            onClick: () => handleViewDetail(record)
-          });
-
-          return <ActionDropdown actions={actions} />;
+          return <ActionDropdown record={record} actions={actions} />;
         }
       }
     ],
-    [handleActivate, handleInvalidate, handleViewDetail]
+    [openDialog]
   );
 
   return (
