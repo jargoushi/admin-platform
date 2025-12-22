@@ -7,7 +7,7 @@
 import React from 'react';
 import { type BrowserDetail } from '../types';
 import { StatusBadge } from '@/components/shared/status-badge';
-import { BROWSER_STATUS } from '../constants';
+import { BROWSER_STATUS_ENUM } from '../constants';
 import { type DialogComponentProps } from '@/contexts/dialog-provider';
 
 export function BrowserDetailView({ data }: DialogComponentProps<BrowserDetail>) {
@@ -19,7 +19,7 @@ export function BrowserDetailView({ data }: DialogComponentProps<BrowserDetail>)
     { label: '窗口ID', value: data.id, className: 'font-mono text-xs' },
     {
       label: '状态',
-      value: <StatusBadge code={data.status} configMap={BROWSER_STATUS} />
+      value: <StatusBadge code={data.status} enum={BROWSER_STATUS_ENUM} />
     },
     { label: '序号', value: data.seq },
     { label: '代理类型', value: data.proxyType || '直连' },
