@@ -58,6 +58,8 @@ interface BaseFieldConfig<T extends FieldValues> {
   /** 编辑模式下只读，需配合 editDisplayValue 使用 */
   editReadonly?: boolean;
   editDisplayValue?: (data: any) => string;
+  /** 动态加载选项的函数 */
+  loadOptions?: () => Promise<EnumOption[] | MultiSelectOption[]>;
 }
 
 interface InputFieldConfig<T extends FieldValues> extends BaseFieldConfig<T> {
@@ -103,8 +105,16 @@ function FormField<T extends FieldValues>({
   isEdit: boolean;
   editData?: any;
 }) {
-  const { name, label, required, placeholder, editReadonly, editDisplayValue } = config;
-  const isLoading = form.formState.isSubmitting;
+  const { name, label, required, placeholder, editReadonly, editDisplayValue, loadOptions } = config;
+  const [dynamicOptions, setDynamicOptions] = React.useState<any[] | null>(null);
+
+  React.useEffect(() => {
+    if (loadOptions) {
+      loadOptions().then(setDynamicOptions);
+    }
+  }, [loadOptions]);
+
+  const isLoading = form.formState.isSubmitting || (!!loadOptions && dynamicOptions === null);
   const error = form.formState.errors[name];
   const fieldType = (config as any).type ?? 'input';
 
@@ -136,9 +146,9 @@ function FormField<T extends FieldValues>({
 
       case 'select': {
         const selectConfig = config as SelectFieldConfig<T>;
-        const options = selectConfig.options instanceof SmartEnum
+        const options = dynamicOptions || (selectConfig.options instanceof SmartEnum
           ? selectConfig.options.options
-          : selectConfig.options;
+          : selectConfig.options);
 
         return (
           <Controller
@@ -168,13 +178,14 @@ function FormField<T extends FieldValues>({
 
       case 'multiselect': {
         const msConfig = config as MultiSelectFieldConfig<T>;
+        const options = (dynamicOptions as MultiSelectOption[]) || msConfig.options;
         return (
           <Controller
             name={name}
             control={form.control}
             render={({ field }) => (
               <MultiSelect
-                options={msConfig.options}
+                options={options}
                 value={field.value || []}
                 onChange={field.onChange}
                 placeholder={placeholder ?? `请选择${label}`}
