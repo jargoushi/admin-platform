@@ -50,7 +50,6 @@ export function BindingAddForm({ data: account, onClose }: DialogComponentProps<
   return (
     <DialogForm<BindingFormData, Account>
       schema={bindingSchema}
-      data={account}
       onClose={onClose}
       defaultValues={DEFAULT_VALUES}
       onSubmit={handleSubmit}
