@@ -16,7 +16,6 @@ import { ActionDropdown } from '@/components/table/action-dropdown';
 import { Action } from '@/types/action';
 import { AccountApiService } from '@/service/api/account.api';
 import { AccountForm } from './AccountForm';
-import { BindingManageDialog } from './bindings/BindingManageDialog';
 import type { Account } from '../types';
 
 /**
@@ -76,14 +75,9 @@ export function AccountTable({
               key: 'binding',
               label: '绑定管理',
               icon: Link2,
-              dialog: {
-                title: `绑定管理 - ${record.name}`,
-                description: '管理该账号的项目渠道绑定关系',
-                component: BindingManageDialog,
-                extraData: record,
-                className: 'sm:max-w-[800px]'
-              }
+              onClick: (record) => router.push(`/account/${record.id}/bindings`)
             },
+
             {
               key: 'edit',
               label: '编辑',

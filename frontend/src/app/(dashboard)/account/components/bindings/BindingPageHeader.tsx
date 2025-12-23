@@ -13,17 +13,25 @@ interface BindingPageHeaderProps {
   accountId: number;
   onSuccess: () => void;
   onAdd?: () => void;
+  isPage?: boolean;
 }
 
-export function BindingPageHeader({ accountId, onSuccess, onAdd }: BindingPageHeaderProps) {
+export function BindingPageHeader({ accountId, onSuccess, onAdd, isPage }: BindingPageHeaderProps) {
   const actions: Action[] = [
     {
       key: 'create',
       label: '新增绑定',
       icon: Plus,
-      onClick: () => onAdd?.()
+      onClick: isPage ? undefined : () => onAdd?.(),
+      dialog: isPage ? {
+        title: '新增绑定',
+        component: BindingAddForm,
+        extraData: { id: accountId } as any,
+        className: 'sm:max-w-[500px]'
+      } : undefined
     }
   ];
+
 
 
   return <PageHeader actions={actions} onRefresh={onSuccess} />;

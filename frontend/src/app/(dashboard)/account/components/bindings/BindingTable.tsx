@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { DataTable, type Column } from '@/components/table/data-table';
 import { useConfirmation } from '@/contexts/confirmation-provider';
+import { useDialog } from '@/contexts/dialog-provider';
 import { AccountApiService } from '@/service/api/account.api';
 import { BindingEditForm } from './BindingEditForm';
 import type { Binding } from '../../types';
@@ -18,14 +19,26 @@ interface BindingTableProps {
   loading: boolean;
   onRefresh: () => void;
   onEdit?: (binding: Binding) => void;
+  useDialog?: boolean;
 }
 
-export function BindingTable({ data, loading, onRefresh, onEdit }: BindingTableProps) {
+export function BindingTable({ data, loading, onRefresh, onEdit, useDialog: useDialogProp }: BindingTableProps) {
+  const dialog = useDialog();
   const { confirm } = useConfirmation();
 
   const handleEdit = (binding: Binding) => {
-    onEdit?.(binding);
+    if (useDialogProp) {
+      dialog.open({
+        title: '编辑绑定',
+        component: BindingEditForm,
+        data: binding,
+        onClose: onRefresh
+      });
+    } else {
+      onEdit?.(binding);
+    }
   };
+
 
 
   const handleUnbind = (binding: Binding) => {
