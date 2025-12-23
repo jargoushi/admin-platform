@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { getBreadcrumbs } from '@/config/breadcrumbs';
+import { getBreadcrumbs } from '@/constants/router';
 
 export interface Tab {
   title: string;

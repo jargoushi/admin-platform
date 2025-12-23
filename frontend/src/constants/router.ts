@@ -66,3 +66,30 @@ export const navList: NavItem[] = [
     ]
   }
 ];
+// 面包屑项类型
+export type BreadcrumbItem = {
+  title: string;
+  link: string;
+};
+
+/**
+ * 递归生成扁平化路由映射表
+ */
+const generateRouteMap = (
+  items: NavItem[],
+  parent: BreadcrumbItem[] = []
+): Record<string, BreadcrumbItem[]> => {
+  return items.reduce((acc, item) => {
+    const current = [...parent, { title: item.title, link: item.url }];
+    if (item.url !== '#') acc[item.url] = current;
+    return item.items ? { ...acc, ...generateRouteMap(item.items, current) } : acc;
+  }, {} as Record<string, BreadcrumbItem[]>);
+};
+
+// 导出扁平化路由映射表
+export const routeMap = generateRouteMap(navList);
+
+/**
+ * 根据当前路径获取面包屑
+ */
+export const getBreadcrumbs = (path: string): BreadcrumbItem[] => routeMap[path] || [];
