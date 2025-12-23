@@ -5,6 +5,7 @@
 'use client';
 
 import * as React from 'react';
+import { toast } from 'sonner';
 import { DialogForm } from '@/components/shared/dialog-form';
 import {
   activationCodeDistributeSchema,
@@ -30,6 +31,7 @@ export function ActivationCodeDistributeForm({ onClose }: DialogComponentProps) 
         const result = await ActivationApiService.distribute(formData);
 
         if (result && result.length > 0) {
+          toast.success('派发成功');
           dialog.open({
             title: '派发结果',
             component: ResultDialog,

@@ -5,6 +5,7 @@
 'use client';
 
 import * as React from 'react';
+import { toast } from 'sonner';
 import { DialogForm } from '@/components/shared/dialog-form';
 import { accountSchema, type AccountFormData } from '../account.schema';
 import { AccountApiService } from '@/service/api/account.api';
@@ -29,6 +30,7 @@ export function AccountForm({ data, onClose }: DialogComponentProps<Account>) {
         } else {
           await AccountApiService.create(values);
         }
+        toast.success(isEdit ? '保存成功' : '创建成功');
       }}
       fields={[
         { name: 'name', label: '账号名称', required: true },

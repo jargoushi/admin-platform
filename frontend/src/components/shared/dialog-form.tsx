@@ -90,10 +90,6 @@ export interface DialogFormProps<T extends FieldValues, TEntity = any> {
   onSubmit: (values: T, isEdit: boolean) => Promise<void>;
   /** 关闭回调 */
   onClose: () => void;
-  /** 成功提示 */
-  successMessage?: string;
-  /** 数据映射：实体 -> 表单 (可选，默认尝试同名映射) */
-  mapData?: (data: TEntity) => Partial<T>;
 }
 
 // ==================== 内部组件：字段渲染 ====================
@@ -244,9 +240,7 @@ export function DialogForm<T extends FieldValues, TEntity = any>({
   data,
   defaultValues,
   onSubmit,
-  onClose,
-  successMessage,
-  mapData
+  onClose
 }: DialogFormProps<T, TEntity>) {
   const isEdit = !!data;
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -259,16 +253,14 @@ export function DialogForm<T extends FieldValues, TEntity = any>({
   // 自动同步数据
   React.useEffect(() => {
     if (data) {
-      const formData = mapData ? mapData(data) : (data as any);
-      form.reset(formData);
+      form.reset(data as any);
     }
-  }, [data, form, mapData]);
+  }, [data, form]);
 
   const handleSubmit = async (values: T) => {
     setIsSubmitting(true);
     try {
       await onSubmit(values, isEdit);
-      toast.success(successMessage || (isEdit ? '保存成功' : '创建成功'));
       onClose();
     } catch (error) {
       console.error('Submit Error:', error);

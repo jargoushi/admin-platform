@@ -5,6 +5,7 @@
 'use client';
 
 import * as React from 'react';
+import { toast } from 'sonner';
 import { DialogForm } from '@/components/shared/dialog-form';
 import { ResultDialog, type ResultDialogData } from '@/components/shared/result-dialog';
 import { ActivationApiService } from '@/service/api/activation.api';
@@ -28,6 +29,7 @@ export function ActivationCodeInitForm({ onClose }: DialogComponentProps) {
         const result = await ActivationApiService.init({ items: [values] });
 
         if (result) {
+          toast.success('初始化成功');
           dialog.open({
             title: '初始化结果',
             component: ResultDialog,

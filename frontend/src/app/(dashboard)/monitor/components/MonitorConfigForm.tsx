@@ -5,6 +5,7 @@
 'use client';
 
 import * as React from 'react';
+import { toast } from 'sonner';
 import { DialogForm } from '@/components/shared/dialog-form';
 import { monitorConfigSchema, type MonitorConfigFormData } from '../monitor.schema';
 import { MonitorApiService } from '@/service/api/monitor.api';
@@ -31,6 +32,7 @@ export function MonitorConfigForm({
         } else {
           await MonitorApiService.create(values);
         }
+        toast.success(isEdit ? '保存成功' : '创建成功');
       }}
       fields={[
         {

@@ -5,6 +5,7 @@
 'use client';
 
 import * as React from 'react';
+import { toast } from 'sonner';
 import { DialogForm } from '@/components/shared/dialog-form';
 import { AccountApiService } from '@/service/api/account.api';
 import { CommonApiService } from '@/service/api/common.api';
@@ -29,6 +30,7 @@ export function BindingEditForm({ data: binding, onClose }: DialogComponentProps
           channel_codes: values.channel_codes,
           browser_id: values.browser_id || undefined
         });
+        toast.success('更新成功');
       }}
       fields={[
         {
