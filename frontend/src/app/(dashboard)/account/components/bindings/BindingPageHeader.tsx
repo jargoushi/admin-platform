@@ -12,22 +12,19 @@ import { Action } from '@/types/action';
 interface BindingPageHeaderProps {
   accountId: number;
   onSuccess: () => void;
+  onAdd?: () => void;
 }
 
-export function BindingPageHeader({ accountId, onSuccess }: BindingPageHeaderProps) {
+export function BindingPageHeader({ accountId, onSuccess, onAdd }: BindingPageHeaderProps) {
   const actions: Action[] = [
     {
       key: 'create',
       label: '新增绑定',
       icon: Plus,
-      dialog: {
-        title: '新增绑定',
-        component: BindingAddForm,
-        extraData: { id: accountId } as any, // 模拟 Account 对象传给 BindingAddForm
-        className: 'sm:max-w-[500px]'
-      }
+      onClick: () => onAdd?.()
     }
   ];
+
 
   return <PageHeader actions={actions} onRefresh={onSuccess} />;
 }
