@@ -8,8 +8,8 @@ import * as React from 'react';
 import { useParams } from 'next/navigation';
 import { CurdLayout } from '@/components/shared/curd-layout';
 import { AccountApiService } from '@/service/api/account.api';
-import { BindingTable } from '../../components/bindings/BindingTable';
-import { BindingPageHeader } from '../../components/bindings/BindingPageHeader';
+import { BindingTable } from './components/BindingTable';
+import { BindingPageHeader } from './components/BindingPageHeader';
 import type { Binding } from '../../types';
 
 export default function BindingPage() {

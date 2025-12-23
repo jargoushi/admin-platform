@@ -12,7 +12,7 @@ import { useConfirmation } from '@/contexts/confirmation-provider';
 import { useDialog } from '@/contexts/dialog-provider';
 import { AccountApiService } from '@/service/api/account.api';
 import { BindingEditForm } from './BindingEditForm';
-import type { Binding } from '../../types';
+import type { Binding } from '../../../types';
 
 interface BindingTableProps {
   data: Binding[];
