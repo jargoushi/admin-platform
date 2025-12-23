@@ -7,7 +7,7 @@
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDialog } from '@/contexts/dialog-provider';
-import { BindingAddForm } from '@/app/(dashboard)/account/components/BindingAddForm';
+import { BindingAddForm } from './BindingAddForm';
 
 interface BindingPageHeaderProps {
   accountId: number;

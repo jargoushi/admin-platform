@@ -11,8 +11,8 @@ import { DataTable, type Column } from '@/components/table/data-table';
 import { useConfirmation } from '@/contexts/confirmation-provider';
 import { useDialog } from '@/contexts/dialog-provider';
 import { AccountApiService } from '@/service/api/account.api';
-import { BindingEditForm } from '@/app/(dashboard)/account/components/BindingEditForm';
-import type { Binding } from '@/app/(dashboard)/account/types';
+import { BindingEditForm } from './BindingEditForm';
+import type { Binding } from '../../types';
 
 interface BindingTableProps {
   data: Binding[];

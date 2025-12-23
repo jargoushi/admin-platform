@@ -16,7 +16,7 @@ import { ActionDropdown } from '@/components/table/action-dropdown';
 import { Action } from '@/types/action';
 import { AccountApiService } from '@/service/api/account.api';
 import { AccountForm } from './AccountForm';
-import { BindingManageDialog } from './BindingManageDialog';
+import { BindingManageDialog } from './bindings/BindingManageDialog';
 import type { Account } from '../types';
 
 /**

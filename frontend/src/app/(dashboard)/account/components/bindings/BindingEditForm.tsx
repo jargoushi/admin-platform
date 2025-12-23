@@ -8,10 +8,10 @@ import { toast } from 'sonner';
 import { DialogForm, FieldType, FormFieldConfig } from '@/components/shared/dialog-form';
 import { AccountApiService } from '@/service/api/account.api';
 import { CommonApiService } from '@/service/api/common.api';
-import { bindingUpdateSchema, type BindingUpdateFormData } from '../account.schema';
+import { bindingUpdateSchema, type BindingUpdateFormData } from '../../account.schema';
 import { useEnumOptions } from '@/hooks/use-enum-options';
 import type { DialogComponentProps } from '@/contexts/dialog-provider';
-import type { Binding } from '../types';
+import type { Binding } from '../../types';
 
 // ==================== 配置常量 ====================
 

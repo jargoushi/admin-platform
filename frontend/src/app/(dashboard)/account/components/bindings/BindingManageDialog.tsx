@@ -9,7 +9,7 @@ import { CurdLayout } from '@/components/shared/curd-layout';
 import { AccountApiService } from '@/service/api/account.api';
 import { BindingTable } from './BindingTable';
 import { BindingPageHeader } from './BindingPageHeader';
-import type { Binding } from '../types';
+import type { Binding } from '../../types';
 import type { DialogComponentProps } from '@/contexts/dialog-provider';
 
 export function BindingManageDialog({ data: account, onClose }: DialogComponentProps<{ id: number; name?: string }>) {
