@@ -9,6 +9,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Edit, Power, Trash2, BarChart3 } from 'lucide-react';
 import { DataTable, type Column } from '@/components/table/data-table';
 import { ActionDropdown } from '@/components/table/action-dropdown';
@@ -16,7 +17,6 @@ import { Action } from '@/types/action';
 import type { MonitorConfig } from '../types';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { MonitorConfigForm } from './MonitorConfigForm';
-import { MonitorDailyStatsChart } from './MonitorDailyStatsChart';
 import { StatusBadge } from '@/components/shared/status-badge';
 import {
   ACTIVE_STATUS_ENUM,
@@ -38,6 +38,7 @@ export function MonitorConfigTable({
   loading = false,
   onRefresh
 }: MonitorConfigTableProps) {
+  const router = useRouter();
   /** 列配置 */
   const columns = useMemo<Column<MonitorConfig>[]>(
     () => [
@@ -117,12 +118,7 @@ export function MonitorConfigTable({
               key: 'stats',
               label: '查看数据',
               icon: BarChart3,
-              dialog: {
-                title: '每日数据统计',
-                description: '查看监控配置的每日数据趋势',
-                component: MonitorDailyStatsChart,
-                className: 'sm:max-w-6xl max-h-[90vh] overflow-y-auto'
-              }
+              onClick: (r) => router.push(`/monitor/${r.id}/stats`)
             },
             {
               key: 'update',
