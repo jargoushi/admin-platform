@@ -23,7 +23,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { DateRangePicker, DateRange } from '@/components/ui/date-range-picker';
-import { SmartEnum, EnumItem, EnumOption } from '@/lib/enum';
+import { SmartEnum, EnumItem } from '@/lib/enum';
 
 // ==================== 类型定义 ====================
 
@@ -46,7 +46,7 @@ export interface InputConfig<T extends FieldValues> extends BaseFieldConfig {
 export interface SelectConfig<T extends FieldValues> extends BaseFieldConfig {
   type: typeof FILTER_TYPES.SELECT;
   key: Path<T>;
-  options: EnumOption[] | SmartEnum<EnumItem>;
+  options: SmartEnum<EnumItem>;
 }
 
 export interface DateRangeConfig<T extends FieldValues>
@@ -175,7 +175,7 @@ function FilterSelect<T extends FieldValues>({
   control: Control<T>;
   loading?: boolean;
 }) {
-  const options = config.options instanceof SmartEnum ? config.options.options : config.options;
+  const options = config.options.options;
 
   return (
     <Controller

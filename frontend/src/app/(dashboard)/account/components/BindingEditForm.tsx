@@ -1,60 +1,86 @@
 /**
- * 编辑绑定表单 (重构版)
+ * 编辑绑定表单 (优化版)
  */
 
 'use client';
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { DialogForm } from '@/components/shared/dialog-form';
+import { DialogForm, FieldType, FormFieldConfig } from '@/components/shared/dialog-form';
 import { AccountApiService } from '@/service/api/account.api';
 import { CommonApiService } from '@/service/api/common.api';
 import { bindingUpdateSchema, type BindingUpdateFormData } from '../account.schema';
 import type { DialogComponentProps } from '@/contexts/dialog-provider';
 import type { Binding } from '../types';
+import { SmartEnum, EnumItem } from '@/lib/enum';
+
+// ==================== 配置常量 ====================
+
+const DEFAULT_VALUES: BindingUpdateFormData = {
+  id: 0,
+  channel_codes: [],
+  browser_id: ''
+};
+
+// ==================== 组件 ====================
 
 export function BindingEditForm({ data: binding, onClose }: DialogComponentProps<Binding>) {
+  const [channelEnum, setChannelEnum] = React.useState<SmartEnum<EnumItem> | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // 预加载选项并创建 SmartEnum
+  React.useEffect(() => {
+    CommonApiService.getChannels().then((channels) => {
+      setChannelEnum(new SmartEnum(channels.map(c => ({ code: c.code, label: c.desc }))));
+      setIsLoading(false);
+    });
+  }, []);
+
+  const handleSubmit = async (values: BindingUpdateFormData) => {
+    await AccountApiService.updateBinding({
+      id: values.id,
+      channel_codes: values.channel_codes,
+      browser_id: values.browser_id || undefined
+    });
+    toast.success('更新成功');
+  };
+
+  if (isLoading || !channelEnum) {
+    return <div className="py-8 text-center text-muted-foreground">加载中...</div>;
+  }
+
+  // 动态生成字段配置
+  const formFields: FormFieldConfig<BindingUpdateFormData>[] = [
+    {
+      name: 'id',
+      type: FieldType.INPUT,
+      label: '项目',
+      editReadonly: true,
+      editDisplayValue: (data: Binding) => data.project_name
+    },
+    {
+      name: 'channel_codes',
+      type: FieldType.MULTISELECT,
+      label: '渠道',
+      required: true,
+      options: channelEnum
+    },
+    {
+      name: 'browser_id',
+      type: FieldType.INPUT,
+      label: '浏览器 ID',
+      placeholder: '可选'
+    }
+  ];
+
   return (
     <DialogForm<BindingUpdateFormData, Binding>
       schema={bindingUpdateSchema}
       data={binding}
       onClose={onClose}
-      defaultValues={{
-        id: 0,
-        channel_codes: [],
-        browser_id: ''
-      }}
-      onSubmit={async (values) => {
-        await AccountApiService.updateBinding({
-          id: values.id,
-          channel_codes: values.channel_codes,
-          browser_id: values.browser_id || undefined
-        });
-        toast.success('更新成功');
-      }}
-      fields={[
-        {
-          name: 'id',
-          label: '项目',
-          editReadonly: true,
-          editDisplayValue: (data: Binding) => data.project_name
-        },
-        {
-          name: 'channel_codes',
-          label: '渠道',
-          type: 'multiselect',
-          required: true,
-          loadOptions: async () => {
-            const channels = await CommonApiService.getChannels();
-            return channels.map(c => ({ value: c.code, label: c.desc }));
-          }
-        },
-        {
-          name: 'browser_id',
-          label: '浏览器 ID',
-          placeholder: '可选'
-        }
-      ]}
+      defaultValues={DEFAULT_VALUES}
+      onSubmit={handleSubmit}
+      fields={formFields}
     />
   );
 }

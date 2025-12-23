@@ -19,14 +19,6 @@ export interface EnumItem {
 }
 
 /**
- * 统一的选项格式 (替代原 OptionConfig)
- */
-export interface EnumOption {
-  code: number;
-  desc: string;
-}
-
-/**
  * 智能枚举类
  *
  * @example
@@ -47,7 +39,7 @@ export class SmartEnum<T extends EnumItem> {
   /**
    * 获取用于下拉框的选项列表
    */
-  get options(): EnumOption[] {
+  get options(): { code: number; desc: string }[] {
     return this.items.map((item) => ({
       code: item.code,
       desc: item.label

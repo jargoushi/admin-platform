@@ -3,6 +3,7 @@
  *
  * @description
  * 通用的多选下拉组件，支持标签展示和多选
+ * 使用 SmartEnum.options 格式 {code, desc}
  */
 
 'use client';
@@ -19,21 +20,19 @@ import {
 } from '@/components/ui/popover';
 import { Checkbox } from '@/components/ui/checkbox';
 
-/**
- * 选项类型
- */
-export interface MultiSelectOption {
-  value: string | number;
-  label: string;
+/** 选项格式：与 SmartEnum.options 一致 */
+interface SelectOption {
+  code: number;
+  desc: string;
 }
 
 interface MultiSelectProps {
   /** 选项列表 */
-  options: MultiSelectOption[];
-  /** 已选中的值 */
-  value: (string | number)[];
+  options: SelectOption[];
+  /** 已选中的值 (code 数组) */
+  value: number[];
   /** 选中值变化回调 */
-  onChange: (value: (string | number)[]) => void;
+  onChange: (value: number[]) => void;
   /** 占位符 */
   placeholder?: string;
   /** 自定义类名 */
@@ -51,23 +50,23 @@ export function MultiSelect({
 
   // 获取已选择的选项
   const selectedOptions = React.useMemo(
-    () => options.filter((opt) => value.includes(opt.value)),
+    () => options.filter((opt) => value.includes(opt.code)),
     [options, value]
   );
 
   // 切换选项
-  const handleToggle = (optValue: string | number) => {
-    if (value.includes(optValue)) {
-      onChange(value.filter((v) => v !== optValue));
+  const handleToggle = (code: number) => {
+    if (value.includes(code)) {
+      onChange(value.filter((v) => v !== code));
     } else {
-      onChange([...value, optValue]);
+      onChange([...value, code]);
     }
   };
 
   // 移除单个
-  const handleRemove = (optValue: string | number, e: React.MouseEvent) => {
+  const handleRemove = (code: number, e: React.MouseEvent) => {
     e.stopPropagation();
-    onChange(value.filter((v) => v !== optValue));
+    onChange(value.filter((v) => v !== code));
   };
 
   return (
@@ -89,14 +88,14 @@ export function MultiSelect({
               <>
                 {selectedOptions.slice(0, 2).map((opt) => (
                   <Badge
-                    key={opt.value}
+                    key={opt.code}
                     variant='secondary'
                     className='text-xs font-normal'
                   >
-                    {opt.label}
+                    {opt.desc}
                     <X
                       className='hover:text-destructive ml-1 h-3 w-3 cursor-pointer'
-                      onClick={(e) => handleRemove(opt.value, e)}
+                      onClick={(e) => handleRemove(opt.code, e)}
                     />
                   </Badge>
                 ))}
@@ -118,12 +117,12 @@ export function MultiSelect({
         <div className='max-h-[200px] overflow-auto'>
           {options.map((opt) => (
             <div
-              key={opt.value}
+              key={opt.code}
               className='hover:bg-accent flex cursor-pointer items-center gap-2 rounded px-2 py-1.5'
-              onClick={() => handleToggle(opt.value)}
+              onClick={() => handleToggle(opt.code)}
             >
-              <Checkbox checked={value.includes(opt.value)} />
-              <span className='text-sm'>{opt.label}</span>
+              <Checkbox checked={value.includes(opt.code)} />
+              <span className='text-sm'>{opt.desc}</span>
             </div>
           ))}
         </div>
