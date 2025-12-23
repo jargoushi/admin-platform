@@ -4,15 +4,14 @@
 
 'use client';
 
-import * as React from 'react';
 import { toast } from 'sonner';
 import { DialogForm, FieldType, FormFieldConfig } from '@/components/shared/dialog-form';
 import { AccountApiService } from '@/service/api/account.api';
 import { CommonApiService } from '@/service/api/common.api';
 import { bindingUpdateSchema, type BindingUpdateFormData } from '../account.schema';
+import { useEnumOptions } from '@/hooks/use-enum-options';
 import type { DialogComponentProps } from '@/contexts/dialog-provider';
 import type { Binding } from '../types';
-import { SmartEnum, EnumItem } from '@/lib/enum';
 
 // ==================== 配置常量 ====================
 
@@ -25,16 +24,11 @@ const DEFAULT_VALUES: BindingUpdateFormData = {
 // ==================== 组件 ====================
 
 export function BindingEditForm({ data: binding, onClose }: DialogComponentProps<Binding>) {
-  const [channelEnum, setChannelEnum] = React.useState<SmartEnum<EnumItem> | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const channelEnum = useEnumOptions(CommonApiService.getChannels);
 
-  // 预加载选项并创建 SmartEnum
-  React.useEffect(() => {
-    CommonApiService.getChannels().then((channels) => {
-      setChannelEnum(new SmartEnum(channels.map(c => ({ code: c.code, label: c.desc }))));
-      setIsLoading(false);
-    });
-  }, []);
+  if (!channelEnum) {
+    return <div className="py-8 text-center text-muted-foreground">加载中...</div>;
+  }
 
   const handleSubmit = async (values: BindingUpdateFormData) => {
     await AccountApiService.updateBinding({
@@ -45,32 +39,10 @@ export function BindingEditForm({ data: binding, onClose }: DialogComponentProps
     toast.success('更新成功');
   };
 
-  if (isLoading || !channelEnum) {
-    return <div className="py-8 text-center text-muted-foreground">加载中...</div>;
-  }
-
-  // 动态生成字段配置
-  const formFields: FormFieldConfig<BindingUpdateFormData>[] = [
-    {
-      name: 'id',
-      type: FieldType.INPUT,
-      label: '项目',
-      editReadonly: true,
-      editDisplayValue: (data: Binding) => data.project_name
-    },
-    {
-      name: 'channel_codes',
-      type: FieldType.MULTISELECT,
-      label: '渠道',
-      required: true,
-      options: channelEnum
-    },
-    {
-      name: 'browser_id',
-      type: FieldType.INPUT,
-      label: '浏览器 ID',
-      placeholder: '可选'
-    }
+  const FORM_FIELDS: FormFieldConfig<BindingUpdateFormData>[] = [
+    { name: 'id', type: FieldType.INPUT, label: '项目', editReadonly: true, editDisplayValue: (data: Binding) => data.project_name },
+    { name: 'channel_codes', type: FieldType.MULTISELECT, label: '渠道', required: true, options: channelEnum },
+    { name: 'browser_id', type: FieldType.INPUT, label: '浏览器 ID', placeholder: '可选' }
   ];
 
   return (
@@ -80,7 +52,7 @@ export function BindingEditForm({ data: binding, onClose }: DialogComponentProps
       onClose={onClose}
       defaultValues={DEFAULT_VALUES}
       onSubmit={handleSubmit}
-      fields={formFields}
+      fields={FORM_FIELDS}
     />
   );
 }
