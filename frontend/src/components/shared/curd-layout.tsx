@@ -85,14 +85,24 @@ interface CurdLayoutProps {
     children: ReactNode;
     /** 是否需要容器滚动 */
     scrollable?: boolean;
+    /** 是否为无头模式（不带外层容器和固定高度，用于嵌套场景） */
+    headless?: boolean;
 }
 
-function CurdLayout({ children, scrollable = false }: CurdLayoutProps) {
+function CurdLayout({ children, scrollable = false, headless = false }: CurdLayoutProps) {
+    const content = (
+        <div className={headless ? 'flex w-full flex-col space-y-4' : 'flex h-[calc(100vh-8rem)] w-full flex-col space-y-4'}>
+            {children}
+        </div>
+    );
+
+    if (headless) {
+        return content;
+    }
+
     return (
         <PageContainer scrollable={scrollable}>
-            <div className='flex h-[calc(100vh-8rem)] w-full flex-col space-y-4'>
-                {children}
-            </div>
+            {content}
         </PageContainer>
     );
 }

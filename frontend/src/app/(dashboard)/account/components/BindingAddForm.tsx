@@ -16,7 +16,7 @@ import type { Account } from '../types';
 // ==================== 配置常量 ====================
 
 const DEFAULT_VALUES: BindingFormData = {
-  project_code: 0,
+  project_code: undefined as any,
   channel_codes: [],
   browser_id: ''
 };

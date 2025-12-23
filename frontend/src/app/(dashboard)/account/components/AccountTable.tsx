@@ -8,14 +8,14 @@
 
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { Pencil, Trash2, Link2 } from 'lucide-react';
 import { DataTable, type Column } from '@/components/table/data-table';
 import { ActionDropdown } from '@/components/table/action-dropdown';
 import { Action } from '@/types/action';
 import { AccountApiService } from '@/service/api/account.api';
 import { AccountForm } from './AccountForm';
-import { BindingManageDialog } from './BindingManageDialog';
 import type { Account } from '../types';
 
 /**
@@ -33,6 +33,8 @@ export function AccountTable({
   loading = false,
   onRefresh
 }: AccountTableProps) {
+  const router = useRouter();
+
   /** 列配置 */
   const columns = useMemo<Column<Account>[]>(
     () => [
@@ -73,12 +75,7 @@ export function AccountTable({
               key: 'binding',
               label: '绑定管理',
               icon: Link2,
-              dialog: {
-                title: `绑定管理 - ${record.name}`,
-                description: '管理该账号的项目渠道绑定关系',
-                component: BindingManageDialog,
-                className: 'sm:max-w-[700px]'
-              }
+              onClick: (r) => router.push(`/account/${r.id}/bindings`)
             },
             {
               key: 'edit',
@@ -106,7 +103,7 @@ export function AccountTable({
         }
       }
     ],
-    [onRefresh]
+    [onRefresh, router]
   );
 
   return (

@@ -144,7 +144,10 @@ const FieldRenderers: Record<string, <T extends FieldValues>(ctx: RendererContex
         render={({ field }) => (
           <Select
             value={field.value != null ? String(field.value) : ''}
-            onValueChange={(val) => field.onChange(Number(val) || val)}
+            onValueChange={(val) => {
+              const num = Number(val);
+              field.onChange(isNaN(num) ? val : num);
+            }}
             disabled={isLoading}
           >
             <SelectTrigger id={config.name}>
@@ -260,7 +263,7 @@ export function DialogForm<T extends FieldValues, TEntity = any>({
       onClose();
     } catch (error) {
       console.error('Submit Error:', error);
-      toast.error('操作失败，请重试');
+      // 不再统一弹出错误，由 API 拦截器处理具体错误信息
     }
   };
 
