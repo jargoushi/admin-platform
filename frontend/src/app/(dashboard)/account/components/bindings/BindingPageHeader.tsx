@@ -5,9 +5,9 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useDialog } from '@/contexts/dialog-provider';
+import { PageHeader } from '@/components/table/page-header';
 import { BindingAddForm } from './BindingAddForm';
+import { Action } from '@/types/action';
 
 interface BindingPageHeaderProps {
   accountId: number;
@@ -15,24 +15,20 @@ interface BindingPageHeaderProps {
 }
 
 export function BindingPageHeader({ accountId, onSuccess }: BindingPageHeaderProps) {
-  const dialog = useDialog();
+  const actions: Action[] = [
+    {
+      key: 'create',
+      label: '新增绑定',
+      icon: Plus,
+      dialog: {
+        title: '新增绑定',
+        component: BindingAddForm,
+        extraData: { id: accountId } as any, // 模拟 Account 对象传给 BindingAddForm
+        className: 'sm:max-w-[500px]'
+      }
+    }
+  ];
 
-  const handleAdd = () => {
-    dialog.open({
-      title: '新增绑定',
-      component: BindingAddForm,
-      data: { id: accountId } as any, // 模拟 Account 对象传给 BindingAddForm
-      onClose: onSuccess
-    });
-  };
-
-  return (
-    <div className="flex flex-1 items-center justify-between">
-      <h1 className="text-xl font-bold">绑定管理</h1>
-      <Button onClick={handleAdd}>
-        <Plus className="mr-2 h-4 w-4" />
-        新增绑定
-      </Button>
-    </div>
-  );
+  return <PageHeader actions={actions} onRefresh={onSuccess} />;
 }
+
