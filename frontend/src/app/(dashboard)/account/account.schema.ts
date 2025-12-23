@@ -44,8 +44,9 @@ export const bindingUpdateSchema = z.object({
   browser_id: z
     .string()
     .max(255, '浏览器 ID 最多255个字符')
-    .optional()
+    .nullable()
     .or(z.literal(''))
+    .optional()
 });
 
 /**

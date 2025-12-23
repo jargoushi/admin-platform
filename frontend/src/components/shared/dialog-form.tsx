@@ -263,7 +263,6 @@ export function DialogForm<T extends FieldValues, TEntity = any>({
       onClose();
     } catch (error) {
       console.error('Submit Error:', error);
-      // 不再统一弹出错误，由 API 拦截器处理具体错误信息
     }
   };
 

@@ -93,10 +93,13 @@ export function MultiSelect({
                     className='text-xs font-normal'
                   >
                     {opt.desc}
-                    <X
-                      className='hover:text-destructive ml-1 h-3 w-3 cursor-pointer'
+                    <span
+                      className='hover:text-destructive ml-1 inline-flex h-3 w-3 cursor-pointer items-center justify-center rounded-sm transition-colors pointer-events-auto'
+                      onPointerDown={(e) => e.stopPropagation()}
                       onClick={(e) => handleRemove(opt.code, e)}
-                    />
+                    >
+                      <X className='h-3 w-3' />
+                    </span>
                   </Badge>
                 ))}
                 {selectedOptions.length > 2 && (
