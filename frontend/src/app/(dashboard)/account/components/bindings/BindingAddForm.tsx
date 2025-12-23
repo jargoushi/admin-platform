@@ -48,12 +48,17 @@ export function BindingAddForm({ data: account, onClose }: DialogComponentProps<
   ];
 
   return (
-    <DialogForm<BindingFormData, Account>
-      schema={bindingSchema}
-      onClose={onClose}
-      defaultValues={DEFAULT_VALUES}
-      onSubmit={handleSubmit}
-      fields={FORM_FIELDS}
-    />
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 border-b pb-4">
+        <h2 className="text-lg font-semibold">新增项目绑定</h2>
+      </div>
+      <DialogForm<BindingFormData, Account>
+        schema={bindingSchema}
+        onClose={onClose}
+        defaultValues={DEFAULT_VALUES}
+        onSubmit={handleSubmit}
+        fields={FORM_FIELDS}
+      />
+    </div>
   );
 }

@@ -46,13 +46,18 @@ export function BindingEditForm({ data: binding, onClose }: DialogComponentProps
   ];
 
   return (
-    <DialogForm<BindingUpdateFormData, Binding>
-      schema={bindingUpdateSchema}
-      data={binding}
-      onClose={onClose}
-      defaultValues={DEFAULT_VALUES}
-      onSubmit={handleSubmit}
-      fields={FORM_FIELDS}
-    />
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 border-b pb-4">
+        <h2 className="text-lg font-semibold">编辑项目绑定</h2>
+      </div>
+      <DialogForm<BindingUpdateFormData, Binding>
+        schema={bindingUpdateSchema}
+        data={binding}
+        onClose={onClose}
+        defaultValues={DEFAULT_VALUES}
+        onSubmit={handleSubmit}
+        fields={FORM_FIELDS}
+      />
+    </div>
   );
 }
