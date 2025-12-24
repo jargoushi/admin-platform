@@ -10,8 +10,8 @@
 
 import { useMemo } from 'react';
 import { Check, X, Eye } from 'lucide-react';
-import { DataTable, type Column } from '@/components/table/data-table';
-import { ActionDropdown } from '@/components/table/action-dropdown';
+import { DataTable, type Column } from '@/components/data/data-table';
+import { TableRowActions } from '@/components/action/table-row-actions';
 import { Action } from '@/types/action';
 import type { ActivationCode } from '../types';
 import {
@@ -19,7 +19,7 @@ import {
   ACTIVATION_TYPE_ENUM
 } from '../constants';
 import { ActivationApiService } from '@/service/api/activation.api';
-import { StatusBadge } from '@/components/shared/status-badge';
+import { StatusBadge } from '@/components/data/status-badge';
 import { ActivationCodeInfo } from './ActivationCodeInfo';
 
 /**
@@ -133,7 +133,7 @@ export function ActivationCodeTable({
             }
           ];
 
-          return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
+          return <TableRowActions record={record} actions={actions} onRefresh={onRefresh} />;
         }
       }
     ],

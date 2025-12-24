@@ -8,7 +8,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { DataTable, type Column } from '@/components/table/data-table';
+import { DataTable, type Column } from '@/components/data/data-table';
 import type { User } from '../types';
 
 /**

@@ -10,7 +10,7 @@ import { DEFAULT_PAGE_REQUEST } from '@/constants/pagination';
 import {
   FilterFieldConfig,
   FILTER_TYPES
-} from '@/components/shared/filter-layout';
+} from '@/components/form/filter-layout';
 import { SmartEnum } from '@/lib/enum';
 
 // ==================== 枚举配置 (单一事实来源) ====================

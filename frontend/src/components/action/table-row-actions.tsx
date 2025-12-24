@@ -1,30 +1,30 @@
 import { Action } from '@/types/action';
-import { ActionGroup } from '@/components/shared/action-group';
+import { ActionGroup } from '@/components/action/action-group';
 
-interface ActionDropdownProps<T> {
+interface TableRowActionsProps<T> {
   /** 当前行数据 */
   record: T;
   /** 操作项列表 */
   actions: Action<T>[];
   /** 刷新回调 */
   onRefresh?: () => void;
-  /** 触发按钮类名 */
-  triggerClassName?: string;
 }
 
-export function ActionDropdown<T>({
+/**
+ * 表格行操作下拉菜单
+ * 用于在表格每行末尾显示操作菜单
+ */
+export function TableRowActions<T>({
   record,
   actions,
-  onRefresh,
-  triggerClassName = 'h-8 w-8 p-0 cursor-pointer'
-}: ActionDropdownProps<T>) {
+  onRefresh
+}: TableRowActionsProps<T>) {
   return (
     <ActionGroup
       record={record}
       actions={actions}
       mode='dropdown'
       onRefresh={onRefresh}
-      className={triggerClassName}
     />
   );
 }

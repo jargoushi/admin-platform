@@ -5,7 +5,7 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import { PageHeader } from '@/components/table/page-header';
+import { PageActions } from '@/components/action/page-actions';
 import { BindingAddForm } from './BindingAddForm';
 import { Action } from '@/types/action';
 
@@ -34,6 +34,6 @@ export function BindingPageHeader({ accountId, onSuccess, onAdd, isPage }: Bindi
 
 
 
-  return <PageHeader actions={actions} onRefresh={onSuccess} />;
+  return <PageActions actions={actions} onRefresh={onSuccess} />;
 }
 

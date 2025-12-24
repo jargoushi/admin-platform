@@ -5,7 +5,7 @@
 import {
   FilterFieldConfig,
   FILTER_TYPES
-} from '@/components/shared/filter-layout';
+} from '@/components/form/filter-layout';
 import { BrowserListRequest } from './types';
 
 export const DEFAULT_QUERY_PARAMS: BrowserListRequest = {

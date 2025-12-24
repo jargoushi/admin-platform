@@ -11,7 +11,7 @@ import React from 'react';
 import {
   InfoList,
   type InfoSection
-} from '@/components/shared/info-list';
+} from '@/components/data/info-list';
 import { formatDateTime } from '@/lib/date';
 import type { ActivationCode } from '../types';
 import {

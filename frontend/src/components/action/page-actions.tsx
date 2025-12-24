@@ -1,7 +1,7 @@
 import { Action } from '@/types/action';
-import { ActionGroup } from '@/components/shared/action-group';
+import { ActionGroup } from '@/components/action/action-group';
 
-interface PageHeaderProps {
+interface PageActionsProps {
   /** 操作按钮列表 */
   actions?: Action[];
   /** 刷新回调 */
@@ -9,10 +9,10 @@ interface PageHeaderProps {
 }
 
 /**
- * 页面头部组件
+ * 页面头部操作按钮组
  * 支持传入多个操作按钮，自动处理确认、弹窗和异步逻辑
  */
-export function PageHeader({ actions = [], onRefresh }: PageHeaderProps) {
+export function PageActions({ actions = [], onRefresh }: PageActionsProps) {
   if (actions.length === 0) {
     return null;
   }

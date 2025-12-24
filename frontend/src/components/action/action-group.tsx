@@ -23,8 +23,6 @@ interface ActionGroupProps<T> {
   mode?: ActionGroupMode;
   /** 刷新回调 */
   onRefresh?: () => void;
-  /** 混合模式下直接展示的数量 */
-  maxVisible?: number;
   /** 容器类名 */
   className?: string;
 }
@@ -34,7 +32,6 @@ export function ActionGroup<T>({
   actions,
   mode = 'buttons',
   onRefresh,
-  maxVisible = 2,
   className = ''
 }: ActionGroupProps<T>) {
   const { confirm } = useConfirmation();

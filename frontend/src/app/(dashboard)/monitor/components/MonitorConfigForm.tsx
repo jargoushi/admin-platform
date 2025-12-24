@@ -5,7 +5,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { DialogForm, FieldType, FormFieldConfig } from '@/components/shared/dialog-form';
+import { DialogForm, FieldType, FormFieldConfig } from '@/components/form/dialog-form';
 import { monitorConfigSchema, type MonitorConfigFormData } from '../monitor.schema';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { CHANNEL_ENUM } from '../constants';

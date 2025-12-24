@@ -8,9 +8,9 @@
 'use client';
 
 import { useMemo } from 'react';
-import { DataTable, type Column } from '@/components/table/data-table';
+import { DataTable, type Column } from '@/components/data/data-table';
 import type { MonitorTask } from '../types';
-import { StatusBadge } from '@/components/shared/status-badge';
+import { StatusBadge } from '@/components/data/status-badge';
 import {
   TASK_STATUS_ENUM,
   CHANNEL_ENUM,

@@ -12,8 +12,8 @@ import { usePageList } from '@/hooks/use-page-list';
 import {
   FilterLayout,
   createFilterParsers
-} from '@/components/shared/filter-layout';
-import { CurdLayout } from '@/components/shared/curd-layout';
+} from '@/components/form/filter-layout';
+import { CurdLayout } from '@/components/layout/curd-layout';
 import { AccountApiService } from '@/service/api/account.api';
 
 import { AccountPageHeader } from './components/AccountPageHeader';

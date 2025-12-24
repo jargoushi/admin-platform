@@ -8,9 +8,9 @@ import { usePageList } from '@/hooks/use-page-list';
 import {
   FilterLayout,
   createFilterParsers
-} from '@/components/shared/filter-layout';
+} from '@/components/form/filter-layout';
 import { BrowserApiService } from '@/service/api/browser.api';
-import { CurdLayout } from '@/components/shared/curd-layout';
+import { CurdLayout } from '@/components/layout/curd-layout';
 import { BrowserPageHeader } from './components/BrowserPageHeader';
 import { BrowserTable } from './components/BrowserTable';
 import { DEFAULT_QUERY_PARAMS, FILTERS_CONFIG } from './constants';

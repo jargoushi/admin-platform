@@ -10,7 +10,7 @@ import { DEFAULT_PAGE_REQUEST } from '@/constants/pagination';
 import {
   FilterFieldConfig,
   FILTER_TYPES
-} from '@/components/shared/filter-layout';
+} from '@/components/form/filter-layout';
 
 // ==================== 默认查询参数 ====================
 

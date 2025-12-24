@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
-import { DataTable, type Column } from '@/components/table/data-table';
+import { DataTable, type Column } from '@/components/data/data-table';
 import type { MonitorDailyStats } from '../../../types';
 
 interface MonitorStatsTableProps {

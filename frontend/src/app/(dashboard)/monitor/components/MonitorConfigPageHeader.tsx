@@ -9,7 +9,7 @@
 'use client';
 
 import { Plus } from 'lucide-react';
-import { PageHeader } from '@/components/table/page-header';
+import { PageActions } from '@/components/action/page-actions';
 import { MonitorConfigForm } from './MonitorConfigForm';
 import { Action } from '@/types/action';
 
@@ -34,5 +34,5 @@ export function MonitorConfigPageHeader({
     }
   ];
 
-  return <PageHeader actions={actions} onRefresh={onSuccess} />;
+  return <PageActions actions={actions} onRefresh={onSuccess} />;
 }

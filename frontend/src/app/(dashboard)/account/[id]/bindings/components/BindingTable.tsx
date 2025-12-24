@@ -7,7 +7,7 @@
 import { Trash2, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { DataTable, type Column } from '@/components/table/data-table';
+import { DataTable, type Column } from '@/components/data/data-table';
 import { useConfirmation } from '@/contexts/confirmation-provider';
 import { useDialog } from '@/contexts/dialog-provider';
 import { AccountApiService } from '@/service/api/account.api';

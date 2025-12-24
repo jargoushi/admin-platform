@@ -11,8 +11,8 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Pencil, Trash2, Link2 } from 'lucide-react';
-import { DataTable, type Column } from '@/components/table/data-table';
-import { ActionDropdown } from '@/components/table/action-dropdown';
+import { DataTable, type Column } from '@/components/data/data-table';
+import { TableRowActions } from '@/components/action/table-row-actions';
 import { Action } from '@/types/action';
 import { AccountApiService } from '@/service/api/account.api';
 import { AccountForm } from './AccountForm';
@@ -100,7 +100,7 @@ export function AccountTable({
               onClick: (r) => AccountApiService.delete(r.id)
             }
           ];
-          return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
+          return <TableRowActions record={record} actions={actions} onRefresh={onRefresh} />;
         }
       }
     ],

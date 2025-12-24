@@ -1,7 +1,7 @@
 'use client';
 
 import { Plus, Send } from 'lucide-react';
-import { PageHeader } from '@/components/table/page-header';
+import { PageActions } from '@/components/action/page-actions';
 import { Action } from '@/types/action';
 import { ActivationCodeInitForm } from './ActivationCodeInitForm';
 import { ActivationCodeDistributeForm } from './ActivationCodeDistributeForm';
@@ -38,5 +38,5 @@ export function ActivationCodePageHeader({
     }
   ];
 
-  return <PageHeader actions={actions} onRefresh={onSuccess} />;
+  return <PageActions actions={actions} onRefresh={onSuccess} />;
 }

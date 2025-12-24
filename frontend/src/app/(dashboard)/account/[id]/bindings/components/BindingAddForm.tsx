@@ -5,7 +5,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { DialogForm, FieldType, FormFieldConfig } from '@/components/shared/dialog-form';
+import { DialogForm, FieldType, FormFieldConfig } from '@/components/form/dialog-form';
 import { AccountApiService } from '@/service/api/account.api';
 import { CommonApiService } from '@/service/api/common.api';
 import { bindingSchema, type BindingFormData } from '../../../account.schema';

@@ -7,14 +7,14 @@
 import * as React from 'react';
 import { useParams } from 'next/navigation';
 import { subDays, format } from 'date-fns';
-import { CurdLayout } from '@/components/shared/curd-layout';
+import { CurdLayout } from '@/components/layout/curd-layout';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import type { MonitorDailyStats, MonitorDailyStatsQueryRequest } from '../../types';
 import {
   FilterLayout,
   FILTER_TYPES,
   FilterFieldConfig
-} from '@/components/shared/filter-layout';
+} from '@/components/form/filter-layout';
 import { MonitorStatsPageHeader } from './components/MonitorStatsPageHeader';
 import { MonitorStatsTable } from './components/MonitorStatsTable';
 

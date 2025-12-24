@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { useParams } from 'next/navigation';
-import { CurdLayout } from '@/components/shared/curd-layout';
+import { CurdLayout } from '@/components/layout/curd-layout';
 import { AccountApiService } from '@/service/api/account.api';
 import { BindingTable } from './components/BindingTable';
 import { BindingPageHeader } from './components/BindingPageHeader';

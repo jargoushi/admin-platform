@@ -11,13 +11,13 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Edit, Power, Trash2, BarChart3 } from 'lucide-react';
-import { DataTable, type Column } from '@/components/table/data-table';
-import { ActionDropdown } from '@/components/table/action-dropdown';
+import { DataTable, type Column } from '@/components/data/data-table';
+import { TableRowActions } from '@/components/action/table-row-actions';
 import { Action } from '@/types/action';
 import type { MonitorConfig } from '../types';
 import { MonitorApiService } from '@/service/api/monitor.api';
 import { MonitorConfigForm } from './MonitorConfigForm';
-import { StatusBadge } from '@/components/shared/status-badge';
+import { StatusBadge } from '@/components/data/status-badge';
 import {
   ACTIVE_STATUS_ENUM,
   CHANNEL_ENUM
@@ -150,7 +150,7 @@ export function MonitorConfigTable({
             }
           ];
 
-          return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
+          return <TableRowActions record={record} actions={actions} onRefresh={onRefresh} />;
         }
       }
     ],

@@ -8,7 +8,7 @@
 
 'use client';
 
-import { PageHeader } from '@/components/table/page-header';
+import { PageActions } from '@/components/action/page-actions';
 
 interface UserPageHeaderProps {
   /** 操作成功后的回调(用于刷新列表) */
@@ -21,6 +21,6 @@ interface UserPageHeaderProps {
 export function UserPageHeader({ onSuccess }: UserPageHeaderProps) {
   // 用户模块暂无操作按钮，预留 onSuccess 以便后续扩展
   void onSuccess;
-  return <PageHeader />;
+  return <PageActions />;
 }
 

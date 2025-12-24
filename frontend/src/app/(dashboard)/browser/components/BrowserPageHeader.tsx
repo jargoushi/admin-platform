@@ -9,7 +9,7 @@
 'use client';
 
 import { LayoutGrid, Square, HeartPulse } from 'lucide-react';
-import { PageHeader } from '@/components/table/page-header';
+import { PageActions } from '@/components/action/page-actions';
 import { BrowserApiService } from '@/service/api/browser.api';
 import { Action } from '@/types/action';
 
@@ -46,5 +46,5 @@ export function BrowserPageHeader({ onSuccess }: BrowserPageHeaderProps) {
     }
   ];
 
-  return <PageHeader actions={actions} onRefresh={onSuccess} />;
+  return <PageActions actions={actions} onRefresh={onSuccess} />;
 }

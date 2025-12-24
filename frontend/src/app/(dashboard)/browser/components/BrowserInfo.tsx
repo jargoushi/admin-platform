@@ -11,8 +11,8 @@ import React from 'react';
 import {
   InfoList,
   type InfoSection
-} from '@/components/shared/info-list';
-import { StatusBadge } from '@/components/shared/status-badge';
+} from '@/components/data/info-list';
+import { StatusBadge } from '@/components/data/status-badge';
 import { BROWSER_STATUS_ENUM } from '../constants';
 import { type DialogComponentProps } from '@/contexts/dialog-provider';
 import { type BrowserDetail } from '../types';

@@ -5,10 +5,10 @@
 'use client';
 
 import { toast } from 'sonner';
-import { DialogForm, FieldType, FormFieldConfig } from '@/components/shared/dialog-form';
+import { DialogForm, FieldType, FormFieldConfig } from '@/components/form/dialog-form';
 import { activationCodeDistributeSchema, type ActivationCodeDistributeFormData } from '../activation.schema';
 import { ACTIVATION_TYPE_ENUM } from '../constants';
-import { ResultDialog, type ResultDialogData } from '@/components/shared/result-dialog';
+import { ResultDialog, type ResultDialogData } from '@/components/action/result-dialog';
 import { ActivationApiService } from '@/service/api/activation.api';
 import { useDialog, type DialogComponentProps } from '@/contexts/dialog-provider';
 

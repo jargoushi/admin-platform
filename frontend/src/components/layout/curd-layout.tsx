@@ -9,7 +9,7 @@
  * ```tsx
  * <CurdLayout pagination={pagination} onPageChange={...} onPageSizeChange={...}>
  *   <CurdLayout.Header>
- *     <PageHeader ... />
+ *     <PageActions ... />
  *   </CurdLayout.Header>
  *   <CurdLayout.Filters>
  *     <Filters ... />
@@ -25,7 +25,7 @@
 
 import React, { ReactNode } from 'react';
 import PageContainer from '@/components/layout/page-container';
-import { Pagination } from '@/components/table/pagination';
+import { Pagination } from '@/components/data/pagination';
 import { PaginationInfo } from '@/lib/http/types';
 
 // ==================== 子组件 ====================

@@ -6,11 +6,11 @@
 
 import { useMemo } from 'react';
 import { Play, Square, Trash2, Info } from 'lucide-react';
-import { DataTable, type Column } from '@/components/table/data-table';
-import { ActionDropdown } from '@/components/table/action-dropdown';
+import { DataTable, type Column } from '@/components/data/data-table';
+import { TableRowActions } from '@/components/action/table-row-actions';
 import { Action } from '@/types/action';
 import { BrowserApiService } from '@/service/api/browser.api';
-import { StatusBadge } from '@/components/shared/status-badge';
+import { StatusBadge } from '@/components/data/status-badge';
 import type { BrowserListItem } from '../types';
 import { BROWSER_STATUS_ENUM } from '../constants';
 import { BrowserInfo } from './BrowserInfo';
@@ -119,7 +119,7 @@ export function BrowserTable({
                         }
                     ];
 
-                    return <ActionDropdown record={record} actions={actions} onRefresh={onRefresh} />;
+                    return <TableRowActions record={record} actions={actions} onRefresh={onRefresh} />;
                 }
             }
         ],
