@@ -32,8 +32,7 @@ export function ActivationCodePageHeader({
       dialog: {
         title: '批量初始化激活码',
         description: '批量生成不同类型的激活码,每种类型只能出现一次',
-        component: ActivationCodeInitForm,
-        className: 'max-w-2xl'
+        component: ActivationCodeInitForm
       }
     }
   ];

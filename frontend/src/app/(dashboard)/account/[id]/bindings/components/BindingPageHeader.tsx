@@ -23,8 +23,7 @@ export function BindingPageHeader({ accountId, onSuccess }: BindingPageHeaderPro
       dialog: {
         title: '新增绑定',
         component: BindingAddForm,
-        extraData: { id: accountId } as any,
-        className: 'sm:max-w-[500px]'
+        extraData: { id: accountId } as any
       }
     }
   ];

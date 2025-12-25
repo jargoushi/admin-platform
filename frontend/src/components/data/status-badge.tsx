@@ -4,7 +4,7 @@ import { SmartEnum, EnumItem } from '@/lib/enum';
 
 export interface StatusBadgeProps {
   /** 业务代码 */
-  code: number | string | undefined | null;
+  code: number;
   /** 智能枚举实例 */
   enum: SmartEnum<EnumItem>;
 }

@@ -27,8 +27,7 @@ export function AccountPageHeader({ onSuccess }: AccountPageHeaderProps) {
       dialog: {
         title: '新建账号',
         description: '创建一个新的账号',
-        component: AccountForm,
-        className: 'sm:max-w-[500px]'
+        component: AccountForm
       }
     }
   ];

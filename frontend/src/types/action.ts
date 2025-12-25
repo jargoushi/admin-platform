@@ -8,7 +8,7 @@ export interface Action<T = any> {
   /** 唯一标识 */
   key: string;
   /** 按钮文本 */
-  label: string | ((record: T) => string);
+  label: string;
   /** 图标组件 (LucideIcon) */
   icon?: LucideIcon;
   /** 点击回调 (支持异步) */
@@ -18,7 +18,6 @@ export interface Action<T = any> {
     title: string;
     description?: string;
     component: React.ComponentType<any>;
-    className?: string;
     /** 传递给组件的额外数据 */
     extraData?: any;
   };
@@ -27,17 +26,18 @@ export interface Action<T = any> {
     title?: string;
     description: string | ((record: T) => string);
   };
-  /** 声明式隐藏逻辑 */
+  /** 隐藏此操作（支持静态布尔值或动态函数） */
   hidden?: boolean | ((record: T) => boolean);
-  /** 声明式禁用逻辑 */
+  /** 禁用此操作（支持静态布尔值或动态函数） */
   disabled?: boolean | ((record: T) => boolean);
   /** 按钮变体 */
-  variant?: 'default' | 'outline' | 'ghost' | 'destructive' | 'secondary';
-  /** 额外类名 */
+  variant?: 'default' | 'outline' | 'ghost' | 'destructive';
+  /** 额外类名（用于特殊样式如危险操作） */
   className?: string;
 }
 
 /**
  * 操作组展示模式
  */
-export type ActionGroupMode = 'buttons' | 'dropdown' | 'mixed';
+export type ActionGroupMode = 'buttons' | 'dropdown';
+

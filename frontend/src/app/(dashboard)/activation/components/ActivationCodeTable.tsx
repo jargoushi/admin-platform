@@ -127,8 +127,7 @@ export function ActivationCodeTable({
               icon: Eye,
               dialog: {
                 title: '激活码详情',
-                component: ActivationCodeInfo,
-                className: 'sm:max-w-[600px]'
+                component: ActivationCodeInfo
               }
             }
           ];

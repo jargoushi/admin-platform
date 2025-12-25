@@ -29,7 +29,7 @@ export function BrowserInfo({
       title: '基本信息',
       items: [
         { label: '窗口名称', key: 'name' },
-        { label: '窗口ID', key: 'id', contentClassName: 'font-mono text-xs' },
+        { label: '窗口ID', key: 'id' },
         {
           label: '状态',
           key: 'status',
@@ -66,8 +66,7 @@ export function BrowserInfo({
           label: 'User Agent',
           key: 'userAgent',
           span: 2,
-          render: () => fingerPrint.userAgent,
-          contentClassName: 'break-all text-xs text-muted-foreground'
+          render: () => fingerPrint.userAgent
         }
       ]
     }

@@ -23,36 +23,43 @@ interface ActionGroupProps<T> {
   mode?: ActionGroupMode;
   /** 刷新回调 */
   onRefresh?: () => void;
-  /** 容器类名 */
-  className?: string;
 }
 
 export function ActionGroup<T>({
   record,
   actions,
   mode = 'buttons',
-  onRefresh,
-  className = ''
+  onRefresh
 }: ActionGroupProps<T>) {
   const { confirm } = useConfirmation();
   const { open } = useDialog();
 
-  // 1. 过滤可见操作
-  const visibleActions = actions.filter((action) => {
+  // 判断是否隐藏
+  const isHidden = (action: Action<T>) => {
     if (typeof action.hidden === 'function') {
-      return !action.hidden(record as T);
+      return action.hidden(record as T);
     }
-    return !action.hidden;
-  });
+    return action.hidden;
+  };
 
-  // 2. 核心执行引擎
+  // 判断是否禁用
+  const isDisabled = (action: Action<T>) => {
+    if (typeof action.disabled === 'function') {
+      return action.disabled(record as T);
+    }
+    return action.disabled;
+  };
+
+  // 过滤可见操作
+  const visibleActions = actions.filter((action) => !isHidden(action));
+
+  // 核心执行引擎
   const handleAction = useCallback(
     async (action: Action<T>) => {
       const execute = async () => {
         try {
           // 处理弹窗逻辑
           if (action.dialog) {
-            // 只有当 record 存在或 extraData 存在时才传递 data
             const dialogData = record || action.dialog.extraData
               ? { ...record, ...action.dialog.extraData }
               : undefined;
@@ -62,7 +69,6 @@ export function ActionGroup<T>({
               description: action.dialog.description,
               component: action.dialog.component,
               data: dialogData,
-              className: action.dialog.className,
               onClose: () => onRefresh?.()
             });
             return;
@@ -73,13 +79,12 @@ export function ActionGroup<T>({
             const result = action.onClick(record as T);
             if (result instanceof Promise) {
               await result;
-              toast.success(`${typeof action.label === 'function' ? action.label(record as T) : action.label}成功`);
+              toast.success(`${action.label}成功`);
               onRefresh?.();
             }
           }
         } catch (error) {
           console.error('Action execution failed:', error);
-          // 错误提示通常由 API 层处理，这里做兜底
         }
       };
 
@@ -104,27 +109,22 @@ export function ActionGroup<T>({
 
   if (visibleActions.length === 0) return null;
 
-  // 3. 渲染逻辑 - 按钮模式 (Header 用)
+  // 渲染逻辑 - 按钮模式 (Header 用)
   if (mode === 'buttons') {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div className='flex items-center gap-3'>
         {visibleActions.map((action) => {
           const Icon = action.icon;
-          const isDisabled =
-            typeof action.disabled === 'function'
-              ? action.disabled(record as T)
-              : action.disabled;
-
           return (
             <Button
               key={action.key}
               variant={action.variant || 'default'}
               onClick={() => handleAction(action)}
-              disabled={isDisabled}
+              disabled={isDisabled(action)}
               className={`gap-2 ${action.className || ''}`}
             >
               {Icon && <Icon className='h-4 w-4' />}
-              {typeof action.label === 'function' ? action.label(record as T) : action.label}
+              {action.label}
             </Button>
           );
         })}
@@ -132,7 +132,7 @@ export function ActionGroup<T>({
     );
   }
 
-  // 4. 渲染逻辑 - 下拉模式 (Table 用)
+  // 渲染逻辑 - 下拉模式 (Table 用)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -143,22 +143,15 @@ export function ActionGroup<T>({
       <DropdownMenuContent align='end' className='min-w-[120px]'>
         {visibleActions.map((action) => {
           const Icon = action.icon;
-          const isDisabled =
-            typeof action.disabled === 'function'
-              ? action.disabled(record as T)
-              : action.disabled;
-
           return (
             <DropdownMenuItem
               key={action.key}
               onClick={() => handleAction(action)}
-              disabled={isDisabled}
+              disabled={isDisabled(action)}
               className={`${action.className || ''} cursor-pointer py-2`}
             >
               {Icon && <Icon className='mr-2 h-4 w-4 flex-shrink-0' />}
-              <span className='flex-1'>
-                {typeof action.label === 'function' ? action.label(record as T) : action.label}
-              </span>
+              <span className='flex-1'>{action.label}</span>
             </DropdownMenuItem>
           );
         })}
@@ -166,3 +159,4 @@ export function ActionGroup<T>({
     </DropdownMenu>
   );
 }
+

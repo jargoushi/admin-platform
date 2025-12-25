@@ -46,16 +46,14 @@ export class SmartEnum<T extends EnumItem> {
    * 根据代码获取枚举项配置
    * @param code 业务代码
    */
-  get(code: number | string | undefined | null): T | undefined {
-    if (code === undefined || code === null) return undefined;
-    const numericCode = typeof code === 'string' ? Number(code) : code;
-    return this.items.find((item) => item.code === numericCode);
+  get(code: number): T | undefined {
+    return this.items.find((item) => item.code === code);
   }
 
   /**
    * 根据代码获取显示标签
    */
-  getLabel(code: number | string | undefined | null): string {
+  getLabel(code: number): string {
     return this.get(code)?.label || '';
   }
 }

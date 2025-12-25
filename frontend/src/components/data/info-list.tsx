@@ -23,12 +23,6 @@ export interface InfoItem<T = any> {
   render?: (value: any, data: T) => React.ReactNode;
   /** 跨列数 (1-4) */
   span?: number;
-  /** 额外类名 */
-  className?: string;
-  /** 标签类名 */
-  labelClassName?: string;
-  /** 内容类名 */
-  contentClassName?: string;
 }
 
 /**
@@ -43,8 +37,6 @@ export interface InfoSection<T = any> {
   items: InfoItem<T>[];
   /** 列数 (默认 2) */
   columns?: number;
-  /** 额外类名 */
-  className?: string;
 }
 
 interface InfoListProps<T extends object> {
@@ -52,8 +44,6 @@ interface InfoListProps<T extends object> {
   data: T;
   /** 分组配置列表 */
   sections: InfoSection<T>[];
-  /** 整体类名 */
-  className?: string;
 }
 
 /**
@@ -61,13 +51,12 @@ interface InfoListProps<T extends object> {
  */
 export function InfoList<T extends object>({
   data,
-  sections,
-  className
+  sections
 }: InfoListProps<T>) {
   return (
-    <div className={cn('space-y-8', className)}>
+    <div className='space-y-8'>
       {sections.map((section, sIdx) => (
-        <section key={sIdx} className={cn('space-y-4', section.className)}>
+        <section key={sIdx} className='space-y-4'>
           {/* 分组头部 */}
           {(section.title || section.description) && (
             <div className='space-y-1'>
@@ -108,24 +97,13 @@ export function InfoList<T extends object>({
                       'sm:col-span-2': span === 2,
                       'sm:col-span-3': span === 3,
                       'sm:col-span-4': span === 4
-                    },
-                    item.className
+                    }
                   )}
                 >
-                  <dt
-                    className={cn(
-                      'text-muted-foreground text-xs font-medium uppercase tracking-wider',
-                      item.labelClassName
-                    )}
-                  >
+                  <dt className='text-muted-foreground text-xs font-medium uppercase tracking-wider'>
                     {item.label}
                   </dt>
-                  <dd
-                    className={cn(
-                      'text-foreground min-w-0 flex-1 text-sm leading-relaxed break-all',
-                      item.contentClassName
-                    )}
-                  >
+                  <dd className='text-foreground min-w-0 flex-1 text-sm leading-relaxed break-all'>
                     {item.render ? (
                       item.render(value, data)
                     ) : (

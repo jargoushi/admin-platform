@@ -84,8 +84,7 @@ export function AccountTable({
               dialog: {
                 title: '编辑账号',
                 description: '修改账号信息',
-                component: AccountForm,
-                className: 'sm:max-w-[500px]'
+                component: AccountForm
               }
             },
             {

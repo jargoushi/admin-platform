@@ -23,22 +23,16 @@ interface DataTableProps<T> {
   columns: Column<T>[];
   data: T[];
   loading?: boolean;
-  rowKey?: keyof T | ((record: T) => string);
+  /** 行唯一标识（必需） */
+  rowKey: string;
 }
 
 export function DataTable<T extends object>({
   columns,
   data,
   loading = false,
-  rowKey = 'id' as keyof T
+  rowKey
 }: DataTableProps<T>) {
-  const getRowKey = (record: T, index: number): string => {
-    if (typeof rowKey === 'function') {
-      return rowKey(record);
-    }
-    const key = rowKey as keyof T;
-    return String(record[key]) || index.toString();
-  };
 
   return (
     <div className='bg-card border-border/50 relative h-full overflow-hidden rounded-xl border shadow-sm'>
@@ -86,7 +80,7 @@ export function DataTable<T extends object>({
             ) : (
               data.map((record, index) => (
                 <TableRow
-                  key={getRowKey(record, index)}
+                  key={String(record[rowKey as keyof T])}
                   className='hover:bg-muted/40 transition-colors duration-150'
                 >
                   {columns.map((column) => (
