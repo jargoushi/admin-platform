@@ -17,65 +17,23 @@ import { SmartEnum } from '@/lib/enum';
 
 /** 渠道类型枚举 */
 export const CHANNEL_ENUM = new SmartEnum([
-  {
-    code: 1,
-    label: '抖音',
-    variant: 'outline',
-    bg: 'bg-pink-50',
-    color: 'text-pink-500'
-  },
-  {
-    code: 2,
-    label: 'YouTube',
-    variant: 'outline',
-    bg: 'bg-red-100',
-    color: 'text-red-600'
-  },
-  {
-    code: 3,
-    label: '哔哩哔哩',
-    variant: 'outline',
-    bg: 'bg-blue-50',
-    color: 'text-blue-500'
-  },
-  {
-    code: 4,
-    label: '视频号',
-    variant: 'outline',
-    bg: 'bg-green-50',
-    color: 'text-green-500'
-  }
+  { code: 1, label: '抖音', variant: 'outline' },
+  { code: 2, label: 'YouTube', variant: 'outline' },
+  { code: 3, label: '哔哩哔哩', variant: 'outline' },
+  { code: 4, label: '视频号', variant: 'outline' }
 ]);
 
 /** 启用状态枚举 */
 export const ACTIVE_STATUS_ENUM = new SmartEnum([
   { code: 0, label: '禁用', variant: 'secondary' },
-  {
-    code: 1,
-    label: '启用',
-    variant: 'default',
-    bg: 'bg-green-100',
-    color: 'text-green-600'
-  }
+  { code: 1, label: '启用', variant: 'default' }
 ]);
 
 /** 任务状态枚举 */
 export const TASK_STATUS_ENUM = new SmartEnum([
   { code: 0, label: '待执行', variant: 'outline' },
-  {
-    code: 1,
-    label: '进行中',
-    variant: 'secondary',
-    bg: 'bg-blue-50',
-    color: 'text-blue-500'
-  },
-  {
-    code: 2,
-    label: '成功',
-    variant: 'default',
-    bg: 'bg-green-50',
-    color: 'text-green-500'
-  },
+  { code: 1, label: '进行中', variant: 'secondary' },
+  { code: 2, label: '成功', variant: 'default' },
   { code: 3, label: '失败', variant: 'destructive' }
 ]);
 

@@ -18,46 +18,16 @@ import { SmartEnum } from '@/lib/enum';
 /** 激活码类型枚举 */
 export const ACTIVATION_TYPE_ENUM = new SmartEnum([
   { code: 0, label: '日卡', variant: 'secondary' },
-  {
-    code: 1,
-    label: '月卡',
-    variant: 'outline',
-    bg: 'bg-blue-50',
-    color: 'text-blue-500'
-  },
-  {
-    code: 2,
-    label: '年卡',
-    variant: 'outline',
-    bg: 'bg-amber-50',
-    color: 'text-amber-500'
-  },
-  {
-    code: 3,
-    label: '永久卡',
-    variant: 'default',
-    bg: 'bg-purple-100',
-    color: 'text-purple-600'
-  }
+  { code: 1, label: '月卡', variant: 'outline' },
+  { code: 2, label: '年卡', variant: 'outline' },
+  { code: 3, label: '永久卡', variant: 'default' }
 ]);
 
 /** 激活码状态枚举 */
 export const ACTIVATION_STATUS_ENUM = new SmartEnum([
   { code: 0, label: '未使用', variant: 'secondary' },
-  {
-    code: 1,
-    label: '已分发',
-    variant: 'outline',
-    bg: 'bg-blue-50',
-    color: 'text-blue-500'
-  },
-  {
-    code: 2,
-    label: '已激活',
-    variant: 'default',
-    bg: 'bg-green-100',
-    color: 'text-green-600'
-  },
+  { code: 1, label: '已分发', variant: 'outline' },
+  { code: 2, label: '已激活', variant: 'default' },
   { code: 3, label: '作废', variant: 'destructive' }
 ]);
 

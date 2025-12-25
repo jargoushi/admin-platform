@@ -13,14 +13,15 @@ export function StatusBadge({
   code,
   enum: enumInstance
 }: StatusBadgeProps) {
-  const config = enumInstance.get(code) || { label: '未知', variant: 'outline' as const, bg: '', color: '' };
+  const config = enumInstance.get(code) || { label: '未知', variant: 'outline' as const };
 
   return (
     <Badge
       variant={config.variant || 'default'}
-      className={`px-2.5 py-1 text-xs font-medium rounded-full border-0 ${config.bg || ''} ${config.color || ''}`}
+      className='px-2.5 py-1 text-xs font-medium rounded-full border-0'
     >
       {config.label}
     </Badge>
   );
 }
+

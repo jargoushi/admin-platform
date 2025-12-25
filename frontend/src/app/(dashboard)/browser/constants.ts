@@ -33,8 +33,8 @@ import { SmartEnum } from '@/lib/enum';
 // ... (DEFAULT_QUERY_PARAMS, FILTERS_CONFIG 不变)
 
 export const BROWSER_STATUS_ENUM = new SmartEnum([
-  { code: 0, label: '未打开', variant: 'outline', color: 'text-gray-500', bg: 'bg-gray-100' },
-  { code: 1, label: '已打开', variant: 'default', color: 'text-green-500', bg: 'bg-green-100' },
-  { code: 2, label: '异常', variant: 'destructive', color: 'text-red-500', bg: 'bg-red-100' }
+  { code: 0, label: '未打开', variant: 'outline' },
+  { code: 1, label: '已打开', variant: 'default' },
+  { code: 2, label: '异常', variant: 'destructive' }
 ]);
 

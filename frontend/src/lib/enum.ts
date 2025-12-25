@@ -10,10 +10,6 @@ export interface EnumItem {
   code: number;
   /** 显示标签 */
   label: string;
-  /** 文字颜色类名 (可选) */
-  color?: string;
-  /** 背景颜色类名 (可选) */
-  bg?: string;
   /** Badge 变体 (可选) */
   variant?: 'default' | 'secondary' | 'destructive' | 'outline';
 }
@@ -24,7 +20,7 @@ export interface EnumItem {
  * @example
  * const STATUS = new SmartEnum([
  *   { code: 0, label: '禁用', variant: 'secondary' },
- *   { code: 1, label: '启用', variant: 'default', color: 'text-green-600', bg: 'bg-green-100' }
+ *   { code: 1, label: '启用', variant: 'default' }
  * ]);
  *
  * // 获取下拉选项
