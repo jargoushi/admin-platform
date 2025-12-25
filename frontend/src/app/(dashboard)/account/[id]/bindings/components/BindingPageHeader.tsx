@@ -1,5 +1,5 @@
 /**
- * 绑定页面头部
+ * 绑定页面头部操作组件
  */
 
 'use client';
@@ -12,28 +12,22 @@ import { Action } from '@/types/action';
 interface BindingPageHeaderProps {
   accountId: number;
   onSuccess: () => void;
-  onAdd?: () => void;
-  isPage?: boolean;
 }
 
-export function BindingPageHeader({ accountId, onSuccess, onAdd, isPage }: BindingPageHeaderProps) {
+export function BindingPageHeader({ accountId, onSuccess }: BindingPageHeaderProps) {
   const actions: Action[] = [
     {
       key: 'create',
       label: '新增绑定',
       icon: Plus,
-      onClick: isPage ? undefined : () => onAdd?.(),
-      dialog: isPage ? {
+      dialog: {
         title: '新增绑定',
         component: BindingAddForm,
         extraData: { id: accountId } as any,
         className: 'sm:max-w-[500px]'
-      } : undefined
+      }
     }
   ];
 
-
-
   return <PageActions actions={actions} onRefresh={onSuccess} />;
 }
-

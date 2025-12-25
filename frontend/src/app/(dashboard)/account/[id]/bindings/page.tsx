@@ -1,18 +1,17 @@
 /**
- * 账号绑定管理页面
+ * 账号绑定管理 Tab 页面
  */
 
 'use client';
 
 import * as React from 'react';
 import { useParams } from 'next/navigation';
-import { CurdLayout } from '@/components/layout/curd-layout';
 import { AccountApiService } from '@/service/api/account.api';
 import { BindingTable } from './components/BindingTable';
 import { BindingPageHeader } from './components/BindingPageHeader';
 import type { Binding } from '../../types';
 
-export default function BindingPage() {
+export default function BindingsPage() {
   const params = useParams();
   const accountId = Number(params.id);
 
@@ -35,23 +34,22 @@ export default function BindingPage() {
   }, [fetchBindings]);
 
   return (
-    <CurdLayout>
-      <CurdLayout.Header>
-        <BindingPageHeader
-          accountId={accountId}
-          onSuccess={fetchBindings}
-          isPage={true}
-        />
-      </CurdLayout.Header>
+    <div className='flex h-full flex-col space-y-4'>
+      {/* 操作按钮 */}
+      <div className='shrink-0'>
+        <BindingPageHeader accountId={accountId} onSuccess={fetchBindings} />
+      </div>
 
-      <CurdLayout.Table>
+      {/* 绑定表格 */}
+      <div className='min-h-0 flex-1'>
         <BindingTable
           data={bindings}
           loading={loading}
           onRefresh={fetchBindings}
           useDialog={true}
         />
-      </CurdLayout.Table>
-    </CurdLayout>
+      </div>
+    </div>
   );
 }
+

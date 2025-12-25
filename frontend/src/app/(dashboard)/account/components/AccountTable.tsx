@@ -72,12 +72,11 @@ export function AccountTable({
         render: (_: unknown, record: Account) => {
           const actions: Action<Account>[] = [
             {
-              key: 'binding',
-              label: '绑定管理',
+              key: 'detail',
+              label: '查看详情',
               icon: Link2,
-              onClick: (record) => router.push(`/account/${record.id}/bindings`)
+              onClick: (r) => router.push(`/account/${r.id}`)
             },
-
             {
               key: 'edit',
               label: '编辑',
