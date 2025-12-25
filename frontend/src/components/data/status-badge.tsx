@@ -7,27 +7,20 @@ export interface StatusBadgeProps {
   code: number | string | undefined | null;
   /** 智能枚举实例 */
   enum: SmartEnum<EnumItem>;
-  /** 回退配置 */
-  fallback?: Partial<EnumItem>;
-  /** 额外类名 */
-  className?: string;
 }
 
 export function StatusBadge({
   code,
-  enum: enumInstance,
-  fallback = { label: '未知', variant: 'outline' },
-  className = ''
+  enum: enumInstance
 }: StatusBadgeProps) {
-  const config = enumInstance.get(code) || fallback;
+  const config = enumInstance.get(code) || { label: '未知', variant: 'outline' as const, bg: '', color: '' };
 
   return (
     <Badge
       variant={config.variant || 'default'}
-      className={`px-2 py-0.5 text-[10px] leading-tight font-normal ${config.bg || ''} ${config.color || ''} hover:bg-opacity-80 border-none ${className}`}
+      className={`px-2.5 py-1 text-xs font-medium rounded-full border-0 ${config.bg || ''} ${config.color || ''}`}
     >
       {config.label}
     </Badge>
   );
 }
-
