@@ -9,6 +9,7 @@ from app.core.logging import log
 from app.core.middleware import setup_middleware
 from app.db.config import init_db, close_db
 from app.routers import api_router
+from app.services.scheduler.scheduler_service import scheduler_service
 
 
 @asynccontextmanager
@@ -23,6 +24,9 @@ async def lifespan(app: FastAPI):
     await init_db()
     log.info("✅ 数据库连接已建立")
 
+    # 启动调度器
+    await scheduler_service.start()
+
     # 这里可以添加其他启动时的初始化操作
     # 例如：加载缓存、预热模型、检查外部服务等
 
@@ -33,6 +37,9 @@ async def lifespan(app: FastAPI):
     # 关闭时执行
     log.info("🛑 应用关闭中...")
     try:
+        # 停止调度器
+        await scheduler_service.stop()
+
         # 关闭数据库连接
         await close_db()
         log.info("✅ 数据库连接已关闭")

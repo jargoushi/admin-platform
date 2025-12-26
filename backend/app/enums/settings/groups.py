@@ -7,6 +7,7 @@ from app.enums.settings.general import GeneralSettingEnum
 from app.enums.settings.notification import NotificationSettingEnum
 from app.enums.settings.advanced import AdvancedSettingEnum
 from app.enums.settings.download import DownloadSettingEnum
+from app.enums.settings.scheduler import SchedulerSettingEnum
 
 
 class SettingGroupEnum(Enum):
@@ -19,6 +20,7 @@ class SettingGroupEnum(Enum):
     NOTIFICATION = (2, "通知设置", "bell", NotificationSettingEnum)
     ADVANCED = (3, "高级设置", "tool", AdvancedSettingEnum)
     DOWNLOAD = (4, "下载设置", "download", DownloadSettingEnum)
+    SCHEDULER = (5, "定时任务", "clock", SchedulerSettingEnum)
 
     def __init__(self, code: int, desc: str, icon: str, setting_enum: Type[Enum]):
         self.code = code
