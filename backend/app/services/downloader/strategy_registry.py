@@ -2,6 +2,7 @@
 
 from typing import List, Optional, Type
 from app.services.downloader.strategies.base import BaseDownloadStrategy
+from app.services.downloader.strategies.bilibili import BilibiliStrategy
 from app.services.downloader.strategies.douyin import DouyinStrategy
 from app.services.downloader.strategies.youtube import YoutubeStrategy
 
@@ -10,6 +11,7 @@ class StrategyRegistry:
     """策略注册表，根据 URL 自动选择策略"""
 
     _strategies: List[Type[BaseDownloadStrategy]] = [
+        BilibiliStrategy,
         DouyinStrategy,
         YoutubeStrategy,
     ]

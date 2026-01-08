@@ -1,260 +1,94 @@
-# 下载模块测试文件
+# 下载模块测试
+"""
+使用: python -m app.test.test_downloader
+"""
 import asyncio
 import os
 import sys
-from typing import List, Dict, Any
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
-
-class DownloaderTester:
-    """下载模块测试类"""
-
-    def __init__(self):
-        self.test_results: List[Dict[str, Any]] = []
-        self.test_user_id = 1
-        self.test_output_dir = "./test_downloads"
-
-    def log_test_result(self, test_name: str, success: bool, message: str = ""):
-        status = "✓ 成功" if success else "✗ 失败"
-        print(f"  {status}: {test_name}")
-        if message:
-            print(f"    {message}")
-        self.test_results.append({"test_name": test_name, "success": success})
-
-    async def test_download_config_default(self):
-        """测试1: 获取默认下载配置"""
-        print("\n测试1: 获取默认下载配置")
-        try:
-            from app.services.downloader.download_config import DownloadConfig
-
-            config = DownloadConfig.default()
-            assert config.download_path == "./downloads"
-            assert config.proxy is None
-            self.log_test_result("获取默认下载配置", True, f"path={config.download_path}")
-        except Exception as e:
-            self.log_test_result("获取默认下载配置", False, str(e))
-
-    async def test_download_setting_enum(self):
-        """测试2: 下载设置枚举结构"""
-        print("\n测试2: 下载设置枚举结构")
-        try:
-            from app.enums.settings import DownloadSettingEnum
-
-            assert len(list(DownloadSettingEnum)) == 2
-            assert DownloadSettingEnum.DOWNLOAD_PATH.code == 401
-            assert DownloadSettingEnum.PROXY_URL.code == 402
-            self.log_test_result("下载设置枚举结构", True, "2个配置项")
-        except Exception as e:
-            self.log_test_result("下载设置枚举结构", False, str(e))
-
-    async def test_youtube_strategy_can_handle(self):
-        """测试3: YouTube策略URL匹配"""
-        print("\n测试3: YouTube策略URL匹配")
-        try:
-            from app.services.downloader.strategies.youtube import YoutubeStrategy
-
-            assert YoutubeStrategy.can_handle("https://www.youtube.com/watch?v=abc123")
-            assert YoutubeStrategy.can_handle("https://youtu.be/abc123")
-            assert not YoutubeStrategy.can_handle("https://www.bilibili.com/video/xxx")
-            self.log_test_result("YouTube策略URL匹配", True)
-        except Exception as e:
-            self.log_test_result("YouTube策略URL匹配", False, str(e))
-
-    async def test_douyin_strategy_can_handle(self):
-        """测试4: 抖音策略URL匹配"""
-        print("\n测试4: 抖音策略URL匹配")
-        try:
-            from app.services.downloader.strategies.douyin import DouyinStrategy
-
-            assert DouyinStrategy.can_handle("https://www.douyin.com/video/123456")
-            assert DouyinStrategy.can_handle("https://v.douyin.com/abc123")
-            assert DouyinStrategy.can_handle("https://www.iesdouyin.com/share/video/123")
-            assert not DouyinStrategy.can_handle("https://www.youtube.com/watch?v=abc")
-            self.log_test_result("抖音策略URL匹配", True)
-        except Exception as e:
-            self.log_test_result("抖音策略URL匹配", False, str(e))
-
-    async def test_downloader_service_get_strategy(self):
-        """测试5: 下载服务策略获取"""
-        print("\n测试5: 下载服务策略获取")
-        try:
-            from app.services.downloader.strategy_registry import StrategyRegistry
-            from app.services.downloader.strategies.youtube import YoutubeStrategy
-            from app.services.downloader.strategies.douyin import DouyinStrategy
-
-            youtube_strategy = StrategyRegistry.get_strategy("https://www.youtube.com/watch?v=abc")
-            assert isinstance(youtube_strategy, YoutubeStrategy)
-
-            douyin_strategy = StrategyRegistry.get_strategy("https://www.douyin.com/video/123")
-            assert isinstance(douyin_strategy, DouyinStrategy)
-
-            self.log_test_result("下载服务策略获取", True)
-        except Exception as e:
-            self.log_test_result("下载服务策略获取", False, str(e))
-
-    async def test_downloader_service_unsupported_url(self):
-        """测试6: 不支持的URL应返回None"""
-        print("\n测试6: 不支持的URL应返回None")
-        try:
-            from app.services.downloader.strategy_registry import StrategyRegistry
-
-            strategy = StrategyRegistry.get_strategy("https://unsupported-site.com/video/123")
-            assert strategy is None
-            self.log_test_result("不支持的URL应返回None", True, "正确返回 None")
-        except Exception as e:
-            self.log_test_result("不支持的URL应返回None", False, str(e))
-
-    async def test_yt_dlp_util_import(self):
-        """测试7: yt_dlp_util 模块可正常导入"""
-        print("\n测试7: yt_dlp_util 模块可正常导入")
-        try:
-            from app.util import yt_dlp_util
-            assert hasattr(yt_dlp_util, 'download')
-            self.log_test_result("yt_dlp_util 模块可正常导入", True)
-        except Exception as e:
-            self.log_test_result("yt_dlp_util 模块可正常导入", False, str(e))
-
-    async def test_progress_callback(self):
-        """测试8: 进度回调类型定义"""
-        print("\n测试8: 进度回调类型定义")
-        try:
-            from app.services.downloader.strategies.base import ProgressCallback
-
-            # 测试回调函数可以正常定义和调用
-            progress_data = []
-
-            def my_callback(downloaded: int, total: int):
-                progress_data.append((downloaded, total))
-
-            # 类型兼容性（Python 不会运行时检查，只是确保定义存在）
-            callback: ProgressCallback = my_callback
-            callback(100, 1000)
-
-            assert progress_data == [(100, 1000)]
-            self.log_test_result("进度回调类型定义", True)
-        except Exception as e:
-            self.log_test_result("进度回调类型定义", False, str(e))
-
-    async def run_all_tests(self):
-        print("=" * 80)
-        print("开始下载模块测试")
-        print("=" * 80)
-
-        try:
-            await self.test_download_config_default()
-            await self.test_download_setting_enum()
-            await self.test_youtube_strategy_can_handle()
-            await self.test_douyin_strategy_can_handle()
-            await self.test_downloader_service_get_strategy()
-            await self.test_downloader_service_unsupported_url()
-            await self.test_yt_dlp_util_import()
-            await self.test_progress_callback()
-
-            total = len(self.test_results)
-            passed = sum(1 for r in self.test_results if r["success"])
-            print("\n" + "=" * 80)
-            print(f"测试结果: {passed}/{total} 通过，成功率 {passed/total*100:.0f}%")
-            print("=" * 80)
-
-        except Exception as e:
-            print(f"测试过程中出现错误: {e}")
+OUTPUT_DIR = "./test_downloads"
 
 
-class DownloaderIntegrationTester:
-    """下载模块集成测试类（需要网络）"""
+# ============================================================================
+# 单元测试
+# ============================================================================
 
-    def __init__(self):
-        self.test_results: List[Dict[str, Any]] = []
-        self.test_output_dir = "./test_downloads"
+async def run_unit_tests():
+    """运行单元测试（不需要网络）"""
+    from app.services.downloader.strategies.youtube import YoutubeStrategy
+    from app.services.downloader.strategies.douyin import DouyinStrategy
+    from app.services.downloader.strategies.bilibili import BilibiliStrategy
+    from app.services.downloader.strategy_registry import StrategyRegistry
 
-    def log_test_result(self, test_name: str, success: bool, message: str = ""):
-        status = "✓ 成功" if success else "✗ 失败"
-        print(f"  {status}: {test_name}")
-        if message:
-            print(f"    {message}")
-        self.test_results.append({"test_name": test_name, "success": success})
+    tests = [
+        ("YouTube URL匹配", YoutubeStrategy.can_handle("https://www.youtube.com/watch?v=abc")),
+        ("抖音 URL匹配", DouyinStrategy.can_handle("https://www.douyin.com/video/123")),
+        ("B站 URL匹配", BilibiliStrategy.can_handle("https://www.bilibili.com/video/BV1xx")),
+        ("策略注册", StrategyRegistry.get_strategy("https://www.bilibili.com/video/BV1xx") is not None),
+    ]
 
-    async def test_youtube_download(self, url: str = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"):
-        """集成测试: YouTube视频下载"""
-        print(f"\n集成测试: YouTube视频下载 ({url})")
-        try:
-            from app.util import yt_dlp_util
+    print("=" * 60)
+    print("单元测试")
+    print("=" * 60)
 
-            def progress_callback(downloaded: int, total: int):
-                percent = downloaded / total * 100 if total > 0 else 0
-                print(f"  下载进度: {percent:.1f}%", end="\r")
+    passed = 0
+    for name, result in tests:
+        status = "✓" if result else "✗"
+        print(f"  {status} {name}")
+        if result:
+            passed += 1
 
-            filepath = await yt_dlp_util.download(
-                url=url,
-                output_dir=self.test_output_dir,
-                on_progress=progress_callback,
-                extra_opts={
-                    "format": "bestvideo[height<=480]+bestaudio/best[height<=480]",  # 低分辨率用于测试
-                }
-            )
-            print()  # 换行
-            self.log_test_result("YouTube视频下载", True, f"保存至: {filepath}")
-        except Exception as e:
-            self.log_test_result("YouTube视频下载", False, str(e))
+    print(f"\n结果: {passed}/{len(tests)} 通过")
 
-    async def test_douyin_download(self, url: str):
-        """集成测试: 抖音视频下载"""
-        print(f"\n集成测试: 抖音视频下载 ({url})")
-        try:
-            from app.util import yt_dlp_util
 
-            filepath = await yt_dlp_util.download(
-                url=url,
-                output_dir=self.test_output_dir,
-                extra_opts={"format": "best"}
-            )
-            self.log_test_result("抖音视频下载", True, f"保存至: {filepath}")
-        except Exception as e:
-            self.log_test_result("抖音视频下载", False, str(e))
+# ============================================================================
+# 视频下载
+# ============================================================================
 
-    async def run_integration_tests(self, youtube_url: str = None, douyin_url: str = None):
-        """运行集成测试（需要提供有效URL）"""
-        print("=" * 80)
-        print(f"开始下载模块集成测试（需要网络）, {youtube_url}, {douyin_url}")
-        print("=" * 80)
+async def download_video(url: str, output_dir: str = OUTPUT_DIR):
+    """下载单个视频"""
+    from app.util import yt_dlp_util
 
-        if youtube_url:
-            await self.test_youtube_download(youtube_url)
+    print(f"下载: {url}")
+    path = await yt_dlp_util.download(url=url, output_dir=output_dir)
+    print(f"✓ 完成: {path}")
 
-        if douyin_url:
-            await self.test_douyin_download(douyin_url)
 
-        if not youtube_url and not douyin_url:
-            print("未提供测试URL，跳过集成测试")
-            return
+async def download_up_videos(mid: int, output_dir: str = OUTPUT_DIR, cookie: str = "", max_pages: int = 1):
+    """下载UP主视频"""
+    from app.services.crawler.bilibili import BilibiliCrawler
 
-        total = len(self.test_results)
-        passed = sum(1 for r in self.test_results if r["success"])
-        print("\n" + "=" * 80)
-        print(f"集成测试结果: {passed}/{total} 通过")
-        print("=" * 80)
+    print(f"下载UP主: {mid}")
+    crawler = BilibiliCrawler(cookie=cookie)
+    paths = await crawler.download_up_videos(
+        mid=mid,
+        output_dir=output_dir,
+        max_pages=max_pages,
+        on_progress=lambda i, t, title: print(f"  [{i}/{t}] {title}")
+    )
+    print(f"✓ 完成: 共 {len(paths)} 个视频")
 
+
+# ============================================================================
+# 入口 - 在这里修改测试参数
+# ============================================================================
 
 async def main():
-    """主测试入口"""
-    tester = DownloaderTester()
-    await tester.run_all_tests()
+    # 单元测试
+    await run_unit_tests()
 
+    # === 下载单个视频 ===
+    # await download_video("https://www.bilibili.com/video/BV1xx411c7XW")
 
-async def run_integration_tests(youtube_url: str = None, douyin_url: str = None):
-    """运行集成测试"""
-    tester = DownloaderIntegrationTester()
-    await tester.run_integration_tests(youtube_url, douyin_url)
+    # === 下载UP主视频 ===
+    await download_up_videos(
+        mid=3546890348006167,
+        cookie="buvid3=7DAFC921-D1A0-EEC3-83BA-3888A6DD28C162330infoc; b_nut=1767686162; _uuid=5DDD2934-8767-31088-6A11-64B19110F6F8D64461infoc; CURRENT_QUALITY=0; rpdid=|(k|~JJ)kl~)0J'u~Y~Y)YuYJ; buvid4=3DDDEEC1-8048-5CC6-C5A7-E0EBB3BDBD3163556-026010615-eIDFHwPtykRJ/MD6qlGf5A%3D%3D; home_feed_column=5; browser_resolution=1920-919; SESSDATA=35296d0b%2C1783238535%2C2a055%2A12CjCLMjYnOVM-0WcawDP9k6k-DlhAN_XTwfeLCAKZd0bZvIDmDyAcH3DfD72MxJRfnaQSVkVZM2w4dDAtdFRsckpaTFdNc2h5NjZOeWs2Z2FnZFI2YzV3bjNjRXBQdkxBeUJqWGdpbmhnbzJmUUQ1M2xYMU1tZ3ZVUWNmbFVUbTJ1LVZjNDJBUnVBIIEC; bili_jct=ab64d75e4445ac6ff23b55e802e7df11; DedeUserID=618187299; DedeUserID__ckMd5=1dba1558595d1e27; theme-tip-show=SHOWED; theme-avatar-tip-show=SHOWED; sid=4ikm0aq9; fingerprint=af11763681c266afe26e2729579ab3a8; buvid_fp_plain=undefined; buvid_fp=af11763681c266afe26e2729579ab3a8; bp_t_offset_618187299=1155053401818529792; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjgwMjk0MzIsImlhdCI6MTc2Nzc3MDE3MiwicGx0IjotMX0.c0DvjWLUV85SnJrGaTqimWEQDuxJcqx6keOqGxvubOo; bili_ticket_expires=1768029372; CURRENT_FNVAL=4048; b_lsid=D576D458_19B9B9B9D3D",
+        max_pages=1
+    )
 
 
 if __name__ == "__main__":
-    # 运行单元测试
-    # asyncio.run(main())
-
-    # 运行集成测试
-    asyncio.run(run_integration_tests(
-        # 使用标准抖音视频链接格式
-        douyin_url="https://www.douyin.com/video/7580327048770506027"
-    ))
-
+    asyncio.run(main())
