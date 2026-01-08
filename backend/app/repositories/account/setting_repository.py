@@ -3,7 +3,7 @@
 合并 UserSettingRepository 和 AccountSettingRepository
 """
 
-from typing import Optional, List, Any
+from typing import Optional, List, Any, Dict
 
 from app.enums.common.setting_owner import SettingOwnerType
 from app.models.account.setting import Setting
@@ -83,6 +83,58 @@ class SettingRepository(BaseRepository[Setting]):
 
     async def delete_account_setting(self, account_id: int, setting_key: int) -> bool:
         return await self.delete_by_owner_and_key(SettingOwnerType.ACCOUNT, account_id, setting_key)
+
+    async def find_by_keys(self, setting_keys: List[int], owner_id: Optional[int] = None) -> List[Setting]:
+        """
+        根据配置键列表查询配置
+
+        Args:
+            setting_keys: 配置键列表
+            owner_id: 可选，指定所有者ID
+
+        Returns:
+            配置列表
+        """
+        query = self.model.filter(setting_key__in=setting_keys)
+        if owner_id is not None:
+            query = query.filter(owner_id=owner_id)
+        return await query.all()
+
+    async def find_grouped_by_keys(self, setting_keys: List[int]) -> Dict[int, Dict[int, Any]]:
+        """
+        查询配置并按 owner_id 分组
+
+        Args:
+            setting_keys: 配置键列表
+
+        Returns:
+            Dict[owner_id, Dict[setting_key, setting_value]]
+        """
+        settings = await self.find_by_keys(setting_keys)
+
+        grouped: Dict[int, Dict[int, Any]] = {}
+        for s in settings:
+            if s.owner_id not in grouped:
+                grouped[s.owner_id] = {}
+            grouped[s.owner_id][s.setting_key] = s.setting_value
+        return grouped
+
+    async def find_config_by_keys(self, owner_id: int, setting_keys: List[int]) -> Dict[int, Any]:
+        """
+        查询指定用户的配置并返回字典
+
+        Args:
+            owner_id: 用户ID
+            setting_keys: 配置键列表
+
+        Returns:
+            Dict[setting_key, setting_value]
+        """
+        settings = await self.find_by_keys(setting_keys, owner_id=owner_id)
+        return {s.setting_key: s.setting_value for s in settings}
+
+
+
 
 
 # 单例实例

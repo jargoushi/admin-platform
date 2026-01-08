@@ -129,16 +129,47 @@ def get_test_video() -> str:
     raise FileNotFoundError("未找到测试视频")
 
 
+def batch_trim_test():
+    """批量截取 test_downloads 目录下所有视频的前1分钟"""
+    from app.util.av_util import AVUtil
+    import os
+
+    input_dir = "test_downloads"
+    output_dir = "test_av_output"
+    os.makedirs(output_dir, exist_ok=True)
+
+    if not os.path.exists(input_dir):
+        print(f"输入目录不存在: {input_dir}")
+        return
+
+    files = [f for f in os.listdir(input_dir) if f.endswith(".mp4")]
+    print(f"找到 {len(files)} 个视频文件，开始批量截取前1分钟...")
+
+    for f in files:
+        input_path = os.path.join(input_dir, f)
+        output_path = os.path.join(output_dir, f)
+        print(f"正在处理: {f}")
+        try:
+            AVUtil.trim(input_path, output_path, start_sec=0, duration_sec=60)
+            print(f"✓ 已保存: {output_path}")
+        except Exception as e:
+            print(f"✗ 处理失败 {f}: {e}")
+
+
 if __name__ == "__main__":
     run_tests()
 
     # === 集成测试 ===
-    video = get_test_video()
+    # video = get_test_video()
     # test_get_info(video)
     # test_extract_audio(video)
     # test_capture_frame(video, 5.0)
     # test_trim(video, 0, 10)
     # test_compress(video)
-    test_transcribe(video)
+    # test_transcribe(video)
+
+    # 批量截取测试
+    batch_trim_test()
+
 
 

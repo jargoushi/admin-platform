@@ -11,7 +11,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from app.core.logging import log
 from app.enums.settings.scheduler import SchedulerSettingEnum
-from app.models.account.setting import Setting
+from app.repositories.account.setting_repository import setting_repository
 
 
 class SchedulerService:
@@ -19,28 +19,12 @@ class SchedulerService:
 
     def __init__(self):
         self.scheduler: Optional[AsyncIOScheduler] = None
-        # 任务类型 -> 执行函数映射
-        self._task_executors: Dict[int, Callable] = {}
-
-    def register_executor(self, setting_code: int, executor: Callable):
-        """
-        注册任务执行器
-
-        Args:
-            setting_code: 配置项code（如 COLLECT_CRON 的 code）
-            executor: 执行函数
-        """
-        self._task_executors[setting_code] = executor
-        log.info(f"注册任务执行器: code={setting_code}")
 
     async def start(self):
         """启动调度器"""
         self.scheduler = AsyncIOScheduler()
         self.scheduler.start()
         log.info("✅ 调度器已启动")
-
-        # 注册默认任务执行器
-        self._register_default_executors()
 
         # 注册系统级固定定时任务（与用户无关）
         self._register_system_tasks()
@@ -53,21 +37,6 @@ class SchedulerService:
         if self.scheduler:
             self.scheduler.shutdown(wait=False)
             log.info("✅ 调度器已停止")
-
-    def _register_default_executors(self):
-        """注册默认任务执行器"""
-        self.register_executor(
-            SchedulerSettingEnum.COLLECT_CRON.code,
-            self._collect_task
-        )
-        self.register_executor(
-            SchedulerSettingEnum.CREATE_CRON.code,
-            self._create_task
-        )
-        self.register_executor(
-            SchedulerSettingEnum.PUBLISH_CRON.code,
-            self._publish_task
-        )
 
     def _register_system_tasks(self):
         """
@@ -87,24 +56,15 @@ class SchedulerService:
 
     async def _load_tasks(self):
         """从数据库加载任务配置"""
-        # 获取所有用户的调度配置
-        settings = await Setting.filter(
-            setting_key__in=[
-                SchedulerSettingEnum.COLLECT_ENABLED.code,
-                SchedulerSettingEnum.COLLECT_CRON.code,
-                SchedulerSettingEnum.CREATE_ENABLED.code,
-                SchedulerSettingEnum.CREATE_CRON.code,
-                SchedulerSettingEnum.PUBLISH_ENABLED.code,
-                SchedulerSettingEnum.PUBLISH_CRON.code,
-            ]
-        ).all()
-
-        # 按 owner_id 分组
-        user_settings: Dict[int, Dict[int, Any]] = {}
-        for setting in settings:
-            if setting.owner_id not in user_settings:
-                user_settings[setting.owner_id] = {}
-            user_settings[setting.owner_id][setting.setting_key] = setting.setting_value
+        # 获取所有用户的调度配置，按 owner_id 分组
+        user_settings = await setting_repository.find_grouped_by_keys([
+            SchedulerSettingEnum.COLLECT_ENABLED.code,
+            SchedulerSettingEnum.COLLECT_CRON.code,
+            SchedulerSettingEnum.CREATE_ENABLED.code,
+            SchedulerSettingEnum.CREATE_CRON.code,
+            SchedulerSettingEnum.PUBLISH_ENABLED.code,
+            SchedulerSettingEnum.PUBLISH_CRON.code,
+        ])
 
         # 为每个用户添加任务
         for owner_id, config in user_settings.items():
@@ -112,44 +72,47 @@ class SchedulerService:
 
     def _add_user_tasks(self, owner_id: int, config: Dict[int, Any]):
         """为用户添加定时任务"""
+        # 直接绑定执行函数，不再通过注册表
         task_configs = [
             (
                 SchedulerSettingEnum.COLLECT_ENABLED.code,
                 SchedulerSettingEnum.COLLECT_CRON.code,
-                "采集"
+                "采集",
+                self._collect_task
             ),
             (
                 SchedulerSettingEnum.CREATE_ENABLED.code,
                 SchedulerSettingEnum.CREATE_CRON.code,
-                "创作"
+                "创作",
+                self._create_task
             ),
             (
                 SchedulerSettingEnum.PUBLISH_ENABLED.code,
                 SchedulerSettingEnum.PUBLISH_CRON.code,
-                "发布"
+                "发布",
+                self._publish_task
             ),
         ]
 
-        for enabled_code, cron_code, task_name in task_configs:
+        for enabled_code, cron_code, task_name, executor in task_configs:
             enabled = config.get(enabled_code, False)
             cron_expr = config.get(cron_code)
 
             if enabled and cron_expr:
-                executor = self._task_executors.get(cron_code)
-                if executor:
-                    job_id = f"{task_name}_{owner_id}"
-                    try:
-                        trigger = CronTrigger.from_crontab(cron_expr)
-                        self.scheduler.add_job(
-                            executor,
-                            trigger,
-                            id=job_id,
-                            args=[owner_id],
-                            replace_existing=True,
-                        )
-                        log.info(f"添加定时任务: {job_id}, cron={cron_expr}")
-                    except Exception as e:
-                        log.error(f"添加任务失败 {job_id}: {e}")
+                job_id = f"{task_name}_{owner_id}"
+                try:
+                    trigger = CronTrigger.from_crontab(cron_expr)
+                    self.scheduler.add_job(
+                        executor,
+                        trigger,
+                        id=job_id,
+                        args=[owner_id],
+                        replace_existing=True,
+                    )
+                    log.info(f"添加定时任务: {job_id}, cron={cron_expr}")
+                except Exception as e:
+                    log.error(f"添加任务失败 {job_id}: {e}")
+
 
     # ========== 动态更新接口（供外部调用） ==========
 
@@ -166,25 +129,18 @@ class SchedulerService:
         self._remove_user_all_tasks(owner_id)
 
         # 重新加载该用户的配置
-        settings = await Setting.filter(
-            owner_id=owner_id,
-            setting_key__in=[
-                SchedulerSettingEnum.COLLECT_ENABLED.code,
-                SchedulerSettingEnum.COLLECT_CRON.code,
-                SchedulerSettingEnum.CREATE_ENABLED.code,
-                SchedulerSettingEnum.CREATE_CRON.code,
-                SchedulerSettingEnum.PUBLISH_ENABLED.code,
-                SchedulerSettingEnum.PUBLISH_CRON.code,
-            ]
-        ).all()
-
-        # 构建配置字典
-        config: Dict[int, Any] = {}
-        for setting in settings:
-            config[setting.setting_key] = setting.setting_value
+        config = await setting_repository.find_config_by_keys(owner_id, [
+            SchedulerSettingEnum.COLLECT_ENABLED.code,
+            SchedulerSettingEnum.COLLECT_CRON.code,
+            SchedulerSettingEnum.CREATE_ENABLED.code,
+            SchedulerSettingEnum.CREATE_CRON.code,
+            SchedulerSettingEnum.PUBLISH_ENABLED.code,
+            SchedulerSettingEnum.PUBLISH_CRON.code,
+        ])
 
         # 重新添加任务
         self._add_user_tasks(owner_id, config)
+
         log.info(f"已更新用户 {owner_id} 的定时任务")
 
     def _remove_user_all_tasks(self, owner_id: int):
